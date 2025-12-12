@@ -6,7 +6,7 @@ const nextConfig: NextConfig = {
       bodySizeLimit: "2mb",
     },
   },
-  transpilePackages: ["react-map-gl"],
+  transpilePackages: ["react-map-gl", "mapbox-gl"],
   images: {
     remotePatterns: [
       {
