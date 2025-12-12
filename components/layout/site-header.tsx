@@ -1,0 +1,45 @@
+import Link from "next/link";
+import { PropsWithChildren } from "react";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
+
+const links = [
+  { href: "/rooms", label: "Rooms" },
+  { href: "/tournaments", label: "Tournaments" },
+  { href: "/cash-games", label: "Cash Games" },
+  { href: "/dashboard", label: "Dashboard" },
+  { href: "/admin", label: "Admin" },
+];
+
+export function SiteHeader({ children }: PropsWithChildren) {
+  return (
+    <header className="border-b bg-white/80 backdrop-blur supports-[backdrop-filter]:bg-white/60">
+      <div className="container flex items-center justify-between py-4">
+        <Link href="/" className="flex items-center gap-2 font-semibold">
+          <span className="text-2xl font-bold logo-gradient">Global TH Index</span>
+        </Link>
+        <nav className="hidden items-center gap-6 text-sm font-medium md:flex">
+          {links.map((link) => (
+            <Link
+              key={link.href}
+              href={link.href}
+              className="text-muted-foreground transition hover:text-foreground"
+            >
+              {link.label}
+            </Link>
+          ))}
+        </nav>
+        <div className="flex items-center gap-2">
+          {children}
+          <Button asChild variant="secondary">
+            <Link href="/dashboard">Get Recommendations</Link>
+          </Button>
+        </div>
+      </div>
+    </header>
+  );
+}
+
+export function SiteHeaderSlot({ className, children }: PropsWithChildren<{ className?: string }>) {
+  return <div className={cn("flex items-center gap-2", className)}>{children}</div>;
+}

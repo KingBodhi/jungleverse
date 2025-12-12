@@ -1,0 +1,120 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum GameType {
+  CASH
+  TOURNAMENT
+}
+
+enum GameVariant {
+  NLHE
+}
+
+model PokerRoom {
+  id        String   @id @default(cuid())
+  name      String
+  brand     String?
+  address   String?
+  city      String
+  state     String?
+  country   String
+  latitude  Float?
+  longitude Float?
+  timezone  String?
+  website   String?
+  phone     String?
+  games     Game[]
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([city, country])
+  @@index([latitude, longitude])
+}
+
+model Game {
+  id          String     @id @default(cuid())
+  pokerRoomId String
+  pokerRoom   PokerRoom  @relation(fields: [pokerRoomId], references: [id], onDelete: Cascade)
+  gameType    GameType
+  variant     GameVariant @default(NLHE)
+  cashGame    CashGame?
+  tournament  Tournament?
+  preferences UserPreferenceSnapshot[]
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+
+  @@index([gameType])
+  @@index([pokerRoomId, gameType])
+}
+
+model CashGame {
+  id               String   @id @default(cuid())
+  gameId           String   @unique
+  game             Game     @relation(fields: [gameId], references: [id], onDelete: Cascade)
+  smallBlind       Int
+  bigBlind         Int
+  minBuyin         Int
+  maxBuyin         Int
+  usualDaysOfWeek  String[] @default([])
+  usualHours       Json?
+  notes            String?
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+}
+
+model Tournament {
+  id                 String   @id @default(cuid())
+  gameId             String   @unique
+  game               Game     @relation(fields: [gameId], references: [id], onDelete: Cascade)
+  startTime          DateTime
+  buyinAmount        Int
+  rakeAmount         Int?
+  startingStack      Int
+  blindLevelMinutes  Int
+  reentryPolicy      String?
+  bountyAmount       Int?
+  recurringRule      String?
+  estimatedPrizePool Int?
+  typicalFieldSize   Int?
+  createdAt          DateTime @default(now())
+  updatedAt          DateTime @updatedAt
+
+  @@index([startTime])
+  @@index([buyinAmount])
+}
+
+model User {
+  id                  String   @id @default(cuid())
+  email               String   @unique
+  username            String   @unique
+  hashedPassword      String
+  homeLat             Float?
+  homeLng             Float?
+  bankrollProfile     String?
+  riskTolerance       String?
+  preferredStakesMin  Int?
+  preferredStakesMax  Int?
+  maxTravelDistance   Int?
+  preferredStartTimes Json?
+  createdAt           DateTime @default(now())
+  updatedAt           DateTime @updatedAt
+  preferenceSnapshots UserPreferenceSnapshot[]
+}
+
+model UserPreferenceSnapshot {
+  id              String   @id @default(cuid())
+  userId          String
+  user            User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  gameId          String
+  game            Game    @relation(fields: [gameId], references: [id], onDelete: Cascade)
+  preferenceScore Float
+  createdAt       DateTime @default(now())
+
+  @@unique([userId, gameId])
+}
