@@ -2,9 +2,13 @@ import { NextRequest } from "next/server";
 import { getRoomById } from "@/lib/services/rooms";
 import { ok, error } from "@/lib/http";
 
-export async function GET(_request: NextRequest, { params }: { params: { id: string } }) {
+export async function GET(
+  _request: NextRequest,
+  context: { params: Promise<{ id: string }> },
+) {
   try {
-    const room = await getRoomById(params.id);
+    const { id } = await context.params;
+    const room = await getRoomById(id);
     if (!room) {
       return error("Room not found", 404);
     }

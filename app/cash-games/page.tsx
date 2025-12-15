@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { Metadata } from "next";
 import { listCashGames } from "@/lib/services/cash-games";
 import type { CashGameWithRoom } from "@/types";
@@ -24,7 +25,9 @@ export default async function CashGamesPage({ searchParams }: Props) {
           <h1 className="text-3xl font-semibold">Cash Games</h1>
           <p className="text-muted-foreground">Filter by stakes, region, or room.</p>
         </div>
-        <CashGameFilters />
+        <Suspense fallback={<div className="h-12 w-full animate-pulse rounded-md bg-muted" />}>
+          <CashGameFilters />
+        </Suspense>
       </div>
       <div className="grid gap-4">
         {games.map((game) => (

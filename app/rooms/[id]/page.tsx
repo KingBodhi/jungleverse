@@ -1,9 +1,11 @@
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import { format } from "date-fns";
 import { getRoomById } from "@/lib/services/rooms";
 import type { RoomWithGames } from "@/types";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 
 interface Props {
   params: { id: string };
@@ -36,6 +38,14 @@ export default async function RoomDetailPage({ params }: Props) {
             </Badge>
           )}
           {room.phone && <Badge variant="secondary">{room.phone}</Badge>}
+        </div>
+        <div className="mt-6 flex flex-wrap gap-3">
+          <Button asChild variant="ghost">
+            <Link href="/rooms">Back to rooms</Link>
+          </Button>
+          <Button asChild variant="secondary">
+            <Link href="/dashboard">Get recommendations</Link>
+          </Button>
         </div>
       </div>
       <div className="grid gap-6 lg:grid-cols-2">

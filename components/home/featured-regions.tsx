@@ -8,8 +8,16 @@ export function FeaturedRegions() {
     <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
       {FEATURED_REGIONS.map((region) => (
         <Card key={region.name} className="overflow-hidden">
-          <div className="relative h-32 w-full">
-            <Image src={region.image} alt={region.name} fill className="object-cover" />
+          <div className="relative h-32 w-full overflow-hidden">
+            <Image
+              src={region.image}
+              alt={region.name}
+              width={640}
+              height={256}
+              sizes="(min-width: 1024px) 25vw, (min-width: 768px) 50vw, 100vw"
+              className="h-full w-full object-cover"
+              priority={region.name === "Las Vegas"}
+            />
           </div>
           <CardHeader>
             <CardTitle>{region.name}</CardTitle>

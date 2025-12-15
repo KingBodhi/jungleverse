@@ -1,8 +1,10 @@
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import { format } from "date-fns";
 import { getTournamentById } from "@/lib/services/tournaments";
 import type { TournamentWithRoom } from "@/types";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
+import { Button } from "@/components/ui/button";
 
 interface Props {
   params: { id: string };
@@ -24,6 +26,14 @@ export default async function TournamentDetailPage({ params }: Props) {
         <p className="text-muted-foreground">
           {room.city}, {room.country} · {format(new Date(tournament.startTime), "PPPp")}
         </p>
+        <div className="mt-6 flex flex-wrap gap-3">
+          <Button asChild variant="ghost">
+            <Link href="/tournaments">Back to tournaments</Link>
+          </Button>
+          <Button asChild variant="secondary">
+            <Link href={`/rooms/${room.id}`}>Visit room profile</Link>
+          </Button>
+        </div>
       </div>
       <Card>
         <CardHeader>

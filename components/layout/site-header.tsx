@@ -7,8 +7,6 @@ const links = [
   { href: "/rooms", label: "Rooms" },
   { href: "/tournaments", label: "Tournaments" },
   { href: "/cash-games", label: "Cash Games" },
-  { href: "/dashboard", label: "Dashboard" },
-  { href: "/admin", label: "Admin" },
 ];
 
 export function SiteHeader({ children }: PropsWithChildren) {
@@ -16,9 +14,9 @@ export function SiteHeader({ children }: PropsWithChildren) {
     <header className="border-b bg-white/80 backdrop-blur supports-[backdrop-filter]:bg-white/60">
       <div className="container flex items-center justify-between py-4">
         <Link href="/" className="flex items-center gap-2 font-semibold">
-          <span className="text-2xl font-bold logo-gradient">Global TH Index</span>
+          <span className="text-2xl font-bold">Jungleverse</span>
         </Link>
-        <nav className="hidden items-center gap-6 text-sm font-medium md:flex">
+        <nav className="hidden flex-1 items-center justify-center gap-6 text-sm font-medium md:flex">
           {links.map((link) => (
             <Link
               key={link.href}
@@ -31,8 +29,8 @@ export function SiteHeader({ children }: PropsWithChildren) {
         </nav>
         <div className="flex items-center gap-2">
           {children}
-          <Button asChild variant="secondary">
-            <Link href="/dashboard">Get Recommendations</Link>
+          <Button asChild size="lg">
+            <Link href="/dashboard">Sign in</Link>
           </Button>
         </div>
       </div>

@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { Metadata } from "next";
 import { listTournaments } from "@/lib/services/tournaments";
 import type { TournamentWithRoom } from "@/types";
@@ -24,7 +25,9 @@ export default async function TournamentsPage({ searchParams }: Props) {
           <h1 className="text-3xl font-semibold">Upcoming tournaments</h1>
           <p className="text-muted-foreground">Filter by date range, buy-in, location, or structure.</p>
         </div>
-        <TournamentFilters />
+        <Suspense fallback={<div className="h-12 w-full animate-pulse rounded-md bg-muted" />}>
+          <TournamentFilters />
+        </Suspense>
       </div>
       <div className="grid gap-4">
         {tournaments.map((tournament) => (

@@ -1,9 +1,11 @@
+import Link from "next/link";
 import { Hero } from "@/components/home/hero";
 import { FeaturedRegions } from "@/components/home/featured-regions";
 import { Section } from "@/components/layout/section";
 import { RoomCard } from "@/components/rooms/room-card";
 import { TournamentCard } from "@/components/tournaments/tournament-card";
 import { CashGameCard } from "@/components/cash-games/cash-game-card";
+import { Button } from "@/components/ui/button";
 import { listRooms } from "@/lib/services/rooms";
 import { listTournaments } from "@/lib/services/tournaments";
 import { listCashGames } from "@/lib/services/cash-games";
@@ -28,6 +30,11 @@ export default async function HomePage() {
             <RoomCard key={room.id} room={room} />
           ))}
         </div>
+        <div className="flex justify-end">
+          <Button asChild variant="link">
+            <Link href="/rooms">Browse full rooms directory</Link>
+          </Button>
+        </div>
       </Section>
       <Section title="Upcoming tournaments" description="Time-based list of scheduled majors and dailies.">
         <div className="grid gap-6 md:grid-cols-2">
@@ -35,12 +42,22 @@ export default async function HomePage() {
             <TournamentCard key={event.id} tournament={event} />
           ))}
         </div>
+        <div className="flex justify-end">
+          <Button asChild variant="link">
+            <Link href="/tournaments">See all tournaments</Link>
+          </Button>
+        </div>
       </Section>
       <Section title="Cash games live now" description="Stakes filtered to your region preferences.">
         <div className="grid gap-6 md:grid-cols-2">
           {(cashGames.items as CashGameWithRoom[]).map((game) => (
             <CashGameCard key={game.id} game={game} />
           ))}
+        </div>
+        <div className="flex justify-end">
+          <Button asChild variant="link">
+            <Link href="/cash-games">Explore all cash games</Link>
+          </Button>
         </div>
       </Section>
     </div>

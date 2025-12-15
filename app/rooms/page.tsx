@@ -1,3 +1,4 @@
+import { Suspense } from "react";
 import { Metadata } from "next";
 import { listRooms } from "@/lib/services/rooms";
 import { RoomCard } from "@/components/rooms/room-card";
@@ -25,7 +26,9 @@ export default async function RoomsPage({ searchParams }: Props) {
           <h1 className="text-3xl font-semibold">Rooms Directory</h1>
           <p className="text-muted-foreground">Filter by city, country, or brand. Live pagination and Mapbox view.</p>
         </div>
-        <RoomFilters />
+        <Suspense fallback={<div className="h-12 w-full animate-pulse rounded-md bg-muted" />}>
+          <RoomFilters />
+        </Suspense>
       </div>
       <div className="grid gap-8 lg:grid-cols-[3fr_2fr]">
         <div className="space-y-4">

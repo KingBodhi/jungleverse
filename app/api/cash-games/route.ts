@@ -9,7 +9,7 @@ export async function GET(request: NextRequest) {
     const result = await listCashGames(search);
     return ok(result);
   } catch (err) {
-    const message = err instanceof ZodError ? err.errors.map((e) => e.message).join(", ") : "Unable to fetch cash games";
+    const message = err instanceof ZodError ? err.issues.map((issue) => issue.message).join(", ") : "Unable to fetch cash games";
     return error(message, err instanceof ZodError ? 422 : 500);
   }
 }
@@ -20,7 +20,7 @@ export async function POST(request: NextRequest) {
     const cashGame = await createCashGame(payload);
     return created(cashGame);
   } catch (err) {
-    const message = err instanceof ZodError ? err.errors.map((e) => e.message).join(", ") : "Unable to create cash game";
+    const message = err instanceof ZodError ? err.issues.map((issue) => issue.message).join(", ") : "Unable to create cash game";
     return error(message, err instanceof ZodError ? 422 : 500);
   }
 }

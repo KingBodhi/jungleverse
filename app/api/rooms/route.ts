@@ -9,7 +9,7 @@ export async function GET(request: NextRequest) {
     const result = await listRooms(search);
     return ok(result);
   } catch (err) {
-    const message = err instanceof ZodError ? err.errors.map((e) => e.message).join(", ") : "Unable to fetch rooms";
+    const message = err instanceof ZodError ? err.issues.map((issue) => issue.message).join(", ") : "Unable to fetch rooms";
     return error(message, err instanceof ZodError ? 422 : 500);
   }
 }
@@ -20,7 +20,7 @@ export async function POST(request: NextRequest) {
     const room = await createRoom(payload);
     return created(room);
   } catch (err) {
-    const message = err instanceof ZodError ? err.errors.map((e) => e.message).join(", ") : "Unable to create room";
+    const message = err instanceof ZodError ? err.issues.map((issue) => issue.message).join(", ") : "Unable to create room";
     return error(message, err instanceof ZodError ? 422 : 500);
   }
 }

@@ -5,6 +5,8 @@ import { cn } from "@/lib/utils";
 import { SiteHeader } from "@/components/layout/site-header";
 import { SiteFooter } from "@/components/layout/site-footer";
 
+export const dynamic = "force-dynamic";
+
 const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://global-holdem-index.local";
 const font = Plus_Jakarta_Sans({ subsets: ["latin"], variable: "--font-sans" });
 

@@ -23,7 +23,7 @@ export async function POST(request: NextRequest) {
     const user = await loginUser(parsed.payload);
     return ok(user);
   } catch (err) {
-    const message = err instanceof ZodError ? err.errors.map((e) => e.message).join(", ") : (err as Error).message;
+    const message = err instanceof ZodError ? err.issues.map((issue) => issue.message).join(", ") : (err as Error).message;
     return error(message, err instanceof ZodError ? 422 : 400);
   }
 }
@@ -52,7 +52,7 @@ export async function PATCH(request: NextRequest) {
     const user = await updateUserPreferences(payload);
     return ok(user);
   } catch (err) {
-    const message = err instanceof ZodError ? err.errors.map((e) => e.message).join(", ") : "Unable to update preferences";
+    const message = err instanceof ZodError ? err.issues.map((issue) => issue.message).join(", ") : "Unable to update preferences";
     return error(message, err instanceof ZodError ? 422 : 500);
   }
 }
