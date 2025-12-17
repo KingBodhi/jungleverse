@@ -1,9 +1,9 @@
 import { Prisma } from "@prisma/client";
 import { formatISO } from "date-fns";
-import { prisma } from "@/lib/prisma";
+import { prisma } from '../prisma';
 import { haversineDistanceKm } from "@/lib/geo";
-import { tournamentFilterSchema, tournamentPayloadSchema } from "@/lib/validators/tournaments";
-import type { TournamentWithRoom } from "@/types";
+import { tournamentFilterSchema, tournamentPayloadSchema } from '../validators/tournaments';
+import type { TournamentWithRoom } from '../../types';
 
 export async function listTournaments(rawQuery: Record<string, unknown>) {
   const query = tournamentFilterSchema.parse(rawQuery);
@@ -66,17 +66,20 @@ export async function listTournaments(rawQuery: Record<string, unknown>) {
 
 export async function createTournament(input: unknown) {
   const payload = tournamentPayloadSchema.parse(input);
+  const { pokerRoomId, variant, ...tournamentData } = payload;
+
   return prisma.$transaction(async (tx) => {
     const game = await tx.game.create({
       data: {
-        pokerRoomId: payload.pokerRoomId,
+        pokerRoomId,
         gameType: "TOURNAMENT",
+        variant,
       },
     });
 
     return tx.tournament.create({
       data: {
-        ...payload,
+        ...tournamentData,
         gameId: game.id,
       },
       include: { game: { include: { pokerRoom: true } } },

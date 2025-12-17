@@ -88,6 +88,14 @@ function computePreferenceScore(user: User, game: RankedGame) {
     score += 0.1;
   }
 
+  if (
+    user.preferredVariants &&
+    user.preferredVariants.length > 0 &&
+    user.preferredVariants.includes(game.variant)
+  ) {
+    score += 0.1;
+  }
+
   if (risk === "HIGH" && game.gameType === GameType.CASH && game.cashGame && game.cashGame.bigBlind >= 5) {
     score += 0.05;
   }

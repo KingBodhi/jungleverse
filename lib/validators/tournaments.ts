@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { GameVariant } from "@prisma/client";
 
 export const tournamentFilterSchema = z.object({
   startDate: z.string().datetime().optional(),
@@ -15,6 +16,7 @@ export const tournamentFilterSchema = z.object({
 
 export const tournamentPayloadSchema = z.object({
   pokerRoomId: z.string().cuid(),
+  variant: z.nativeEnum(GameVariant),
   startTime: z.coerce.date(),
   buyinAmount: z.number().int().positive(),
   rakeAmount: z.number().int().nonnegative().optional(),

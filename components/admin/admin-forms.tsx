@@ -1,5 +1,4 @@
-"use client";
-
+import { GameVariant } from "@prisma/client";
 import { FormEvent, useState, useTransition } from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -50,6 +49,7 @@ export function AdminForms({ rooms }: Props) {
     const formData = new FormData(event.currentTarget);
     const payload = {
       pokerRoomId: formData.get("pokerRoomId"),
+      variant: formData.get("variant") as GameVariant,
       startTime: new Date(String(formData.get("startTime"))),
       buyinAmount: Number(formData.get("buyinAmount")),
       rakeAmount: Number(formData.get("rakeAmount")) || undefined,
@@ -73,6 +73,7 @@ export function AdminForms({ rooms }: Props) {
     const formData = new FormData(event.currentTarget);
     const payload = {
       pokerRoomId: formData.get("pokerRoomId"),
+      variant: formData.get("variant") as GameVariant,
       smallBlind: Number(formData.get("smallBlind")),
       bigBlind: Number(formData.get("bigBlind")),
       minBuyin: Number(formData.get("minBuyin")),
@@ -137,6 +138,17 @@ export function AdminForms({ rooms }: Props) {
                 </option>
               ))}
             </select>
+            <select
+              name="variant"
+              required
+              className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+            >
+              <option value="NLHE">NLHE</option>
+              <option value="PLO">PLO</option>
+              <option value="PLO5">PLO5</option>
+              <option value="MIXED">Mixed</option>
+              <option value="OTHER">Other</option>
+            </select>
             <Input name="startTime" type="datetime-local" required />
             <div className="grid grid-cols-2 gap-3">
               <Input name="buyinAmount" type="number" placeholder="Buy-in" required />
@@ -176,6 +188,17 @@ export function AdminForms({ rooms }: Props) {
                   {room.name}
                 </option>
               ))}
+            </select>
+            <select
+              name="variant"
+              required
+              className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+            >
+              <option value="NLHE">NLHE</option>
+              <option value="PLO">PLO</option>
+              <option value="PLO5">PLO5</option>
+              <option value="MIXED">Mixed</option>
+              <option value="OTHER">Other</option>
             </select>
             <div className="grid grid-cols-2 gap-3">
               <Input name="smallBlind" type="number" placeholder="Small blind" required />

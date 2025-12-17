@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { GameVariant } from "@prisma/client";
 
 export const cashGameFilterSchema = z.object({
   city: z.string().optional(),
@@ -12,6 +13,7 @@ export const cashGameFilterSchema = z.object({
 
 export const cashGamePayloadSchema = z.object({
   pokerRoomId: z.string().cuid(),
+  variant: z.nativeEnum(GameVariant),
   smallBlind: z.number().int().positive(),
   bigBlind: z.number().int().positive(),
   minBuyin: z.number().int().positive(),

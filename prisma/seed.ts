@@ -13,7 +13,7 @@ const roomsSeed = [
     city: "Las Vegas",
     state: "NV",
     country: "USA",
-    latitude: 36.1070,
+    latitude: 36.107,
     longitude: -115.1765,
     timezone: "America/Los_Angeles",
     website: "https://aria.mgmresorts.com",
@@ -186,13 +186,24 @@ async function seedRooms() {
     const existing = await prisma.pokerRoom.findFirst({
       where: { name: room.name },
     });
+    const amenityDefaults = {
+      hoursJson: room["hoursJson"] ?? { weekdays: "10a-4a", weekend: "24 hours" },
+      hasFood: room["hasFood"] ?? true,
+      hasHotel: room["hasHotel"] ?? Boolean(room.brand?.toLowerCase().includes("resort")),
+      hasParking: room["hasParking"] ?? true,
+      currentPromo:
+        room["currentPromo"] ?? `${room.city} high-hand jackpot ${new Date().getFullYear()}`,
+      promoExpiresAt:
+        room["promoExpiresAt"] ?? addDays(new Date(), 21 + Math.floor(Math.random() * 14)),
+    };
+    const payload = { ...room, ...amenityDefaults };
     const result = existing
       ? await prisma.pokerRoom.update({
           where: { id: existing.id },
-          data: room,
+          data: payload,
         })
       : await prisma.pokerRoom.create({
-          data: room,
+          data: payload,
         });
     created[room.name] = result.id;
   }
@@ -200,9 +211,10 @@ async function seedRooms() {
 }
 
 async function seedUsers() {
+  const created: Record<string, string> = {};
   for (const user of usersSeed) {
     const hashedPassword = await bcrypt.hash(user.password, SALT_ROUNDS);
-    await prisma.user.upsert({
+    const record = await prisma.user.upsert({
       where: { email: user.email },
       update: {
         username: user.username,
@@ -229,8 +241,11 @@ async function seedUsers() {
         maxTravelDistance: user.maxTravelDistance,
         preferredStartTimes: user.preferredStartTimes,
       },
+      select: { id: true },
     });
+    created[user.email] = record.id;
   }
+  return created;
 }
 
 async function seedGames(roomMap: Record<string, string>) {
@@ -284,6 +299,9 @@ async function seedGames(roomMap: Record<string, string>) {
           usualDaysOfWeek: ["Mon", "Wed", "Fri"],
           usualHours: { start: "12:00", end: "04:00" },
           notes: "Reliable lineup",
+          rakeCap: 5 + i,
+          rakePercentage: 5.0,
+          rakeDescription: "5% up to $5",
         },
       });
       cashCount++;
@@ -293,10 +311,38 @@ async function seedGames(roomMap: Record<string, string>) {
   console.log(`Seeded ${tournamentCount} tournaments and ${cashCount} cash games`);
 }
 
+async function seedFavorites(roomMap: Record<string, string>, userMap: Record<string, string>) {
+  const favoritesPlan = [
+    {
+      email: "vegasgrinder@example.com",
+      rooms: ["Aria Poker Room", "Bellagio", "Wynn Poker Room"],
+    },
+    {
+      email: "texascrusher@example.com",
+      rooms: ["Texas Card House Austin", "Shuffle 214"],
+    },
+  ];
+
+  for (const plan of favoritesPlan) {
+    const userId = userMap[plan.email];
+    if (!userId) continue;
+    for (const roomName of plan.rooms) {
+      const pokerRoomId = roomMap[roomName];
+      if (!pokerRoomId) continue;
+      await prisma.favoriteRoom.upsert({
+        where: { userId_pokerRoomId: { userId, pokerRoomId } },
+        update: {},
+        create: { userId, pokerRoomId },
+      });
+    }
+  }
+}
+
 async function main() {
   const rooms = await seedRooms();
-  await seedUsers();
+  const users = await seedUsers();
   await seedGames(rooms);
+  await seedFavorites(rooms, users);
   console.log("Seed complete");
 }
 

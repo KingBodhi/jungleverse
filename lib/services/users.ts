@@ -68,6 +68,7 @@ export async function updateUserPreferences(input: unknown) {
       preferredStakesMax: payload.preferredStakesMax,
       maxTravelDistance: payload.maxTravelDistance,
       preferredStartTimes: payload.preferredStartTimes ?? [],
+      preferredVariants: payload.preferredVariants ?? [],
     },
   });
 }

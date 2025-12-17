@@ -5,6 +5,8 @@ import { RoomCard } from "@/components/rooms/room-card";
 import { RoomFilters } from "@/components/rooms/room-filters";
 import { RoomsMap } from "@/components/maps/rooms-map";
 import { PaginationControls } from "@/components/pagination/pagination";
+import { getCurrentUser } from "@/lib/auth-helpers";
+import { getFavoriteRoomIds } from "@/lib/services/favorites";
 import type { RoomWithGames } from "@/types";
 
 export const metadata: Metadata = {
@@ -16,8 +18,12 @@ interface Props {
 }
 
 export default async function RoomsPage({ searchParams }: Props) {
-  const data = await listRooms(searchParams);
+  const [data, currentUser] = await Promise.all([
+    listRooms(searchParams),
+    getCurrentUser(),
+  ]);
   const rooms = data.items as RoomWithGames[];
+  const favoriteRoomIds = currentUser ? await getFavoriteRoomIds(currentUser.id) : [];
 
   return (
     <div className="container space-y-8 py-10">
@@ -33,7 +39,12 @@ export default async function RoomsPage({ searchParams }: Props) {
       <div className="grid gap-8 lg:grid-cols-[3fr_2fr]">
         <div className="space-y-4">
           {rooms.map((room) => (
-            <RoomCard key={room.id} room={room} />
+            <RoomCard
+              key={room.id}
+              room={room}
+              currentUserId={currentUser?.id}
+              initialIsFavorite={favoriteRoomIds.includes(room.id)}
+            />
           ))}
           <PaginationControls page={data.page} pages={data.pages} searchParams={searchParams} />
         </div>

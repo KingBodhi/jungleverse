@@ -1,4 +1,5 @@
 import { z } from "zod";
+import { GameVariant } from "@prisma/client";
 
 export const userRegisterSchema = z.object({
   email: z.string().email(),
@@ -27,6 +28,7 @@ export const userPreferenceSchema = z.object({
   preferredStakesMax: z.number().int().nonnegative().optional(),
   maxTravelDistance: z.number().int().nonnegative().optional(),
   preferredStartTimes: z.array(z.number()).optional(),
+  preferredVariants: z.array(z.nativeEnum(GameVariant)).optional(),
 });
 
 export const userPostSchema = z.discriminatedUnion("intent", [

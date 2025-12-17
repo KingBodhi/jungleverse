@@ -1,6 +1,6 @@
 # Global Texas Hold'em Game Index
 
-Production-grade Next.js 14 (App Router) MVP that indexes live poker rooms, tournaments, and cash games worldwide. Built with TypeScript, TailwindCSS + shadcn/ui, Prisma ORM, PostgreSQL, and Mapbox for spatial discovery.
+Production-grade Next.js 14 (App Router) MVP that indexes live poker rooms, tournaments, and cash games worldwide. Built with TypeScript, TailwindCSS + shadcn/ui, Prisma ORM, PostgreSQL, Mapbox for spatial discovery, and NextAuth for credential-based logins + favorites.
 
 ## Tech Stack
 
@@ -15,7 +15,8 @@ Production-grade Next.js 14 (App Router) MVP that indexes live poker rooms, tour
 
 ```bash
 npm install
-cp .env.example .env # edit DATABASE_URL + NEXT_PUBLIC_MAPBOX_TOKEN
+cp .env.example .env
+# Fill in DATABASE_URL, NEXT_PUBLIC_MAPBOX_TOKEN, NEXTAUTH_SECRET, etc.
 npm run db:generate
 npm run db:migrate
 npm run db:seed
@@ -29,7 +30,12 @@ The Prisma seed creates 10 poker rooms, 20 tournaments, 20 cash games, and 3 exa
 ```
 DATABASE_URL=postgresql://postgres:postgres@localhost:5432/global_holdem_index
 NEXT_PUBLIC_MAPBOX_TOKEN=pk.your-mapbox-token
+NEXT_PUBLIC_APP_URL=http://localhost:3000
+NEXTAUTH_URL=http://localhost:3000
+NEXTAUTH_SECRET=run `openssl rand -base64 32`
 ```
+
+`NEXTAUTH_SECRET` and `NEXTAUTH_URL` power secure cookie signing + callback redirects for NextAuth. `NEXT_PUBLIC_APP_URL` feeds Next metadata + sharing tags.
 
 Add `NEXT_PUBLIC_APP_URL` to override metadata URLs when deploying.
 

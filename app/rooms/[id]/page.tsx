@@ -1,20 +1,62 @@
+import { useState, useCallback, useEffect } from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { format } from "date-fns";
 import { getRoomById } from "@/lib/services/rooms";
+import { getCurrentUser } from "@/lib/auth-helpers";
+import { isFavorite } from "@/lib/services/favorites";
 import type { RoomWithGames } from "@/types";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { FavoriteButton } from "@/components/rooms/favorite-button";
+import { ReviewForm } from "@/components/reviews/review-form";
+import { ReviewList } from "@/components/reviews/review-list";
+import { WaitTimeForm } from "@/components/wait-times/wait-time-form";
+import { WaitTimeList } from "@/components/wait-times/wait-time-list";
 
 interface Props {
   params: { id: string };
 }
 
-export default async function RoomDetailPage({ params }: Props) {
-  const room = (await getRoomById(params.id)) as RoomWithGames | null;
+export default function RoomDetailPage({ params }: Props) {
+  const [room, setRoom] = useState<RoomWithGames | null>(null);
+  const [currentUser, setCurrentUser] = useState<any>(null);
+  const [initialIsFavorite, setInitialIsFavorite] = useState(false);
+  const [reviewsRefreshKey, setReviewsRefreshKey] = useState(0);
+  const [waitTimesRefreshKey, setWaitTimesRefreshKey] = useState(0);
+
+  const handleReviewSubmit = useCallback(() => {
+    setReviewsRefreshKey((prev) => prev + 1);
+  }, []);
+
+  const handleWaitTimeSubmit = useCallback(() => {
+    setWaitTimesRefreshKey((prev) => prev + 1);
+  }, []);
+
+  useEffect(() => {
+    async function fetchData() {
+      const [roomData, currentUserData] = await Promise.all([
+        getRoomById(params.id) as Promise<RoomWithGames | null>,
+        getCurrentUser(),
+      ]);
+
+      if (!roomData) {
+        notFound();
+      }
+
+      const isFavoriteData = currentUserData ? await isFavorite(currentUserData.id, roomData.id) : false;
+
+      setRoom(roomData);
+      setCurrentUser(currentUserData);
+      setInitialIsFavorite(isFavoriteData);
+    }
+
+    fetchData();
+  }, [params.id]);
+
   if (!room) {
-    notFound();
+    return <div>Loading...</div>;
   }
 
   const cashGames = room.games.filter((game) => game.cashGame);
@@ -39,13 +81,16 @@ export default async function RoomDetailPage({ params }: Props) {
           )}
           {room.phone && <Badge variant="secondary">{room.phone}</Badge>}
         </div>
-        <div className="mt-6 flex flex-wrap gap-3">
+        <div className="mt-6 flex flex-wrap items-center gap-3">
           <Button asChild variant="ghost">
             <Link href="/rooms">Back to rooms</Link>
           </Button>
           <Button asChild variant="secondary">
             <Link href="/dashboard">Get recommendations</Link>
           </Button>
+          {currentUser ? (
+            <FavoriteButton roomId={room.id} initialIsFavorite={initialIsFavorite} />
+          ) : null}
         </div>
       </div>
       <div className="grid gap-6 lg:grid-cols-2">
@@ -56,14 +101,20 @@ export default async function RoomDetailPage({ params }: Props) {
           <CardContent className="space-y-3">
             {cashGames.length === 0 && <p className="text-sm text-muted-foreground">No cash lineup published.</p>}
             {cashGames.map((game) => (
-              <div key={game.id} className="rounded-lg border p-4">
-                <p className="font-medium">
-                  {game.cashGame?.smallBlind}/{game.cashGame?.bigBlind} blinds
-                </p>
-                <p className="text-sm text-muted-foreground">
-                  Buy-in {game.cashGame?.minBuyin}-{game.cashGame?.maxBuyin}
-                </p>
-                {game.cashGame?.notes && <p className="text-sm">{game.cashGame.notes}</p>}
+              <div key={game.id} className="rounded-lg border p-4 space-y-2">
+                <div>
+                  <p className="font-medium">
+                    {game.cashGame?.smallBlind}/{game.cashGame?.bigBlind} blinds
+                  </p>
+                  <p className="text-sm text-muted-foreground">
+                    Buy-in {game.cashGame?.minBuyin}-{game.cashGame?.maxBuyin}
+                  </p>
+                  {game.cashGame?.notes && <p className="text-sm">{game.cashGame.notes}</p>}
+                </div>
+                <WaitTimeList gameId={game.id} refreshKey={waitTimesRefreshKey} />
+                {currentUser && (
+                  <WaitTimeForm gameId={game.id} onSubmitSuccess={handleWaitTimeSubmit} />
+                )}
               </div>
             ))}
           </CardContent>
@@ -88,6 +139,17 @@ export default async function RoomDetailPage({ params }: Props) {
           </CardContent>
         </Card>
       </div>
+      <Card>
+        <CardHeader>
+          <CardTitle>Reviews</CardTitle>
+        </CardHeader>
+        <CardContent className="space-y-6">
+          {currentUser && (
+            <ReviewForm pokerRoomId={room.id} onSubmitSuccess={handleReviewSubmit} />
+          )}
+          <ReviewList pokerRoomId={room.id} refreshKey={reviewsRefreshKey} />
+        </CardContent>
+      </Card>
     </div>
   );
 }

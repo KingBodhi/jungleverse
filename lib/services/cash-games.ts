@@ -1,7 +1,7 @@
 import { Prisma } from "@prisma/client";
-import { prisma } from "@/lib/prisma";
-import { cashGameFilterSchema, cashGamePayloadSchema } from "@/lib/validators/cash-games";
-import type { CashGameWithRoom } from "@/types";
+import { prisma } from '../prisma';
+import { cashGameFilterSchema, cashGamePayloadSchema } from '../validators/cash-games';
+import type { CashGameWithRoom } from '../../types';
 
 export async function listCashGames(rawQuery: Record<string, unknown>) {
   const query = cashGameFilterSchema.parse(rawQuery);
@@ -38,6 +38,7 @@ export async function createCashGame(input: unknown) {
       data: {
         pokerRoomId: payload.pokerRoomId,
         gameType: "CASH",
+        variant: payload.variant,
       },
     });
 

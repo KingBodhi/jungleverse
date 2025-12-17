@@ -2,6 +2,8 @@ import Link from "next/link";
 import { PropsWithChildren } from "react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { getCurrentUser } from "@/lib/auth-helpers";
+import { UserNav } from "@/components/layout/user-nav";
 
 const links = [
   { href: "/rooms", label: "Rooms" },
@@ -9,7 +11,9 @@ const links = [
   { href: "/cash-games", label: "Cash Games" },
 ];
 
-export function SiteHeader({ children }: PropsWithChildren) {
+export async function SiteHeader({ children }: PropsWithChildren) {
+  const user = await getCurrentUser();
+
   return (
     <header className="border-b bg-white/80 backdrop-blur supports-[backdrop-filter]:bg-white/60">
       <div className="container flex items-center justify-between py-4">
@@ -29,9 +33,13 @@ export function SiteHeader({ children }: PropsWithChildren) {
         </nav>
         <div className="flex items-center gap-2">
           {children}
-          <Button asChild size="lg">
-            <Link href="/dashboard">Sign in</Link>
-          </Button>
+          {user ? (
+            <UserNav user={user} />
+          ) : (
+            <Button asChild>
+              <Link href="/login">Sign in</Link>
+            </Button>
+          )}
         </div>
       </div>
     </header>

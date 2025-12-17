@@ -14,6 +14,53 @@ enum GameType {
 
 enum GameVariant {
   NLHE
+  PLO
+  PLO5
+  MIXED
+  OTHER
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+// NextAuth.js Models
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String? @db.Text
+  access_token      String? @db.Text
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String? @db.Text
+  session_state     String?
+  user              User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+  @@index([userId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
 }
 
 model PokerRoom {
@@ -29,9 +76,20 @@ model PokerRoom {
   timezone  String?
   website   String?
   phone     String?
-  games     Game[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+
+  // M1: Hours of operation and amenities
+  hoursJson       Json?
+  hasFood         Boolean @default(false)
+  hasHotel        Boolean @default(false)
+  hasParking      Boolean @default(false)
+  currentPromo    String?
+  promoExpiresAt  DateTime?
+
+  games           Game[]
+  favoriteRooms   FavoriteRoom[]
+  reviews         Review[]
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
 
   @@index([city, country])
   @@index([latitude, longitude])
@@ -46,6 +104,7 @@ model Game {
   cashGame    CashGame?
   tournament  Tournament?
   preferences UserPreferenceSnapshot[]
+  waitTimes   WaitTime[]
   createdAt   DateTime   @default(now())
   updatedAt   DateTime   @updatedAt
 
@@ -64,6 +123,12 @@ model CashGame {
   usualDaysOfWeek  String[] @default([])
   usualHours       Json?
   notes            String?
+
+  // M1: Rake structure
+  rakeCap          Int?
+  rakePercentage   Float?
+  rakeDescription  String?
+
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
 }
@@ -91,9 +156,19 @@ model Tournament {
 
 model User {
   id                  String   @id @default(cuid())
+
+  // NextAuth.js fields
+  name                String?
+  image               String?
+  emailVerified       DateTime?
+  role                Role     @default(USER)
+
+  // Existing auth fields
   email               String   @unique
   username            String   @unique
-  hashedPassword      String
+  hashedPassword      String?  // Nullable for OAuth
+
+  // Preference fields
   homeLat             Float?
   homeLng             Float?
   bankrollProfile     String?
@@ -102,9 +177,36 @@ model User {
   preferredStakesMax  Int?
   maxTravelDistance   Int?
   preferredStartTimes Json?
+  preferredVariants   GameVariant[]
+
+  // M2: Custom ranking weights
+  distanceWeight      Float? @default(0.3)
+  bankrollWeight      Float? @default(0.25)
+  preferenceWeight    Float? @default(0.45)
+
   createdAt           DateTime @default(now())
   updatedAt           DateTime @updatedAt
+
+  // Relations
+  accounts            Account[]
+  sessions            Session[]
+  favoriteRooms       FavoriteRoom[]
   preferenceSnapshots UserPreferenceSnapshot[]
+  reviews             Review[]
+  waitTimes           WaitTime[]
+}
+
+model FavoriteRoom {
+  id          String    @id @default(cuid())
+  userId      String
+  pokerRoomId String
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  pokerRoom   PokerRoom @relation(fields: [pokerRoomId], references: [id], onDelete: Cascade)
+  createdAt   DateTime  @default(now())
+
+  @@unique([userId, pokerRoomId])
+  @@index([userId])
+  @@index([pokerRoomId])
 }
 
 model UserPreferenceSnapshot {
@@ -117,4 +219,31 @@ model UserPreferenceSnapshot {
   createdAt       DateTime @default(now())
 
   @@unique([userId, gameId])
+}
+
+
+model Review {
+  id          String    @id @default(cuid())
+  rating      Int
+  comment     String?
+  userId      String
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  pokerRoomId String
+  pokerRoom   PokerRoom @relation(fields: [pokerRoomId], references: [id], onDelete: Cascade)
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+
+  @@unique([userId, pokerRoomId])
+}
+
+model WaitTime {
+  id        String   @id @default(cuid())
+  gameId    String
+  game      Game     @relation(fields: [gameId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  minutes   Int
+  createdAt DateTime @default(now())
+
+  @@unique([gameId, userId])
 }

@@ -41,6 +41,29 @@ function parseStartTimes(value: User["preferredStartTimes"]) {
   return [];
 }
 
+import { Checkbox } from "@/components/ui/checkbox";
+
+const PreferencesSchema = userPreferenceSchema;
+type PreferencesValues = z.infer<typeof PreferencesSchema>;
+
+function parseStartTimes(value: User["preferredStartTimes"]) {
+  if (!value) return [] as number[];
+  if (Array.isArray(value)) {
+    return value.filter((item): item is number => typeof item === "number");
+  }
+  if (typeof value === "string") {
+    try {
+      const parsed = JSON.parse(value);
+      return Array.isArray(parsed)
+        ? parsed.filter((item: unknown): item is number => typeof item === "number")
+        : [];
+    } catch {
+      return [];
+    }
+  }
+  return [];
+}
+
 interface Props {
   user: User;
 }
@@ -58,6 +81,7 @@ export function PreferencesForm({ user }: Props) {
       preferredStakesMax: user.preferredStakesMax ?? 5,
       maxTravelDistance: user.maxTravelDistance ?? 800,
       preferredStartTimes: parseStartTimes(user.preferredStartTimes),
+      preferredVariants: user.preferredVariants ?? [],
     },
   });
 
@@ -188,6 +212,40 @@ export function PreferencesForm({ user }: Props) {
                 />
               </FormControl>
               <FormDescription>Provide comma separated hours (0-23) to bias tournaments.</FormDescription>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+        <FormField
+          control={form.control}
+          name="preferredVariants"
+          render={() => (
+            <FormItem>
+              <FormLabel>Preferred Variants</FormLabel>
+              <div className="flex flex-wrap gap-4">
+                {["NLHE", "PLO", "PLO5", "MIXED", "OTHER"].map((variant) => (
+                  <FormField
+                    key={variant}
+                    control={form.control}
+                    name="preferredVariants"
+                    render={({ field }) => (
+                      <FormItem className="flex flex-row items-start space-x-3 space-y-0">
+                        <FormControl>
+                          <Checkbox
+                            checked={field.value?.includes(variant)}
+                            onCheckedChange={(checked) => {
+                              return checked
+                                ? field.onChange([...field.value, variant])
+                                : field.onChange(field.value?.filter((value) => value !== variant));
+                            }}
+                          />
+                        </FormControl>
+                        <FormLabel className="font-normal">{variant}</FormLabel>
+                      </FormItem>
+                    )}
+                  />
+                ))}
+              </div>
               <FormMessage />
             </FormItem>
           )}

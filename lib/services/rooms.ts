@@ -1,7 +1,7 @@
 import { Prisma } from "@prisma/client";
-import { prisma } from "@/lib/prisma";
-import { roomFilterSchema, roomPayloadSchema } from "@/lib/validators/rooms";
-import type { RoomWithGames } from "@/types";
+import { prisma } from '../prisma';
+import { roomFilterSchema, roomPayloadSchema } from '../validators/rooms';
+import type { RoomWithGames } from '../../types';
 
 export async function listRooms(rawQuery: Record<string, unknown>) {
   const query = roomFilterSchema.parse(rawQuery);

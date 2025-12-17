@@ -17,6 +17,18 @@ Go to your Vercel project settings > Environment Variables and add:
    - Get from: https://www.mapbox.com/
    - Environment: Production, Preview, Development
 
+3. **NEXT_PUBLIC_APP_URL**
+   - Value: Public site URL (e.g. `https://jungleverse.com`)
+   - Used for metadata + Open Graph tags
+
+4. **NEXTAUTH_URL**
+   - Value: Same as your deployed base URL (e.g. `https://jungleverse.com`)
+   - Required for NextAuth callback + redirect logic
+
+5. **NEXTAUTH_SECRET**
+   - Value: Output of `openssl rand -base64 32`
+   - Used to encrypt cookies/tokens
+
 ## Deployment Steps
 
 ### Option 1: Automatic Deployment (Recommended)
