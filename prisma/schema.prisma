@@ -25,6 +25,28 @@ enum Role {
   ADMIN
 }
 
+enum Provider {
+  POKERSTARS
+  GG_POKER
+  POKER_888
+  PARTY_POKER
+  WPT_GLOBAL
+  WSOP_ONLINE
+  LIVE_ROLL
+  OTHER
+}
+
+enum TransactionType {
+  DEPOSIT
+  WITHDRAWAL
+  TRANSFER_IN
+  TRANSFER_OUT
+  SESSION_BUYIN
+  SESSION_CASHOUT
+  BONUS
+  RAKEBACK
+}
+
 // NextAuth.js Models
 model Account {
   id                String  @id @default(cuid())
@@ -65,7 +87,7 @@ model VerificationToken {
 
 model PokerRoom {
   id        String   @id @default(cuid())
-  name      String
+  name      String @unique
   brand     String?
   address   String?
   city      String
@@ -110,6 +132,8 @@ model Game {
 
   @@index([gameType])
   @@index([pokerRoomId, gameType])
+  @@index([variant])
+  @@index([pokerRoomId, variant])
 }
 
 model CashGame {
@@ -131,6 +155,8 @@ model CashGame {
 
   createdAt        DateTime @default(now())
   updatedAt        DateTime @updatedAt
+
+  @@index([smallBlind, bigBlind])
 }
 
 model Tournament {
@@ -140,8 +166,8 @@ model Tournament {
   startTime          DateTime
   buyinAmount        Int
   rakeAmount         Int?
-  startingStack      Int
-  blindLevelMinutes  Int
+  startingStack      Int?
+  blindLevelMinutes  Int?
   reentryPolicy      String?
   bountyAmount       Int?
   recurringRule      String?
@@ -194,6 +220,7 @@ model User {
   preferenceSnapshots UserPreferenceSnapshot[]
   reviews             Review[]
   waitTimes           WaitTime[]
+  bankrollAccounts    BankrollAccount[]
 }
 
 model FavoriteRoom {
@@ -246,4 +273,80 @@ model WaitTime {
   createdAt DateTime @default(now())
 
   @@unique([gameId, userId])
+}
+
+// Bankroll Tracking Models
+
+model BankrollAccount {
+  id               String   @id @default(cuid())
+  userId           String
+  user             User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  provider         Provider
+  nickname         String?
+  balance          Int      @default(0)  // cents
+  depositTolerance Int      @default(0)  // cents - how much more they'd add
+  currency         String   @default("USD")
+  isActive         Boolean  @default(true)
+
+  gameSessions     GameSession[]
+  transactions     BankrollTransaction[]
+
+  lastSyncedAt     DateTime @default(now())
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
+
+  @@unique([userId, provider])
+  @@index([userId])
+  @@index([provider])
+}
+
+model GameSession {
+  id                String   @id @default(cuid())
+  bankrollAccountId String
+  bankrollAccount   BankrollAccount @relation(fields: [bankrollAccountId], references: [id], onDelete: Cascade)
+
+  sessionType       GameType
+  variant           GameVariant @default(NLHE)
+
+  buyIn             Int                // cents
+  cashOut           Int      @default(0)  // cents (0 = busted)
+  result            Int      @default(0)  // cents: cashOut - buyIn
+
+  stakesDescription String?            // "1/2 NL" or "$200 Nightly"
+  venueName         String?            // room/site name
+
+  startedAt         DateTime @default(now())
+  endedAt           DateTime?
+  durationMinutes   Int?
+
+  notes             String?
+
+  transactions      BankrollTransaction[]
+  createdAt         DateTime @default(now())
+  updatedAt         DateTime @updatedAt
+
+  @@index([bankrollAccountId])
+  @@index([startedAt])
+  @@index([sessionType])
+}
+
+model BankrollTransaction {
+  id                String   @id @default(cuid())
+  bankrollAccountId String
+  bankrollAccount   BankrollAccount @relation(fields: [bankrollAccountId], references: [id], onDelete: Cascade)
+
+  type              TransactionType
+  amount            Int                // cents (positive = in, negative = out)
+  balanceAfter      Int                // snapshot for audit trail
+
+  sessionId         String?
+  session           GameSession? @relation(fields: [sessionId], references: [id], onDelete: SetNull)
+
+  notes             String?
+  createdAt         DateTime @default(now())
+
+  @@index([bankrollAccountId])
+  @@index([createdAt])
+  @@index([type])
 }

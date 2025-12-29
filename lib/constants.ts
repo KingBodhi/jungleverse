@@ -27,3 +27,23 @@ export const FEATURED_REGIONS = [
 
 export const RISK_TOLERANCE_OPTIONS = ["LOW", "MEDIUM", "HIGH"];
 export const BANKROLL_PROFILES = ["CASH_ONLY", "TOURNAMENT_ONLY", "BALANCED"];
+
+export const PROVIDERS = [
+  { value: "POKERSTARS", label: "PokerStars", color: "#c00000" },
+  { value: "GG_POKER", label: "GG Poker", color: "#ff6b00" },
+  { value: "POKER_888", label: "888 Poker", color: "#000000" },
+  { value: "PARTY_POKER", label: "PartyPoker", color: "#ff4400" },
+  { value: "WPT_GLOBAL", label: "WPT Global", color: "#0066cc" },
+  { value: "WSOP_ONLINE", label: "WSOP Online", color: "#c9a227" },
+  { value: "LIVE_ROLL", label: "Live Bankroll", color: "#22c55e" },
+  { value: "OTHER", label: "Other", color: "#6b7280" },
+] as const;
+
+export const TRANSACTION_TYPES = [
+  { value: "DEPOSIT", label: "Deposit", icon: "+" },
+  { value: "WITHDRAWAL", label: "Withdrawal", icon: "-" },
+  { value: "TRANSFER_IN", label: "Transfer In", icon: "↓" },
+  { value: "TRANSFER_OUT", label: "Transfer Out", icon: "↑" },
+  { value: "BONUS", label: "Bonus", icon: "★" },
+  { value: "RAKEBACK", label: "Rakeback", icon: "%" },
+] as const;
