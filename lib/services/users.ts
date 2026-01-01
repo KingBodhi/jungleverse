@@ -41,7 +41,7 @@ export async function registerUser(input: unknown) {
 export async function loginUser(input: unknown) {
   const payload = userLoginSchema.parse(input);
   const user = await prisma.user.findUnique({ where: { email: payload.email } });
-  if (!user) {
+  if (!user || !user.hashedPassword) {
     throw new Error("Invalid credentials");
   }
   const isValid = await verifyPassword(payload.password, user.hashedPassword);

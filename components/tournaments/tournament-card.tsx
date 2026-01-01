@@ -6,17 +6,26 @@ import type { TournamentWithRoom } from "@/types";
 
 export function TournamentCard({ tournament }: { tournament: TournamentWithRoom }) {
   const room = tournament.game.pokerRoom;
+  const stackLabel =
+    typeof tournament.startingStack === "number"
+      ? `${tournament.startingStack.toLocaleString()} stack`
+      : "Stack TBD";
+  const levelLabel =
+    typeof tournament.blindLevelMinutes === "number"
+      ? `${tournament.blindLevelMinutes}m levels`
+      : "Levels TBD";
+
   return (
     <Card>
       <CardHeader>
         <CardTitle className="flex items-center justify-between text-lg">
           <Link href={`/tournaments/${tournament.id}`} className="hover:underline">
-            {room.name} · {tournament.startingStack} stack
+            {room.name} · {stackLabel}
           </Link>
           <Badge>{format(new Date(tournament.startTime), "MMM d")}</Badge>
         </CardTitle>
         <CardDescription>
-          {room.city}, {room.country} · {tournament.blindLevelMinutes}m levels
+          {room.city}, {room.country} · {levelLabel}
         </CardDescription>
       </CardHeader>
       <CardContent className="flex flex-wrap items-center gap-3 text-sm">

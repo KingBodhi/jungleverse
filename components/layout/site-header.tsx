@@ -9,6 +9,7 @@ const links = [
   { href: "/rooms", label: "Rooms" },
   { href: "/tournaments", label: "Tournaments" },
   { href: "/cash-games", label: "Cash Games" },
+  { href: "/virtual", label: "Virtual" },
 ];
 
 export async function SiteHeader({ children }: PropsWithChildren) {

@@ -1,3 +1,5 @@
+"use client";
+
 import { GameVariant } from "@prisma/client";
 import { FormEvent, useState, useTransition } from "react";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";

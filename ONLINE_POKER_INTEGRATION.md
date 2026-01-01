@@ -42,19 +42,24 @@ All sites are stored as `PokerRoom` records with:
 
 **File**: `lib/poker-data-fetcher.ts`
 
-A modular service using a "connector" pattern where each poker site has its own fetching function:
+A provider registry (`lib/providers/index.ts`) describes each connector’s responsibilities (tournaments, cash games, or both). The ingester resolves poker-room IDs, deduplicates upcoming events, and routes the normalized payloads through Prisma services.
 
 ```typescript
-const siteConnectors: { [key: string]: () => Promise<any[]> } = {
-  GGpoker: async () => { /* fetch logic */ },
-  Pokerstars: async () => { /* fetch logic */ },
-  // ... more connectors
-};
+export const providerRegistry: ProviderConnector[] = [ggpokerConnector, bestbetConnector];
+
+export async function fetchAllPokerData(providerName?: string) {
+  const connectors = providerName
+    ? providerRegistry.filter((provider) => provider.name.toLowerCase() === providerName.toLowerCase())
+    : providerRegistry;
+  for (const connector of connectors) {
+    await runConnector(connector);
+  }
+}
 ```
 
 **Key Functions**:
-- `fetchAndStorePokerData(siteName)` - Fetches data for a specific site
-- `fetchAllPokerData()` - Fetches data from all configured sites
+- `fetchAllPokerData(provider?: string)` – runs every connector or a single provider when the query string includes `?provider=...`
+- `runConnector` – routes normalized tournaments/cash games through Prisma-backed services with duplicate protection
 
 ### 3. API Endpoint
 
@@ -83,21 +88,22 @@ npx tsx scripts/seed-poker-sites.ts
 ## Current Status
 
 ✅ **Working**:
-- 24 online poker sites added to database
-- Data fetching architecture implemented
-- API endpoint functional
-- Proof of concept with GGpoker and Pokerstars (dummy data)
-- Successfully storing tournaments in the database
+- 24 online poker sites + new bestbet brick-and-mortar rooms seeded
+- Real GGPoker daily schedule scraped directly from `ggpoker.com/tournaments/daily-guarantees`
+- Real bestbet tournaments (Jacksonville, Orange Park, St. Augustine) parsed from their live schedule endpoint
+- Live bestbet St. Augustine cash tables ingested via PokerAtlas JSON feed with stake/buy-in metadata
+- `/api/fetch-poker-data` accepts an optional `provider` filter for targeted refreshes
 
 **Verified**:
 ```bash
-curl http://localhost:3000/api/fetch-poker-data
-# Returns: {"message":"Data fetching completed successfully"}
+curl "http://localhost:3000/api/fetch-poker-data?provider=bestbet"
+# Returns: {"message":"Data fetching completed successfully (provider:bestbet)"}
 ```
 
 Database now contains:
-- 2 online tournaments (GGpoker: $150, Pokerstars: $109)
-- Both stored with proper relationships (Tournament -> Game -> PokerRoom)
+- Fresh online tournaments mapped to the GGpoker room with real guarantees
+- A rolling slate of bestbet daily events across Florida locations
+- St. Augustine cash games that update min/max buy-ins + waitlist counts instead of dummy data
 
 ## Architecture Highlights
 

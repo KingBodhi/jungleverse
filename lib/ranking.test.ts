@@ -97,10 +97,10 @@ describe("ranking", () => {
       preferredStakesMin: 1,
       preferredStakesMax: 3,
     };
-    const alignedScore = rankingHelpers.computeBankrollScore(lowBankrollUser, aligned);
-    const highScore = rankingHelpers.computeBankrollScore(lowBankrollUser, highStakes);
+    const alignedResult = rankingHelpers.computeBankrollScore(lowBankrollUser, aligned);
+    const highResult = rankingHelpers.computeBankrollScore(lowBankrollUser, highStakes);
 
-    expect(alignedScore).toBeGreaterThan(highScore);
+    expect(alignedResult.score).toBeGreaterThan(highResult.score);
   });
 
   it("computes positive distance scores", () => {

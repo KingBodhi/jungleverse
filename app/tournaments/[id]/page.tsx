@@ -40,8 +40,22 @@ export default async function TournamentDetailPage({ params }: Props) {
           <CardTitle>Structure</CardTitle>
         </CardHeader>
         <CardContent className="grid gap-3 md:grid-cols-2">
-          <Stat label="Starting stack" value={`${tournament.startingStack} chips`} />
-          <Stat label="Levels" value={`${tournament.blindLevelMinutes} minutes`} />
+          <Stat
+            label="Starting stack"
+            value={
+              typeof tournament.startingStack === "number"
+                ? `${tournament.startingStack.toLocaleString()} chips`
+                : "Stack TBD"
+            }
+          />
+          <Stat
+            label="Levels"
+            value={
+              typeof tournament.blindLevelMinutes === "number"
+                ? `${tournament.blindLevelMinutes} minutes`
+                : "Levels TBD"
+            }
+          />
           <Stat label="Re-entry" value={tournament.reentryPolicy ?? "TBD"} />
           <Stat
             label="Bounty"

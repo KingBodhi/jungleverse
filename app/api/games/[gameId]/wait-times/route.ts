@@ -5,9 +5,9 @@ import { prisma } from "@/lib/prisma";
 import { z } from "zod";
 
 const routeContextSchema = z.object({
-  params: z.object({
+  params: z.promise(z.object({
     gameId: z.string(),
-  }),
+  })),
 });
 
 export async function GET(
@@ -16,10 +16,11 @@ export async function GET(
 ) {
   try {
     const { params } = routeContextSchema.parse(context);
+    const { gameId } = await params;
 
     const waitTimes = await prisma.waitTime.findMany({
       where: {
-        gameId: params.gameId,
+        gameId,
       },
       include: {
         user: {
@@ -55,6 +56,7 @@ export async function POST(
 ) {
   try {
     const { params } = routeContextSchema.parse(context);
+    const { gameId } = await params;
 
     const session = await getServerSession(authOptions);
     if (!session?.user) {
@@ -67,7 +69,7 @@ export async function POST(
     const waitTime = await prisma.waitTime.create({
       data: {
         minutes: body.minutes,
-        gameId: params.gameId,
+        gameId,
         userId: session.user.id,
       },
     });

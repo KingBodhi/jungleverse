@@ -1,37 +1,12 @@
 import { PrismaClient, GameType } from "@prisma/client";
 import bcrypt from "bcryptjs";
 import { addDays, addHours } from "date-fns";
+import { seedCasinos } from './seed_casinos';
 
 const prisma = new PrismaClient();
 const SALT_ROUNDS = 10;
 
 const roomsSeed = [
-  {
-    name: "Aria Poker Room",
-    brand: "MGM Resorts",
-    address: "3730 S Las Vegas Blvd",
-    city: "Las Vegas",
-    state: "NV",
-    country: "USA",
-    latitude: 36.107,
-    longitude: -115.1765,
-    timezone: "America/Los_Angeles",
-    website: "https://aria.mgmresorts.com",
-    phone: "(702) 590-7232",
-  },
-  {
-    name: "Bellagio",
-    brand: "MGM Resorts",
-    address: "3600 S Las Vegas Blvd",
-    city: "Las Vegas",
-    state: "NV",
-    country: "USA",
-    latitude: 36.1126,
-    longitude: -115.1767,
-    timezone: "America/Los_Angeles",
-    website: "https://bellagio.mgmresorts.com",
-    phone: "(702) 693-7111",
-  },
   {
     name: "Commerce Casino",
     brand: "Commerce",
@@ -98,19 +73,6 @@ const roomsSeed = [
     phone: "(866) 502-7529",
   },
   {
-    name: "King's Casino",
-    brand: "King's",
-    address: "Rozvadov 7",
-    city: "Rozvadov",
-    state: "",
-    country: "Czech Republic",
-    latitude: 49.6769,
-    longitude: 12.5541,
-    timezone: "Europe/Prague",
-    website: "https://kings-resort.com",
-    phone: "+420 374 616 050",
-  },
-  {
     name: "Hippodrome Casino",
     brand: "Hippodrome",
     address: "Leicester Square",
@@ -135,6 +97,110 @@ const roomsSeed = [
     timezone: "Asia/Manila",
     website: "https://www.okadamanila.com",
     phone: "+63 2 8888 0777",
+  },
+  {
+    name: "bestbet Jacksonville",
+    brand: "bestbet",
+    address: "201 Monument Road",
+    city: "Jacksonville",
+    state: "FL",
+    country: "USA",
+    latitude: 30.324838,
+    longitude: -81.546813,
+    timezone: "America/New_York",
+    website: "https://bestbetjax.com/bestbet-jacksonville",
+    phone: "(904) 646-0001",
+  },
+  {
+    name: "bestbet Orange Park",
+    brand: "bestbet",
+    address: "455 Park Avenue",
+    city: "Orange Park",
+    state: "FL",
+    country: "USA",
+    latitude: 30.184187,
+    longitude: -81.700155,
+    timezone: "America/New_York",
+    website: "https://bestbetjax.com/bestbet-orange-park",
+    phone: "(904) 646-0001",
+  },
+  {
+    name: "bestbet St. Augustine",
+    brand: "bestbet",
+    address: "800 Marketplace Drive",
+    city: "St. Augustine",
+    state: "FL",
+    country: "USA",
+    latitude: 29.834025,
+    longitude: -81.382636,
+    timezone: "America/New_York",
+    website: "https://bestbetjax.com/bestbet-st-augustine",
+    phone: "(904) 646-0001",
+  },
+  {
+    name: "MGM National Harbor Poker Room",
+    brand: "MGM Resorts",
+    address: "101 MGM National Avenue",
+    city: "Oxon Hill",
+    state: "MD",
+    country: "USA",
+    latitude: 38.78595,
+    longitude: -77.015505,
+    timezone: "America/New_York",
+    website: "https://mgmnationalharbor.mgmresorts.com/en/casino/poker-room.html",
+    phone: "(844) 346-4664",
+  },
+  {
+    name: "Resorts World Las Vegas Poker Room",
+    brand: "Resorts World",
+    address: "3000 S Las Vegas Blvd",
+    city: "Las Vegas",
+    state: "NV",
+    country: "USA",
+    latitude: 36.133961,
+    longitude: -115.163792,
+    timezone: "America/Los_Angeles",
+    website: "https://www.rwlasvegas.com/casino/poker-room/",
+    phone: "(702) 676-7000",
+  },
+  {
+    name: "Live! Casino Philadelphia Poker Room",
+    brand: "Live! Casino & Hotel",
+    address: "900 Packer Avenue",
+    city: "Philadelphia",
+    state: "PA",
+    country: "USA",
+    latitude: 39.910317,
+    longitude: -75.164415,
+    timezone: "America/New_York",
+    website: "https://philadelphia.livecasinohotel.com/casino/poker-room",
+    phone: "(267) 682-9700",
+  },
+  {
+    name: "Playground Poker Club",
+    brand: "Playground",
+    address: "1500 QC-138",
+    city: "Kahnawake",
+    state: "QC",
+    country: "Canada",
+    latitude: 45.376763,
+    longitude: -73.706322,
+    timezone: "America/Toronto",
+    website: "https://www.playground.ca/",
+    phone: "+1 450-635-7653",
+  },
+  {
+    name: "Banco Casino Bratislava",
+    brand: "Banco Casino",
+    address: "Hodzovo Namestie 2",
+    city: "Bratislava",
+    state: "",
+    country: "Slovakia",
+    latitude: 48.147422,
+    longitude: 17.10865,
+    timezone: "Europe/Bratislava",
+    website: "https://www.bancocasino.sk/",
+    phone: "+421 915 510 510",
   },
 ];
 
@@ -187,14 +253,12 @@ async function seedRooms() {
       where: { name: room.name },
     });
     const amenityDefaults = {
-      hoursJson: room["hoursJson"] ?? { weekdays: "10a-4a", weekend: "24 hours" },
-      hasFood: room["hasFood"] ?? true,
-      hasHotel: room["hasHotel"] ?? Boolean(room.brand?.toLowerCase().includes("resort")),
-      hasParking: room["hasParking"] ?? true,
-      currentPromo:
-        room["currentPromo"] ?? `${room.city} high-hand jackpot ${new Date().getFullYear()}`,
-      promoExpiresAt:
-        room["promoExpiresAt"] ?? addDays(new Date(), 21 + Math.floor(Math.random() * 14)),
+      hoursJson: { weekdays: "10a-4a", weekend: "24 hours" },
+      hasFood: true,
+      hasHotel: Boolean(room.brand?.toLowerCase().includes("resort")),
+      hasParking: true,
+      currentPromo: `${room.city} high-hand jackpot ${new Date().getFullYear()}`,
+      promoExpiresAt: addDays(new Date(), 21 + Math.floor(Math.random() * 14)),
     };
     const payload = { ...room, ...amenityDefaults };
     const result = existing
@@ -340,6 +404,7 @@ async function seedFavorites(roomMap: Record<string, string>, userMap: Record<st
 
 async function main() {
   const rooms = await seedRooms();
+  await seedCasinos(prisma);
   const users = await seedUsers();
   await seedGames(rooms);
   await seedFavorites(rooms, users);

@@ -16,16 +16,16 @@ export function RoomCard({ room, currentUserId, initialIsFavorite = false }: Pro
 
   return (
     <Card className="h-full">
-      <CardHeader>
-        <div className="flex items-start justify-between gap-4">
-          <div className="space-y-1">
-            <CardTitle className="flex items-center justify-between gap-3">
+      <CardHeader className="py-3 px-4">
+        <div className="flex items-start justify-between gap-2">
+          <div className="space-y-0">
+            <CardTitle className="flex items-center justify-between gap-2 text-lg">
               <Link href={`/rooms/${room.id}`} className="hover:underline">
                 {room.name}
               </Link>
-              <Badge variant="secondary">{room.city}</Badge>
+              <Badge variant="secondary" className="text-xs">{room.city}</Badge>
             </CardTitle>
-            <CardDescription>
+            <CardDescription className="text-xs">
               {room.brand ?? "Independent"} · {room.city}, {room.country}
             </CardDescription>
           </div>
@@ -36,14 +36,14 @@ export function RoomCard({ room, currentUserId, initialIsFavorite = false }: Pro
           ) : null}
         </div>
       </CardHeader>
-      <CardContent className="space-y-3">
+      <CardContent className="space-y-2 py-3 px-4 text-sm">
         {cashGames.length > 0 && (
           <div>
-            <p className="text-sm font-medium text-muted-foreground">Cash action</p>
-            <div className="flex flex-wrap gap-2 text-sm">
+            <p className="font-medium text-muted-foreground">Cash action</p>
+            <div className="flex flex-wrap gap-1">
               {cashGames.map((game) => (
-                <Badge key={game.id} variant="outline">
-                  {game.cashGame?.smallBlind}/{game.cashGame?.bigBlind} blinds
+                <Badge key={game.id} variant="outline" className="text-xs py-0 px-1">
+                  {game.cashGame?.smallBlind}/{game.cashGame?.bigBlind}
                 </Badge>
               ))}
             </div>
@@ -51,20 +51,24 @@ export function RoomCard({ room, currentUserId, initialIsFavorite = false }: Pro
         )}
         {tournaments.length > 0 && (
           <div>
-            <p className="text-sm font-medium text-muted-foreground">Tournaments</p>
-            <div className="flex flex-wrap gap-2 text-sm">
+            <p className="font-medium text-muted-foreground">Tournaments</p>
+            <div className="flex flex-wrap gap-1">
               {tournaments.map((game) => (
-                <Badge key={game.id} variant="outline">
+                <Badge key={game.id} variant="outline" className="text-xs py-0 px-1">
                   {"$"}
-                  {game.tournament?.buyinAmount?.toLocaleString() ?? "?"} buy-in · {game.tournament?.blindLevelMinutes}m levels
+                  {game.tournament?.buyinAmount?.toLocaleString() ?? "?"}
                 </Badge>
               ))}
             </div>
           </div>
         )}
-        <div className="text-sm text-muted-foreground">
-          {room.website ? <Link href={room.website}>Website</Link> : room.address}
-        </div>
+        {room.website && (
+          <div className="text-xs text-muted-foreground">
+            <Link href={room.website} target="_blank" rel="noreferrer" className="hover:underline">
+              Visit Website
+            </Link>
+          </div>
+        )}
       </CardContent>
     </Card>
   );

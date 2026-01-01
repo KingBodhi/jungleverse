@@ -1,14 +1,12 @@
 import { NextAuthOptions } from "next-auth";
-import type { Adapter } from "next-auth/adapters";
 import { PrismaAdapter } from "@auth/prisma-adapter";
 import CredentialsProvider from "next-auth/providers/credentials";
-import GoogleProvider from "next-auth/providers/google";
-import GithubProvider from "next-auth/providers/github";
 import { prisma } from "@/lib/prisma";
 import { verifyPassword } from "@/lib/security";
 import { userLoginSchema } from "@/lib/validators/users";
 
-const adapter: Adapter = PrismaAdapter(prisma);
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const adapter = PrismaAdapter(prisma) as any;
 
 export const authOptions: NextAuthOptions = {
   adapter,

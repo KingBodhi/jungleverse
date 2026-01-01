@@ -1,19 +1,31 @@
-import { NextRequest } from "next/server";
-import { getRoomById } from "@/lib/services/rooms";
-import { ok, error } from "@/lib/http";
+import { NextRequest, NextResponse } from 'next/server';
+import { getRoomById } from '@/lib/services/rooms';
+import { getCurrentUser } from '@/lib/auth-helpers';
+import { isFavorite } from '@/lib/services/favorites';
+import type { RoomWithGames } from '@/types';
 
 export async function GET(
-  _request: NextRequest,
-  context: { params: Promise<{ id: string }> },
+  request: NextRequest,
+  { params }: { params: Promise<{ id: string }> }
 ) {
+  const { id: roomId } = await params;
   try {
-    const { id } = await context.params;
-    const room = await getRoomById(id);
-    if (!room) {
-      return error("Room not found", 404);
+    const roomData = await getRoomById(roomId) as RoomWithGames | null;
+
+    if (!roomData) {
+      return NextResponse.json({ message: 'Room not found' }, { status: 404 });
     }
-    return ok(room);
-  } catch {
-    return error("Unable to retrieve room", 500);
+
+    const currentUserData = await getCurrentUser();
+    const isFavoriteData = currentUserData ? await isFavorite(currentUserData.id, roomData.id) : false;
+
+    return NextResponse.json({
+      room: roomData,
+      currentUser: currentUserData,
+      initialIsFavorite: isFavoriteData,
+    });
+  } catch (error) {
+    console.error('Error fetching room details:', error);
+    return NextResponse.json({ message: 'Internal server error' }, { status: 500 });
   }
 }

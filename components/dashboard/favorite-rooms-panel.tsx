@@ -34,7 +34,11 @@ export function FavoriteRoomsPanel({ favorites }: FavoriteRoomsPanelProps) {
           const summary = firstGame?.cashGame
             ? `$${firstGame.cashGame.smallBlind}/$${firstGame.cashGame.bigBlind} cash`
             : firstGame?.tournament
-            ? `$${firstGame.tournament.buyinAmount?.toLocaleString() ?? "?"} · ${firstGame.tournament.blindLevelMinutes}m`
+            ? `$${firstGame.tournament.buyinAmount?.toLocaleString() ?? "?"} · ${
+                typeof firstGame.tournament.blindLevelMinutes === "number"
+                  ? `${firstGame.tournament.blindLevelMinutes}m`
+                  : "Levels TBD"
+              }`
             : null;
 
           return (

@@ -1,10 +1,9 @@
+"use client";
+
 import { useState, useCallback, useEffect } from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { format } from "date-fns";
-import { getRoomById } from "@/lib/services/rooms";
-import { getCurrentUser } from "@/lib/auth-helpers";
-import { isFavorite } from "@/lib/services/favorites";
 import type { RoomWithGames } from "@/types";
 import { Badge } from "@/components/ui/badge";
 import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
@@ -36,20 +35,23 @@ export default function RoomDetailPage({ params }: Props) {
 
   useEffect(() => {
     async function fetchData() {
-      const [roomData, currentUserData] = await Promise.all([
-        getRoomById(params.id) as Promise<RoomWithGames | null>,
-        getCurrentUser(),
-      ]);
+      try {
+        const response = await fetch(`/api/rooms/${params.id}`);
+        if (!response.ok) {
+          if (response.status === 404) {
+            notFound();
+          }
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+        const data = await response.json();
 
-      if (!roomData) {
-        notFound();
+        setRoom(data.room);
+        setCurrentUser(data.currentUser);
+        setInitialIsFavorite(data.initialIsFavorite);
+      } catch (error) {
+        console.error("Failed to fetch room data:", error);
+        // Optionally, show an error message to the user
       }
-
-      const isFavoriteData = currentUserData ? await isFavorite(currentUserData.id, roomData.id) : false;
-
-      setRoom(roomData);
-      setCurrentUser(currentUserData);
-      setInitialIsFavorite(isFavoriteData);
     }
 
     fetchData();
@@ -125,17 +127,23 @@ export default function RoomDetailPage({ params }: Props) {
           </CardHeader>
           <CardContent className="space-y-3">
             {tournaments.length === 0 && <p className="text-sm text-muted-foreground">No tournaments posted.</p>}
-            {tournaments.map((game) => (
-              <div key={game.id} className="rounded-lg border p-4">
-                <p className="font-medium">
-                  {"$"}
-                  {game.tournament?.buyinAmount?.toLocaleString()} buy-in · {game.tournament?.blindLevelMinutes}m
-                </p>
-                <p className="text-sm text-muted-foreground">
-                  Starts {game.tournament?.startTime ? format(new Date(game.tournament.startTime), "MMM d, p") : "TBA"}
-                </p>
-              </div>
-            ))}
+            {tournaments.map((game) => {
+              const levelLabel =
+                typeof game.tournament?.blindLevelMinutes === "number"
+                  ? `${game.tournament.blindLevelMinutes}m`
+                  : "Levels TBD";
+              return (
+                <div key={game.id} className="rounded-lg border p-4">
+                  <p className="font-medium">
+                    {"$"}
+                    {game.tournament?.buyinAmount?.toLocaleString() ?? "?"} buy-in · {levelLabel}
+                  </p>
+                  <p className="text-sm text-muted-foreground">
+                    Starts {game.tournament?.startTime ? format(new Date(game.tournament.startTime), "MMM d, p") : "TBA"}
+                  </p>
+                </div>
+              );
+            })}
           </CardContent>
         </Card>
       </div>

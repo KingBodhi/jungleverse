@@ -14,12 +14,28 @@ export const metadata: Metadata = {
 };
 
 interface Props {
-  searchParams: Record<string, string | string[] | undefined>;
+  searchParams: Promise<Record<string, string | string[] | undefined>>;
 }
 
 export default async function RoomsPage({ searchParams }: Props) {
+  const resolvedSearchParams = await searchParams;
+  const sanitizedSearchParams: Record<string, string | string[] | undefined> = {};
+  for (const key in resolvedSearchParams) {
+    const value = resolvedSearchParams[key];
+    // Only include string or string[] values and exclude known problematic keys
+    if (
+      (typeof value === 'string' || (Array.isArray(value) && value.every(item => typeof item === 'string'))) &&
+      !key.startsWith('_debugChunk') && // Exclude internal Next.js debug properties
+      key !== 'status' && // Exclude status related to promise resolution
+      key !== 'value' &&   // Exclude value related to promise resolution
+      key !== 'reason'    // Exclude reason related to promise resolution
+    ) {
+      sanitizedSearchParams[key] = value;
+    }
+  }
+
   const [data, currentUser] = await Promise.all([
-    listRooms(searchParams),
+    listRooms(resolvedSearchParams),
     getCurrentUser(),
   ]);
   const rooms = data.items as RoomWithGames[];
@@ -36,8 +52,8 @@ export default async function RoomsPage({ searchParams }: Props) {
           <RoomFilters />
         </Suspense>
       </div>
-      <div className="grid gap-8 lg:grid-cols-[3fr_2fr]">
-        <div className="space-y-4">
+      <div className="grid gap-8 lg:grid-cols-1">
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
           {rooms.map((room) => (
             <RoomCard
               key={room.id}
@@ -46,8 +62,8 @@ export default async function RoomsPage({ searchParams }: Props) {
               initialIsFavorite={favoriteRoomIds.includes(room.id)}
             />
           ))}
-          <PaginationControls page={data.page} pages={data.pages} searchParams={searchParams} />
         </div>
+        <PaginationControls page={data.page} pages={data.pages} searchParams={sanitizedSearchParams} />
         <div>
           <RoomsMap rooms={rooms} />
         </div>

@@ -1,72 +1,108 @@
-// lib/poker-data-fetcher.ts
+import { prisma } from "./prisma";
+import { providerRegistry } from "./providers";
+import type { NormalizedCashGame, NormalizedTournament, ProviderConnector } from "./providers/types";
+import { createCashGame } from "./services/cash-games";
+import { createTournament } from "./services/tournaments";
 
-import { PrismaClient } from '@prisma/client';
-import { createTournament } from './services/tournaments';
-import { GameVariant } from '@prisma/client';
+const roomIdCache = new Map<string, string>();
 
-const prisma = new PrismaClient();
-
-// A map of poker site names to their "connector" functions
-const siteConnectors: { [key: string]: () => Promise<any[]> } = {
-  // Example for GGpoker
-  GGpoker: async () => {
-    // In a real implementation, this would fetch data from the GGpoker API or website
-    console.log('Fetching data for GGpoker...');
-    // For now, we'll just return some dummy data
-    return [
-      {
-        variant: GameVariant.NLHE,
-        startTime: new Date(),
-        buyinAmount: 150,
-        startingStack: 10000,
-        blindLevelMinutes: 15,
-      },
-    ];
-  },
-  // Example for Pokerstars
-  Pokerstars: async () => {
-    // In a real implementation, this would fetch data from the Pokerstars API or website
-    console.log('Fetching data for Pokerstars...');
-    // For now, we'll just return some dummy data
-    return [
-      {
-        variant: GameVariant.NLHE,
-        startTime: new Date(),
-        buyinAmount: 109,
-        startingStack: 10000,
-        blindLevelMinutes: 12,
-      },
-    ];
-  },
-};
-
-export async function fetchAndStorePokerData(siteName: string) {
-  const connector = siteConnectors[siteName];
-  if (!connector) {
-    throw new Error(`No connector found for site: ${siteName}`);
+async function resolveRoomId(name: string) {
+  if (roomIdCache.has(name)) {
+    return roomIdCache.get(name)!;
   }
+  const room = await prisma.pokerRoom.findFirst({ where: { name } });
+  if (!room) {
+    return null;
+  }
+  roomIdCache.set(name, room.id);
+  return room.id;
+}
 
-  const games = await connector();
-
-  for (const game of games) {
-    const room = await prisma.pokerRoom.findFirst({
-      where: { name: siteName },
-    });
-
-    if (!room) {
-      console.error(`Poker room not found: ${siteName}`);
+async function ingestTournaments(records: NormalizedTournament[], providerName: string) {
+  for (const record of records) {
+    const roomId = await resolveRoomId(record.pokerRoom);
+    if (!roomId) {
+      console.warn(`[${providerName}] Missing poker room: ${record.pokerRoom}`);
       continue;
     }
-
+    const exists = await prisma.tournament.findFirst({
+      where: {
+        buyinAmount: record.buyinAmount,
+        startTime: record.startTime,
+        game: {
+          pokerRoomId: roomId,
+        },
+      },
+    });
+    if (exists) {
+      continue;
+    }
     await createTournament({
-      pokerRoomId: room.id,
-      ...game,
+      ...record,
+      pokerRoomId: roomId,
     });
   }
 }
 
-export async function fetchAllPokerData() {
-  for (const siteName in siteConnectors) {
-    await fetchAndStorePokerData(siteName);
+async function ingestCashGames(records: NormalizedCashGame[], providerName: string) {
+  for (const record of records) {
+    const roomId = await resolveRoomId(record.pokerRoom);
+    if (!roomId) {
+      console.warn(`[${providerName}] Missing poker room: ${record.pokerRoom}`);
+      continue;
+    }
+    const existing = await prisma.cashGame.findFirst({
+      where: {
+        smallBlind: record.smallBlind,
+        bigBlind: record.bigBlind,
+        game: {
+          pokerRoomId: roomId,
+        },
+      },
+    });
+    if (existing) {
+      await prisma.cashGame.update({
+        where: { id: existing.id },
+        data: {
+          minBuyin: record.minBuyin,
+          maxBuyin: record.maxBuyin,
+          notes: record.notes,
+        },
+      });
+      continue;
+    }
+    await createCashGame({
+      pokerRoomId: roomId,
+      variant: record.variant,
+      smallBlind: record.smallBlind,
+      bigBlind: record.bigBlind,
+      minBuyin: record.minBuyin,
+      maxBuyin: record.maxBuyin,
+      usualDaysOfWeek: record.usualDaysOfWeek ?? [],
+      notes: record.notes,
+    });
+  }
+}
+
+async function runConnector(connector: ProviderConnector) {
+  if (connector.fetchTournaments) {
+    const tournaments = await connector.fetchTournaments();
+    await ingestTournaments(tournaments, connector.name);
+  }
+  if (connector.fetchCashGames) {
+    const cashGames = await connector.fetchCashGames();
+    await ingestCashGames(cashGames, connector.name);
+  }
+}
+
+export async function fetchAllPokerData(providerName?: string) {
+  const connectors = providerName
+    ? providerRegistry.filter((provider) => provider.name.toLowerCase() === providerName.toLowerCase())
+    : providerRegistry;
+  if (!connectors.length) {
+    throw new Error(providerName ? `Unknown provider: ${providerName}` : "No providers configured");
+  }
+  for (const connector of connectors) {
+    await runConnector(connector);
   }
 }

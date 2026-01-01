@@ -4,22 +4,19 @@ import { authOptions } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
 import { z } from "zod";
 
-const routeContextSchema = z.object({
-  params: z.object({
-    id: z.string(),
-  }),
-});
+const idSchema = z.string().min(1);
 
 export async function GET(
   req: Request,
-  context: z.infer<typeof routeContextSchema>
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { params } = routeContextSchema.parse(context);
+    const { id } = await params;
+    const roomId = idSchema.parse(id);
 
     const reviews = await prisma.review.findMany({
       where: {
-        pokerRoomId: params.id,
+        pokerRoomId: roomId,
       },
       include: {
         user: {
@@ -52,10 +49,11 @@ const createReviewSchema = z.object({
 
 export async function POST(
   req: Request,
-  context: z.infer<typeof routeContextSchema>
+  { params }: { params: Promise<{ id: string }> }
 ) {
   try {
-    const { params } = routeContextSchema.parse(context);
+    const { id } = await params;
+    const roomId = idSchema.parse(id);
 
     const session = await getServerSession(authOptions);
     if (!session?.user) {
@@ -69,7 +67,7 @@ export async function POST(
       data: {
         rating: body.rating,
         comment: body.comment,
-        pokerRoomId: params.id,
+        pokerRoomId: roomId,
         userId: session.user.id,
       },
     });

@@ -19,28 +19,6 @@ import {
   SelectValue,
   SelectItem,
 } from "@/components/ui/select";
-
-const PreferencesSchema = userPreferenceSchema;
-type PreferencesValues = z.infer<typeof PreferencesSchema>;
-
-function parseStartTimes(value: User["preferredStartTimes"]) {
-  if (!value) return [] as number[];
-  if (Array.isArray(value)) {
-    return value.filter((item): item is number => typeof item === "number");
-  }
-  if (typeof value === "string") {
-    try {
-      const parsed = JSON.parse(value);
-      return Array.isArray(parsed)
-        ? parsed.filter((item: unknown): item is number => typeof item === "number")
-        : [];
-    } catch {
-      return [];
-    }
-  }
-  return [];
-}
-
 import { Checkbox } from "@/components/ui/checkbox";
 
 const PreferencesSchema = userPreferenceSchema;
@@ -223,7 +201,7 @@ export function PreferencesForm({ user }: Props) {
             <FormItem>
               <FormLabel>Preferred Variants</FormLabel>
               <div className="flex flex-wrap gap-4">
-                {["NLHE", "PLO", "PLO5", "MIXED", "OTHER"].map((variant) => (
+                {(["NLHE", "PLO", "PLO5", "MIXED", "OTHER"] as const).map((variant) => (
                   <FormField
                     key={variant}
                     control={form.control}
@@ -234,9 +212,10 @@ export function PreferencesForm({ user }: Props) {
                           <Checkbox
                             checked={field.value?.includes(variant)}
                             onCheckedChange={(checked) => {
+                              const current = field.value ?? [];
                               return checked
-                                ? field.onChange([...field.value, variant])
-                                : field.onChange(field.value?.filter((value) => value !== variant));
+                                ? field.onChange([...current, variant])
+                                : field.onChange(current.filter((value) => value !== variant));
                             }}
                           />
                         </FormControl>
