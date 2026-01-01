@@ -31,21 +31,36 @@ export default async function VirtualPage() {
     );
   }
 
-  // Generate initial token
-  const token = jwt.sign(
+  const token = createPcgToken(
     {
-      sub: session.user.id,
+      id: session.user.id,
       email: session.user.email,
       name: session.user.name,
-      provider: "jungleverse",
-      iat: Math.floor(Date.now() / 1000),
-      exp: Math.floor(Date.now() / 1000) + 5 * 60,
     },
-    jwtSecret,
-    { algorithm: "HS256" }
+    jwtSecret
   );
 
   const iframeSrc = `${pcgUrl}/embed/virtual-environment?token=${token}`;
 
   return <VirtualEnvironmentEmbed initialSrc={iframeSrc} />;
+}
+
+type SessionUser = {
+  id: string;
+  email?: string | null;
+  name?: string | null;
+};
+
+function createPcgToken(user: SessionUser, secret: string) {
+  const issuedAt = Math.floor(Date.now() / 1000);
+  const payload = {
+    sub: user.id,
+    email: user.email,
+    name: user.name,
+    provider: "jungleverse" as const,
+    iat: issuedAt,
+    exp: issuedAt + 5 * 60,
+  };
+
+  return jwt.sign(payload, secret, { algorithm: "HS256" });
 }

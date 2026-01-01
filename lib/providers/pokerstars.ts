@@ -45,6 +45,27 @@ async function fetchPokerStarsTournaments(): Promise<NormalizedTournament[]> {
   }
 }
 
+type PokerStarsAPITournament = {
+  gameType?: string;
+  variant?: string;
+  startTime?: string;
+  start_time?: string;
+  buyIn?: string | number;
+  buyin?: string | number;
+  rake?: string | number;
+  startingChips?: number;
+  starting_stack?: number;
+  levelDuration?: number;
+  blind_level?: number;
+  reentry?: string;
+  guarantee?: string | number;
+  guaranteed?: string | number;
+  expectedPlayers?: number;
+  tournamentId?: string | number;
+  id?: string | number;
+  [key: string]: unknown;
+};
+
 async function tryPokerStarsAPI(): Promise<NormalizedTournament[]> {
   try {
     const response = await fetch(POKERSTARS_API_URL, {
@@ -63,20 +84,23 @@ async function tryPokerStarsAPI(): Promise<NormalizedTournament[]> {
     // Transform API response to normalized format
     // Note: This structure is hypothetical - adjust based on actual API
     if (Array.isArray(data.tournaments)) {
-      return data.tournaments.map((t: any) => ({
-        pokerRoom: "Pokerstars",
-        variant: parsePokerStarsVariant(t.gameType || t.variant),
-        startTime: new Date(t.startTime || t.start_time),
-        buyinAmount: parseCurrency(t.buyIn || t.buyin) || 0,
-        rakeAmount: parseCurrency(t.rake) ?? undefined,
-        startingStack: t.startingChips || t.starting_stack,
-        blindLevelMinutes: t.levelDuration || t.blind_level,
-        reentryPolicy: t.reentry,
-        estimatedPrizePool: parseCurrency(t.guarantee || t.guaranteed) ?? undefined,
-        typicalFieldSize: t.expectedPlayers,
-        externalId: t.tournamentId || t.id,
-        metadata: { source: "api", ...t },
-      }));
+      return data.tournaments.map((t: PokerStarsAPITournament) => {
+        const startSource = t.startTime ?? t.start_time ?? Date.now();
+        return {
+          pokerRoom: "Pokerstars",
+          variant: parsePokerStarsVariant(t.gameType ?? t.variant ?? ""),
+          startTime: new Date(startSource),
+          buyinAmount: parseCurrency(String(t.buyIn ?? t.buyin ?? "")) || 0,
+          rakeAmount: parseCurrency(String(t.rake ?? "")) ?? undefined,
+          startingStack: t.startingChips ?? t.starting_stack ?? 0,
+          blindLevelMinutes: t.levelDuration ?? t.blind_level ?? 0,
+          reentryPolicy: t.reentry,
+          estimatedPrizePool: parseCurrency(String(t.guarantee ?? t.guaranteed ?? "")) ?? undefined,
+          typicalFieldSize: t.expectedPlayers,
+          externalId: String(t.tournamentId ?? t.id ?? ""),
+          metadata: { source: "api", ...t },
+        };
+      });
     }
 
     return [];

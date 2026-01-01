@@ -1,4 +1,5 @@
 import { Suspense } from "react";
+import Link from "next/link";
 import { Metadata } from "next";
 import { listRooms } from "@/lib/services/rooms";
 import { RoomCard } from "@/components/rooms/room-card";
@@ -35,11 +36,12 @@ export default async function RoomsPage({ searchParams }: Props) {
   }
 
   const [data, currentUser] = await Promise.all([
-    listRooms(resolvedSearchParams),
+    listRooms(sanitizedSearchParams),
     getCurrentUser(),
   ]);
   const rooms = data.items as RoomWithGames[];
   const favoriteRoomIds = currentUser ? await getFavoriteRoomIds(currentUser.id) : [];
+  const hasRooms = rooms.length > 0;
 
   return (
     <div className="container space-y-8 py-10">
@@ -48,26 +50,47 @@ export default async function RoomsPage({ searchParams }: Props) {
           <h1 className="text-3xl font-semibold">Rooms Directory</h1>
           <p className="text-muted-foreground">Filter by city, country, or brand. Live pagination and Mapbox view.</p>
         </div>
-        <Suspense fallback={<div className="h-12 w-full animate-pulse rounded-md bg-muted" />}>
+        <Suspense fallback={<div className="h-12 w-full rounded-full bg-muted" />}>
           <RoomFilters />
         </Suspense>
       </div>
-      <div className="grid gap-8 lg:grid-cols-1">
-        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
-          {rooms.map((room) => (
-            <RoomCard
-              key={room.id}
-              room={room}
-              currentUserId={currentUser?.id}
-              initialIsFavorite={favoriteRoomIds.includes(room.id)}
-            />
-          ))}
+      {hasRooms ? (
+        <div className="grid gap-8 lg:grid-cols-1">
+          <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+            {rooms.map((room) => (
+              <RoomCard
+                key={room.id}
+                room={room}
+                currentUserId={currentUser?.id}
+                initialIsFavorite={favoriteRoomIds.includes(room.id)}
+              />
+            ))}
+          </div>
+          <PaginationControls page={data.page} pages={data.pages} searchParams={sanitizedSearchParams} />
+          <div>
+            <RoomsMap rooms={rooms} />
+          </div>
         </div>
-        <PaginationControls page={data.page} pages={data.pages} searchParams={sanitizedSearchParams} />
-        <div>
-          <RoomsMap rooms={rooms} />
-        </div>
-      </div>
+      ) : (
+        <RoomsEmptyState />
+      )}
+    </div>
+  );
+}
+
+function RoomsEmptyState() {
+  return (
+    <div className="rounded-2xl border border-dashed bg-muted/20 p-12 text-center">
+      <p className="text-lg font-semibold">No rooms match those filters—yet.</p>
+      <p className="mt-2 text-sm text-muted-foreground">
+        Clear filters or search a different city to discover active poker rooms.
+      </p>
+      <Link
+        href="/rooms"
+        className="mt-6 inline-flex items-center justify-center rounded-full border border-secondary px-4 py-2 text-xs font-semibold uppercase tracking-[0.2em] text-secondary transition hover:bg-secondary/10"
+      >
+        Reset filters
+      </Link>
     </div>
   );
 }

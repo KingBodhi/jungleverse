@@ -31,7 +31,6 @@ interface ReviewFormProps {
 export function ReviewForm({ pokerRoomId, onSubmitSuccess }: ReviewFormProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
-  const [rating, setRating] = useState(0);
 
   const form = useForm<ReviewFormValues>({
     resolver: zodResolver(reviewSchema),
@@ -58,8 +57,7 @@ export function ReviewForm({ pokerRoomId, onSubmitSuccess }: ReviewFormProps) {
         throw new Error("Failed to submit review");
       }
 
-      form.reset();
-      setRating(0);
+      form.reset({ rating: 0, comment: "" });
       onSubmitSuccess();
     } catch {
       setError("An error occurred. Please try again.");
@@ -71,26 +69,31 @@ export function ReviewForm({ pokerRoomId, onSubmitSuccess }: ReviewFormProps) {
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-        <FormItem>
-          <FormLabel>Rating</FormLabel>
-          <FormControl>
-            <div className="flex items-center">
-              {[1, 2, 3, 4, 5].map((star) => (
-                <Star
-                  key={star}
-                  className={`h-6 w-6 cursor-pointer ${
-                    star <= rating ? "text-yellow-400 fill-yellow-400" : "text-gray-300"
-                  }`}
-                  onClick={() => {
-                    setRating(star);
-                    form.setValue("rating", star);
-                  }}
-                />
-              ))}
-            </div>
-          </FormControl>
-          <FormMessage />
-        </FormItem>
+        <FormField
+          control={form.control}
+          name="rating"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Rating</FormLabel>
+              <FormControl>
+                <div className="flex items-center">
+                  {[1, 2, 3, 4, 5].map((star) => (
+                    <Star
+                      key={star}
+                      className={`h-6 w-6 cursor-pointer ${
+                        star <= (field.value ?? 0)
+                          ? "text-yellow-400 fill-yellow-400"
+                          : "text-gray-300"
+                      }`}
+                      onClick={() => field.onChange(star)}
+                    />
+                  ))}
+                </div>
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
         <FormField
           control={form.control}
           name="comment"

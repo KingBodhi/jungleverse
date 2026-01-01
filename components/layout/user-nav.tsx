@@ -11,6 +11,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Button } from "@/components/ui/button";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { User } from "next-auth";
 
 interface UserNavProps {
@@ -21,10 +22,13 @@ export function UserNav({ user }: UserNavProps) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button variant="ghost" className="relative h-10 w-10 rounded-full">
-          <div className="flex h-10 w-10 items-center justify-center rounded-full bg-primary text-primary-foreground">
-            {user.name?.[0]?.toUpperCase() || user.email?.[0]?.toUpperCase() || "U"}
-          </div>
+        <Button variant="ghost" className="relative h-10 w-10 rounded-full p-0" aria-label="User menu">
+          <Avatar className="h-10 w-10 border border-border">
+            <AvatarImage src={user.image ?? undefined} alt={user.name ?? user.email ?? "User avatar"} />
+            <AvatarFallback>
+              {user.name?.[0]?.toUpperCase() || user.email?.[0]?.toUpperCase() || "U"}
+            </AvatarFallback>
+          </Avatar>
         </Button>
       </DropdownMenuTrigger>
       <DropdownMenuContent className="w-56" align="end" forceMount>

@@ -1,18 +1,28 @@
 // lib/poker-data-fetcher.ts
 
-import { PrismaClient } from '@prisma/client';
-import { createTournament } from './services/tournaments';
-import { GameVariant } from '@prisma/client';
-import { scrapeClubGG, getUpcomingTournaments as getClubGGTournaments } from './scrapers/clubgg';
+import { PrismaClient, GameVariant } from "@prisma/client";
+import { createTournament } from "./services/tournaments";
+import { getUpcomingTournaments as getClubGGTournaments } from "./scrapers/clubgg";
 
 const prisma = new PrismaClient();
 
+type ConnectorTournament = {
+  variant: GameVariant;
+  startTime: Date;
+  buyinAmount: number;
+  startingStack: number;
+  blindLevelMinutes: number;
+  estimatedPrizePool?: number;
+};
+
+type SiteConnector = () => Promise<ConnectorTournament[]>;
+
 // A map of poker site names to their "connector" functions
-const siteConnectors: { [key: string]: () => Promise<any[]> } = {
+const siteConnectors: Record<string, SiteConnector> = {
   // Example for GGpoker
   GGpoker: async () => {
     // In a real implementation, this would fetch data from the GGpoker API or website
-    console.log('Fetching data for GGpoker...');
+    console.log("Fetching data for GGpoker...");
     // For now, we'll just return some dummy data
     return [
       {
@@ -27,7 +37,7 @@ const siteConnectors: { [key: string]: () => Promise<any[]> } = {
   // Example for Pokerstars
   Pokerstars: async () => {
     // In a real implementation, this would fetch data from the Pokerstars API or website
-    console.log('Fetching data for Pokerstars...');
+    console.log("Fetching data for Pokerstars...");
     // For now, we'll just return some dummy data
     return [
       {
@@ -41,11 +51,11 @@ const siteConnectors: { [key: string]: () => Promise<any[]> } = {
   },
   // ClubGG connector
   ClubGG: async () => {
-    console.log('Fetching data for ClubGG...');
+    console.log("Fetching data for ClubGG...");
     const tournaments = await getClubGGTournaments();
     return tournaments
-      .filter(t => t.tournament)
-      .map(t => ({
+      .filter((t) => t.tournament)
+      .map((t) => ({
         variant: t.variant,
         startTime: t.tournament!.startTime,
         buyinAmount: t.tournament!.buyIn * 100, // Convert to cents
@@ -90,7 +100,7 @@ export async function fetchAllPokerData(provider?: string) {
     await fetchAndStorePokerData(provider);
   } else {
     // Fetch for all providers
-    for (const siteName in siteConnectors) {
+    for (const siteName of Object.keys(siteConnectors)) {
       await fetchAndStorePokerData(siteName);
     }
   }

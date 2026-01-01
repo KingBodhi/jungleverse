@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Plus_Jakarta_Sans } from "next/font/google";
+import { Bebas_Neue, Inter } from "next/font/google";
 import "./globals.css";
 import { cn } from "@/lib/utils";
 import { SiteHeader } from "@/components/layout/site-header";
@@ -8,7 +8,8 @@ import { SiteFooter } from "@/components/layout/site-footer";
 export const dynamic = "force-dynamic";
 
 const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "https://global-holdem-index.local";
-const font = Plus_Jakarta_Sans({ subsets: ["latin"], variable: "--font-sans" });
+const bodyFont = Inter({ subsets: ["latin"], variable: "--font-body", display: "swap" });
+const displayFont = Bebas_Neue({ subsets: ["latin"], weight: "400", variable: "--font-display" });
 
 export const metadata: Metadata = {
   title: "Global Texas Hold'em Index",
@@ -26,7 +27,13 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={cn("min-h-screen bg-background font-sans antialiased", font.variable)}>
+      <body
+        className={cn(
+          "min-h-screen bg-background font-sans antialiased",
+          bodyFont.variable,
+          displayFont.variable
+        )}
+      >
         <SiteHeader />
         <main className="min-h-[calc(100dvh-200px)]">{children}</main>
         <SiteFooter />

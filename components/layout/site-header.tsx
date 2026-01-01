@@ -9,24 +9,25 @@ const links = [
   { href: "/rooms", label: "Rooms" },
   { href: "/tournaments", label: "Tournaments" },
   { href: "/cash-games", label: "Cash Games" },
-  { href: "/virtual", label: "Virtual" },
 ];
 
 export async function SiteHeader({ children }: PropsWithChildren) {
   const user = await getCurrentUser();
 
   return (
-    <header className="border-b bg-white/80 backdrop-blur supports-[backdrop-filter]:bg-white/60">
+    <header className="border-b border-border/60 bg-background/90 backdrop-blur supports-[backdrop-filter]:bg-background/70">
       <div className="container flex items-center justify-between py-4">
         <Link href="/" className="flex items-center gap-2 font-semibold">
-          <span className="text-2xl font-bold">Jungleverse</span>
+          <span className="font-display text-2xl uppercase tracking-[0.35em] text-secondary">
+            Jungleverse
+          </span>
         </Link>
         <nav className="hidden flex-1 items-center justify-center gap-6 text-sm font-medium md:flex">
           {links.map((link) => (
             <Link
               key={link.href}
               href={link.href}
-              className="text-muted-foreground transition hover:text-foreground"
+              className="text-muted-foreground transition hover:text-secondary"
             >
               {link.label}
             </Link>

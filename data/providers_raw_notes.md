@@ -1,0 +1,630 @@
+# Providers Raw Notes
+
+## Bellagio Poker Room (Las Vegas, NV)
+- provider_id: bellagio-las-vegas
+- official_name: Bellagio Poker Room
+- brand_name: Bellagio
+- operator_company: MGM Resorts International
+- address: 3600 S Las Vegas Blvd, Las Vegas, NV 89109, USA
+- phone: +1-702-693-7291 (poker host)
+- email: pcohen@bellagioresort.com
+- website: https://bellagio.mgmresorts.com/en/casino/poker.html
+- timezone: America/Los_Angeles
+- latitude: 36.11306 
+- longitude: -115.17639
+- licensing: Nevada Gaming Control Board
+- games_offered: Cash NLHE; Cash LHE; Cash PLO; Daily tournaments (paused until Jul 26)
+- specialties: High-limit Limit Hold'em and No-Limit Hold'em; call-ahead waitlist; nightly PLO bomb pots
+- notes: Tournament relaunch July 26 with $300 PLO double board opener
+- contact_hours: 24/7
+- support_channels: phone, email
+- data_sources: bellagio.mgmresorts.com/en/casino/poker.html | bellagio.mgmresorts.com/map-directions | mapcarta.com/25278210
+## ARIA Poker Room (Las Vegas, NV)
+- provider_id: aria-las-vegas
+- official_name: ARIA Poker Room
+- brand_name: ARIA Resort & Casino
+- operator_company: MGM Resorts International
+- address: 3730 S Las Vegas Blvd, Las Vegas, NV 89158, USA
+- phone: +1-702-590-7232 (poker room line)
+- email: PokerRoomRates@aria.com
+- website: https://aria.mgmresorts.com/en/casino/poker.html
+- timezone: America/Los_Angeles
+- latitude: 36.10754
+- longitude: -115.17668
+- licensing: Nevada Gaming Control Board
+- games_offered: Cash NLHE; Cash PLO; Mixed games; Daily tournaments
+- specialties: 24-table room with Ivey Room high-limit area and BetMGM Championship
+- notes: Hosts ARIA Poker Classic May 28–July 13 2025 and BetMGM Championship July 4 weekend
+- contact_hours: 24/7
+- support_channels: phone, email
+- data_sources: aria.mgmresorts.com/en/casino/poker.html | mapcarta.com/ChIJSx21Lp1DyIARBcluKKm9gE
+## MGM Grand Poker Room (Las Vegas, NV)
+- provider_id: mgm-grand-las-vegas
+- official_name: MGM Grand Poker Room
+- brand_name: MGM Grand
+- operator_company: MGM Resorts International
+- address: 3799 S Las Vegas Blvd, Las Vegas, NV 89109, USA
+- phone: +1-702-891-7434
+- email: N/A
+- website: https://mgmgrand.mgmresorts.com/en/casino/poker-tables.html
+- timezone: America/Los_Angeles
+- latitude: 36.10201
+- longitude: -115.16988
+- licensing: Nevada Gaming Control Board
+- games_offered: Cash NLHE; Cash LHE; Daily tournaments
+- specialties: 24/7 nonsmoking poker room dubbed $1/$2 NLH capital; 1/2–3/5 NLH buy-ins $100–$1,200
+- notes: Four daily NLH tournaments (11 a.m., 3 p.m., 7 p.m., 11 p.m.) with $100–$300 buy-ins
+- contact_hours: 24/7
+- support_channels: phone
+- data_sources: mgmgrand.mgmresorts.com/en/casino/poker-tables.html | coordinatesfinder.com/usa/nevada/las-vegas/mgm-grand-las-vegas
+## Mandalay Bay Poker Room (Las Vegas, NV)
+- provider_id: mandalay-bay-las-vegas
+- official_name: Mandalay Bay Poker Room
+- brand_name: Mandalay Bay Resort and Casino
+- operator_company: MGM Resorts International
+- address: 3950 S Las Vegas Blvd, Las Vegas, NV 89119, USA
+- phone: +1-702-632-7790
+- email: N/A
+- website: https://mandalaybay.mgmresorts.com/en/casino/poker-tables.html
+- timezone: America/Los_Angeles
+- latitude: 36.09278
+- longitude: -115.17667
+- licensing: Nevada Gaming Control Board
+- games_offered: Cash NLHE; Limit Hold'em; Tournaments (on request)
+- specialties: 10-table room (Wed–Mon 10 a.m.–4 a.m.) offering jackpots up to $5/$10 blinds and group tournament hosting
+- notes: Schedule includes $100-to-$500 buy-in events and call-ahead signups; closed Tuesdays
+- contact_hours: Wed–Mon 10 a.m.–4 a.m.
+- support_channels: phone
+- data_sources: mandalaybay.mgmresorts.com/en/casino/poker-tables.html | mapcarta.com/27150008
+
+## Venetian Poker Room (Las Vegas, NV)
+- provider_id: venetian-las-vegas
+- official_name: Venetian Poker Room
+- brand_name: The Venetian Resort Las Vegas
+- operator_company: Apollo Global Management (operator for The Venetian Las Vegas)
+- address: 3325 S Las Vegas Blvd, Las Vegas, NV 89109, USA
+- phone: +1-702-414-7657
+- email: N/A
+- website: https://www.venetianlasvegas.com/resort/casino/poker/promotions.html
+- timezone: America/Los_Angeles
+- latitude: 36.12227
+- longitude: -115.16681
+- licensing: Nevada Gaming Control Board
+- games_offered: Cash NLHE; Cash PLO; Daily tournaments; Promotions such as high hands and freerolls
+- specialties: Level 2 poker room with high-hand promos (“Take It or Risk It,” mystery envelopes) and hosted events
+- notes: Weekly $30k freeroll entry via 30 promo hours and ability to customize tournaments via concierge
+- contact_hours: 24/7
+- support_channels: phone
+- data_sources: venetianlasvegas.com/resort/casino/poker/promotions.html | worldcasinodirectory.com/casino/the-venetian-resort-hotel-casino-las-vegas#poker | mapcarta.com/27223406
+## Resorts World Las Vegas Poker Room (Las Vegas, NV)
+- provider_id: resorts-world-las-vegas
+- official_name: Resorts World Las Vegas Poker Room
+- brand_name: Resorts World Las Vegas
+- operator_company: Genting Group
+- address: 3000 S Las Vegas Blvd, Las Vegas, NV 89109, USA
+- phone: +1-702-676-7000
+- email: N/A
+- website: https://www.rwlasvegas.com/casino/poker-room/
+- timezone: America/Los_Angeles
+- latitude: 36.13355
+- longitude: -115.15933
+- licensing: Nevada Gaming Control Board
+- games_offered: Cash NLHE; Cash PLO; Daily tournaments; Mixed games
+- specialties: 30-table room with VIP lounge, plush seating, high-limit service
+- notes: Hosts daily NLH/PLO mixed tournaments and features Waitlist via Bravo
+- contact_hours: 24/7
+- support_channels: phone
+- data_sources: rwlasvegas.com/casino/poker-room | mapcarta.com/27198660
+## Borgata Poker Room (Atlantic City, NJ)
+- provider_id: borgata-atlantic-city
+- official_name: Borgata Poker Room
+- brand_name: Borgata Hotel Casino & Spa
+- operator_company: MGM Resorts International
+- address: 1 Borgata Way, Atlantic City, NJ 08401, USA
+- phone: +1-609-317-8257
+- email: N/A
+- website: https://borgata.mgmresorts.com/en/casino/poker.html
+- timezone: America/New_York
+- latitude: 39.37786
+- longitude: -74.42832
+- licensing: New Jersey Division of Gaming Enforcement
+- games_offered: Cash NLHE; Cash LHE; Cash PLO; Daily tournaments; Major series (Borgata Poker Open)
+- specialties: 52-table room hosting WPT-caliber series with 24/7 action
+- notes: Winter Poker Open Jan 2–18 2026 with $8M guaranteed across 37 events
+- contact_hours: 24/7
+- support_channels: phone
+- data_sources: borgata.mgmresorts.com/en/casino/poker.html | worldcasinodirectory.com/poker-room/borgata-poker | coordinatesfinder.com/usa/new-jersey/atlantic-city/borgata-hotel-casino-spa
+## Foxwoods Poker Room (Mashantucket, CT)
+- provider_id: foxwoods-mashantucket
+- official_name: Foxwoods Poker Room
+- brand_name: Foxwoods Resort Casino
+- operator_company: Mashantucket Pequot Tribal Nation
+- address: 350 Trolley Line Blvd, Mashantucket, CT 06338, USA
+- phone: +1-860-312-2151
+- email: N/A
+- website: https://www.foxwoods.com/game/poker/
+- timezone: America/New_York
+- latitude: 41.47421
+- longitude: -71.95878
+- licensing: Mashantucket Pequot Gaming Commission
+- games_offered: Cash NLHE; Cash PLO; Limit Hold'em; Daily tournaments
+- specialties: 54-table modern room with HD video walls, kiosk check-in, weekend late hours
+- notes: Weekly $395/$135/$255 NLH tournaments plus tier multipliers
+- contact_hours: Sun–Thu 8 a.m.–2 a.m.; Fri–Sat 8 a.m.–4 a.m.
+- support_channels: phone
+- data_sources: foxwoods.com/game/poker | mapcarta.com/26049226
+## Mohegan Sun Poker Room (Uncasville, CT)
+- provider_id: mohegan-sun-uncasville
+- official_name: Mohegan Sun Poker Room
+- brand_name: Mohegan Sun
+- operator_company: Mohegan Tribal Gaming Authority
+- address: 1 Mohegan Sun Blvd, Uncasville, CT 06382, USA
+- phone: +1-860-862-2638
+- email: N/A
+- website: https://mohegansun.com/playing/poker.html
+- timezone: America/New_York
+- latitude: 41.48863
+- longitude: -72.09023
+- licensing: Mohegan Tribe / CT Department of Consumer Protection
+- games_offered: Cash NLHE; Cash LHE; Daily tournaments; Bounty events; Mixed games
+- specialties: 33-table smoke-free room with progressive bad beat (quad fives qualifier)
+- notes: Daily $160–$350 NLH/bounty tournaments and 7-game cash mix
+- contact_hours: 9 a.m.–4 a.m. (extended weekends)
+- support_channels: phone
+- data_sources: mohegansun.com/playing/poker.html | mapcarta.com/23094554
+## Live! Casino & Hotel Maryland Poker Room (Hanover, MD)
+- provider_id: live-casino-maryland
+- official_name: Live! Casino & Hotel Maryland Poker Room
+- brand_name: Live! Casino & Hotel Maryland
+- operator_company: The Cordish Companies
+- address: 7002 Arundel Mills Cir #7777, Hanover, MD 21076, USA
+- phone: +1-443-445-2500
+- email: N/A
+- website: https://maryland.livecasinohotel.com/casino-and-gaming/poker
+- timezone: America/New_York
+- latitude: 39.15554
+- longitude: -76.72672
+- licensing: Maryland Lottery and Gaming Control Agency
+- games_offered: Cash NLHE; Cash PLO; Daily tournaments; High-limit games
+- specialties: 50-table 15,000 sq ft room with Poker Penthouse for high stakes and dedicated smoking patio
+- notes: Hosts PokerStars Open Maryland (Oct 19–26 2025) and offers comps + Bravo waitlists
+- contact_hours: 24/7
+- support_channels: phone
+- data_sources: maryland.livecasinohotel.com/casino-and-gaming/poker | mapcarta.com/28468806
+## MGM National Harbor Poker Room (Oxon Hill, MD)
+- provider_id: mgm-national-harbor
+- official_name: MGM National Harbor Poker Room
+- brand_name: MGM National Harbor
+- operator_company: MGM Resorts International
+- address: 101 MGM National Ave, Oxon Hill, MD 20745, USA
+- phone: +1-301-971-5600
+- email: N/A
+- website: https://mgmnationalharbor.mgmresorts.com/en/casino/poker.html
+- timezone: America/New_York
+- latitude: 38.79510
+- longitude: -77.01226
+- licensing: Maryland Lottery and Gaming Control Agency
+- games_offered: Cash NLHE; Cash PLO; Limit Hold'em; Daily tournaments
+- specialties: 53 tables with high-limit salon, 8-handed caps, and Potomac Winter Poker Open
+- notes: Potomac Winter Poker Open Feb 11–23 2026 (23 trophy events) and 24/7 operations
+- contact_hours: 24/7
+- support_channels: phone
+- data_sources: mgmnationalharbor.mgmresorts.com/en/casino/poker.html | mapcarta.com/27175130
+## Live! Casino & Hotel Philadelphia Poker Room (Philadelphia, PA)
+- provider_id: live-casino-philadelphia
+- official_name: Live! Casino & Hotel Philadelphia Poker Room
+- brand_name: Live! Casino & Hotel Philadelphia
+- operator_company: The Cordish Companies
+- address: 900 Packer Ave, Philadelphia, PA 19148, USA
+- phone: +1-267-682-7562
+- email: N/A
+- website: https://philadelphia.livecasinohotel.com/casino/table-games/poker
+- timezone: America/New_York
+- latitude: 39.90798
+- longitude: -75.16851
+- licensing: Pennsylvania Gaming Control Board
+- games_offered: Cash NLHE; Cash PLO; Daily tournaments; Bounty events
+- specialties: 29-table room with daily NLH schedule (morning/evening) and Stadium District location
+- notes: Frequent $20k-$50k guaranteed tournaments and comped parking for poker players
+- contact_hours: 24/7
+- support_channels: phone
+- data_sources: philadelphia.livecasinohotel.com/casino/table-games/poker | uscasinoadvantage.com/poker-rooms/pennsylvania/live-philadelphia | mapcarta.com/26753488
+## Rivers Casino Pittsburgh Poker Room (Pittsburgh, PA)
+- provider_id: rivers-casino-pittsburgh
+- official_name: Rivers Casino Pittsburgh Poker Room
+- brand_name: Rivers Casino Pittsburgh
+- operator_company: Rush Street Gaming
+- address: 777 Casino Dr, Pittsburgh, PA 15212, USA
+- phone: +1-412-566-4606
+- email: N/A
+- website: https://www.riverscasino.com/pittsburgh/casino/poker-room/
+- timezone: America/New_York
+- latitude: 40.44732
+- longitude: -80.01373
+- licensing: Pennsylvania Gaming Control Board
+- games_offered: Cash NLHE; Cash PLO; Limit Hold'em; Daily tournaments
+- specialties: 30-table room with varied hours (extended weekends) and weekly bounty events
+- notes: Wednesday $160 bounty, Friday $125 NLH, plus standard 1/3 NLH $100–$300 buy-ins
+- contact_hours: Mon–Wed 10 a.m.–6 a.m., Thu 10 a.m.–Mon 6 a.m.
+- support_channels: phone
+- data_sources: riverscasino.com/pittsburgh/casino/poker-room | mapcarta.com/26781646
+## MGM Grand Detroit Poker Room (Detroit, MI)
+- provider_id: mgm-grand-detroit
+- official_name: MGM Grand Detroit Poker Room
+- brand_name: MGM Grand Detroit
+- operator_company: MGM Resorts International
+- address: 1777 3rd Ave, Detroit, MI 48226, USA
+- phone: +1-313-465-1070
+- email: N/A
+- website: https://mgmgranddetroit.mgmresorts.com/en/casino/poker-room.html
+- timezone: America/Detroit
+- latitude: 42.33252
+- longitude: -83.06179
+- licensing: Michigan Gaming Control Board
+- games_offered: Cash NLHE; Cash Limit Hold'em; Cash PLO
+- specialties: 24/7 poker floor near valet with high-hand promos ($200–$4,000) and $100k freeroll hours program
+- notes: Rewards include comped parking and November–January hours promo for freeroll entry
+- contact_hours: 24/7
+- support_channels: phone
+- data_sources: mgmgranddetroit.mgmresorts.com/en/casino/poker-room.html | mapcarta.com/23108194
+## Seminole Hard Rock Hollywood Poker Room (Hollywood, FL)
+- provider_id: seminole-hard-rock-hollywood
+- official_name: Seminole Hard Rock Hollywood Poker Room
+- brand_name: Seminole Hard Rock Hotel & Casino Hollywood
+- operator_company: Seminole Gaming
+- address: 1 Seminole Way, Hollywood, FL 33314, USA
+- phone: +1-954-585-5111
+- email: N/A
+- website: https://www.seminolehardrockpokeropen.com/poker-room/
+- timezone: America/New_York
+- latitude: 26.05182
+- longitude: -80.21038
+- licensing: Seminole Tribal Gaming Commission
+- games_offered: Cash NLHE; Cash PLO; Limit Hold'em; Daily tournaments
+- specialties: 45-table, 24/7 room with Unity comps, onsite wiring, $5/$10+ NLH, PLO, and high-hand promos
+- notes: Hosts Seminole Hard Rock Poker Showdown and other WPT events
+- contact_hours: 24/7
+- support_channels: phone
+- data_sources: seminolehardrockpokeropen.com/poker-room | mapcarta.com/25680168
+## Seminole Hard Rock Tampa Poker Room (Tampa, FL)
+- provider_id: seminole-hard-rock-tampa
+- official_name: Seminole Hard Rock Tampa Poker Room
+- brand_name: Seminole Hard Rock Hotel & Casino Tampa
+- operator_company: Seminole Gaming
+- address: 5223 Orient Rd, Tampa, FL 33610, USA
+- phone: +1-813-627-6650
+- email: N/A
+- website: https://www.seminolehardrocktampa.com/casino/poker
+- timezone: America/New_York
+- latitude: 27.98221
+- longitude: -82.36447
+- licensing: Seminole Tribal Gaming Commission
+- games_offered: Cash NLHE; Cash PLO; Omaha Hi/Lo; Tournaments
+- specialties: 46-table smoke-free room with Wi-Fi, snack bar, 42 TVs, high-limit NLH up to $10/$10+
+- notes: Hosts WPT regional festivals and premium comps for poker hours
+- contact_hours: 24/7
+- support_channels: phone
+- data_sources: seminolehardrocktampa.com/casino/poker | mapcarta.com/26634766
+## Choctaw Casino & Resort Durant Poker Room (Durant, OK)
+- provider_id: choctaw-durant
+- official_name: Choctaw Casino & Resort Durant Poker Room
+- brand_name: Choctaw Casino & Resort Durant
+- operator_company: Choctaw Nation of Oklahoma
+- address: 4216 S Hwy 69/75, Durant, OK 74701, USA
+- phone: +1-580-920-0160
+- email: N/A
+- website: https://www.choctawcasinos.com/durant/
+- timezone: America/Chicago
+- latitude: 33.96277
+- longitude: -96.41417
+- licensing: Choctaw Nation Gaming Commission
+- games_offered: Cash NLHE; Cash PLO; Daily tournaments; WSOP Circuit events
+- specialties: Sky Casino poker lounge with 30+ tables, Bravo waitlists, WSOP Circuit stop Jan 7–19 2026
+- notes: Hosts Monster Stack, Gargantuan, $1,700 Main Event ($1M GTD)
+- contact_hours: 24/7
+- support_channels: phone
+- data_sources: choctawcasinos.com/durant | wsop.com/tournaments/2026-wsop-circuit-choctaw-durant | mapcarta.com/23529490
+## WinStar World Casino & Resort Poker Room (Thackerville, OK)
+- provider_id: winstar-thackerville
+- official_name: WinStar Poker Room
+- brand_name: WinStar World Casino & Resort
+- operator_company: Chickasaw Nation
+- address: 777 Casino Ave, Thackerville, OK 73459, USA
+- phone: +1-866-946-7787
+- email: N/A
+- website: https://www.winstar.com/blog/winstar-new-poker-room/
+- timezone: America/Chicago
+- latitude: 33.79650
+- longitude: -97.14119
+- licensing: Chickasaw Nation Office of the Gaming Commissioner
+- games_offered: Cash NLHE; Cash PLO; Daily tournaments; Seasonal River Poker Series
+- specialties: Newly renovated poker room with charging stations, tableside service, weekly tournaments
+- notes: Weekly tournaments Mon–Fri 1 p.m./7 p.m., Sat 11 a.m., Sun 1 p.m.; hosts River Poker Series
+- contact_hours: 24/7
+- support_channels: phone
+- data_sources: winstar.com/blog/winstar-new-poker-room | mapcarta.com/25653110
+## Talking Stick Resort Arena Poker Room (Scottsdale, AZ)
+- provider_id: talking-stick-scottsdale
+- official_name: The ARENA Poker Room at Talking Stick Resort
+- brand_name: Talking Stick Resort
+- operator_company: Salt River Pima-Maricopa Indian Community
+- address: 9800 Talking Stick Way, Scottsdale, AZ 85256, USA
+- phone: +1-480-850-7734
+- email: N/A
+- website: https://www.talkingstickresort.com/phoenix-scottsdale-casino/poker/
+- timezone: America/Phoenix
+- latitude: 33.54023
+- longitude: -111.88663
+- licensing: Salt River Pima-Maricopa Gaming Commission
+- games_offered: Cash NLHE; Cash PLO; Mixed games; Daily tournaments
+- specialties: 69-table Arena Poker Room with 300-foot LED walls, 24/7 kitchen, 600+ annual tournaments
+- notes: Reopened Feb 8 2025 after expansion; hosts Arizona State Poker Championship
+- contact_hours: 24/7
+- support_channels: phone
+- data_sources: talkingstickresort.com/phoenix-scottsdale-casino/poker | mapcarta.com/24798306
+## Parkwest Bicycle Casino (Bell Gardens, CA)
+- provider_id: bicycle-casino
+- official_name: Parkwest Bicycle Casino Poker Room
+- brand_name: Parkwest Bicycle Casino
+- operator_company: Parkwest Casinos
+- address: 888 Bicycle Casino Dr, Bell Gardens, CA 90201, USA
+- phone: +1-562-806-4646
+- email: N/A
+- website: https://www.thebike.com/
+- timezone: America/Los_Angeles
+- latitude: 33.96463
+- longitude: -118.15325
+- licensing: California Gambling Control Commission
+- games_offered: Cash NLHE; Cash LHE; Cash PLO; Mixed games; Daily tournaments
+- specialties: ~185 tables, Live at The Bike streaming, WPT Legends host
+- notes: Hosts WSOP Circuit Tournament of Champions & 18 events May 8–24 2025
+- contact_hours: 24/7
+- support_channels: phone
+- data_sources: thebike.com | pokernews.com/poker-rooms/bicycle-hotel-casino.htm | mapcarta.com/24668018
+## Wynn Las Vegas Poker Room (Las Vegas, NV)
+- provider_id: wynn-las-vegas
+- official_name: Wynn Las Vegas Poker Room
+- brand_name: Wynn Las Vegas / Encore
+- operator_company: Wynn Resorts
+- address: 3131 Las Vegas Blvd S, Las Vegas, NV 89109, USA
+- phone: +1-702-770-7654
+- email: N/A
+- website: https://www.wynnlasvegas.com/casino/poker
+- timezone: America/Los_Angeles
+- latitude: 36.12630
+- longitude: -115.16282
+- licensing: Nevada Gaming Control Board
+- games_offered: Cash NLHE; Cash PLO; Daily tournaments; High-limit games
+- specialties: 28-table Encore poker room with USB charging, Ivey Room equivalents, Wynn Signature Series
+- notes: Wynn Signature Series Jan 5–19 2026 with 29 events and $400k GTD multi-day
+- contact_hours: 24/7
+- support_channels: phone
+- data_sources: wynnlasvegas.com/casino/poker | pokernews.com/poker-rooms/wynn-las-vegas.htm | mapcarta.com/27278336
+## Encore Boston Harbor Poker Room (Everett, MA)
+- provider_id: encore-boston-harbor
+- official_name: Encore Boston Harbor Poker Room
+- brand_name: Encore Boston Harbor
+- operator_company: Wynn Resorts
+- address: 1 Broadway, Everett, MA 02149, USA
+- phone: +1-857-770-3090
+- email: N/A
+- website: https://encorebostonharbor.com/casino/poker
+- timezone: America/New_York
+- latitude: 42.39524
+- longitude: -71.07686
+- licensing: Massachusetts Gaming Commission
+- games_offered: Cash NLHE; Cash PLO; Limit games
+- specialties: 24-table Loft poker room with USB charging, shufflers, Poker Atlas remote sign-up
+- notes: Offers $1/$3 to $10/$25 NLH and PLO, high-hand promos
+- contact_hours: 24/7
+- support_channels: phone
+- data_sources: encorebostonharbor.com/casino/poker | worldcasinodirectory.com/casino/wynn-boston-harbor-resort#poker | mapcarta.com/35122606
+## Caesars Palace Poker Room (Las Vegas, NV)
+- provider_id: caesars-palace-las-vegas
+- official_name: Caesars Palace Poker Room
+- brand_name: Caesars Palace
+- operator_company: Caesars Entertainment
+- address: 3570 Las Vegas Blvd S, Las Vegas, NV 89109, USA
+- phone: +1-702-731-7731
+- email: N/A
+- website: https://www.caesars.com/caesars-palace/casino/poker
+- timezone: America/Los_Angeles
+- latitude: 36.11654
+- longitude: -115.17412
+- licensing: Nevada Gaming Control Board
+- games_offered: Cash NLHE; Limit Hold'em; Daily tournaments
+- specialties: 16 tables with four $100 NLH tournaments daily and relocation near sportsbook
+- notes: Daily tournaments at 10 a.m., 2 p.m., 6 p.m., 9 p.m. with $1k guarantees
+- contact_hours: 24/7
+- support_channels: phone
+- data_sources: caesars.com/caesars-palace/casino/poker | poker.org/inside-vegas/latest-news/caesars-palace-poker-room-on-the-move-to-a-new-old-spot-a6irF0V24hMS | mapcarta.com/27096436
+## Horseshoe Las Vegas / WSOP Hall of Fame Poker Room (Las Vegas, NV)
+- provider_id: horseshoe-las-vegas
+- official_name: Horseshoe Las Vegas Poker Room (WSOP Hall of Fame)
+- brand_name: Horseshoe Las Vegas
+- operator_company: Caesars Entertainment
+- address: 3645 Las Vegas Blvd S, Las Vegas, NV 89109, USA
+- phone: +1-702-967-4402
+- email: N/A
+- website: https://www.caesars.com/horseshoe-las-vegas/casino/poker
+- timezone: America/Los_Angeles
+- latitude: 36.11404
+- longitude: -115.17133
+- licensing: Nevada Gaming Control Board
+- games_offered: Cash NLHE; Limit Hold'em
+- specialties: 18 tables, eight-handed NLH with daily tournaments six times a day and WSOP Circuit host
+- notes: WSOP Circuit stop Mar 20–Apr 1 2025 with 18 rings and $1,700 Main ($750k GTD)
+- contact_hours: 24/7
+- support_channels: phone
+- data_sources: caesars.com/horseshoe-las-vegas/casino/poker | vegasadvantage.com/open-las-vegas-poker-rooms/ballys-poker-room | mapcarta.com/27243110
+## Commerce Casino Poker Room (Commerce, CA)
+- provider_id: commerce-casino
+- official_name: Commerce Casino Poker Room
+- brand_name: Commerce Casino & Hotel
+- operator_company: Commerce Casino & Hotel
+- address: 6131 Telegraph Rd, Commerce, CA 90040, USA
+- phone: +1-323-721-2100
+- email: N/A
+- website: https://www.commercecasino.com/poker/
+- timezone: America/Los_Angeles
+- latitude: 34.00868
+- longitude: -118.14874
+- licensing: California Gambling Control Commission
+- games_offered: Cash NLHE; Cash LHE; Cash PLO; Mixed games; Daily tournaments
+- specialties: 150+ tables, LAPC/WPT host, Live at the Bike streaming
+- notes: Hosting WSOP Tournament of Champions & Circuit May 8–24 2025 with $2M GTD Main Event
+- contact_hours: 24/7
+- support_channels: phone
+- data_sources: commercecasino.com/poker | pokernews.com/poker-rooms/commerce-casino.htm | mapcarta.com/24682202
+## Peppermill Resort Poker Room (Reno, NV)
+- provider_id: peppermill-reno
+- official_name: Peppermill Resort Spa Casino Poker Room
+- brand_name: Peppermill Resort Spa Casino
+- operator_company: Peppermill Resorts
+- address: 2707 S Virginia St, Reno, NV 89502, USA
+- phone: +1-775-689-7275
+- email: N/A
+- website: https://www.peppermillreno.com/gaming/poker/
+- timezone: America/Los_Angeles
+- latitude: 39.49962
+- longitude: -119.80208
+- licensing: Nevada Gaming Control Board
+- games_offered: Cash NLHE; Cash PLO; Dealer's choice variants; Daily tournaments
+- specialties: 19-table room with mezzanine VIP area and themed tournaments ($135–$560)
+- notes: Fall Poker Palooza Nov 7–17 2025 and special lineup (Mon/ Wed dealer's choice)
+- contact_hours: 24/7
+- support_channels: phone
+- data_sources: peppermillreno.com/gaming/poker | mapcarta.com/24371050 | studiopoker.live/signature-festival-2025-peppermill
+## Hard Rock Casino Cincinnati Poker Room (Cincinnati, OH)
+- provider_id: hard-rock-cincinnati
+- official_name: Hard Rock Casino Cincinnati Poker Room
+- brand_name: Hard Rock Casino Cincinnati
+- operator_company: Seminole Hard Rock / Hard Rock International
+- address: 1000 Broadway St, Cincinnati, OH 45202, USA
+- phone: +1-513-250-3153
+- email: N/A
+- website: https://uscasinoadvantage.com/poker-rooms/ohio/hard-rock-cincinnati/
+- timezone: America/New_York
+- latitude: 39.10903
+- longitude: -84.50477
+- licensing: Ohio Casino Control Commission
+- games_offered: Cash NLHE; Cash PLO; Daily tournaments; Bounty events
+- specialties: 30-table room with $1/$3 up to $5/$5 NLH/PLO, $200 Sunday majors, $400 monthly guarantees
+- notes: Frequent black-chip bounty events and comp dollars for hours played
+- contact_hours: 24/7
+- support_channels: phone
+- data_sources: uscasinoadvantage.com/poker-rooms/ohio/hard-rock-cincinnati | mapcarta.com/25539610
+## Harrah's New Orleans WSOP Poker Room (New Orleans, LA)
+- provider_id: harrahs-new-orleans
+- official_name: Harrah's New Orleans WSOP Poker Room
+- brand_name: Caesars New Orleans (Harrah's)
+- operator_company: Caesars Entertainment
+- address: 228 Poydras St, New Orleans, LA 70130, USA
+- phone: +1-504-533-6000
+- email: N/A
+- website: https://www.caesars.com/harrahs-new-orleans/casino/poker
+- timezone: America/Chicago
+- latitude: 29.94824
+- longitude: -90.06869
+- licensing: Louisiana Gaming Control Board
+- games_offered: Cash NLHE; Cash PLO; Mixed games; Weekly tournaments
+- specialties: 20-table room adjacent to Caesars sportsbook with WSOP-branded events
+- notes: Weekly tournaments Sun/Mon/Wed and WSOP Circuit returns during 2025 upgrade
+- contact_hours: Sun–Thu 10 a.m.–4 a.m.; Fri–Sat 10 a.m.–6 a.m.
+- support_channels: phone
+- data_sources: caesars.com/harrahs-new-orleans/casino/poker | cdcgaming.com/caesars-updates-sportsbook-and-poker-room-at-harrahs-new-orleans-as-part-of-325-million-transformation | mapcarta.com/24057382
+## Hollywood Casino at Charles Town Races Poker Room (Charles Town, WV)
+- provider_id: hollywood-charles-town
+- official_name: Hollywood Casino at Charles Town Races Poker Room
+- brand_name: Hollywood Casino at Charles Town Races
+- operator_company: PENN Entertainment
+- address: 750 Hollywood Dr, Charles Town, WV 25414, USA
+- phone: +1-304-724-4654
+- email: N/A
+- website: https://www.hollywoodcasinocharlestown.com/casino/poker
+- timezone: America/New_York
+- latitude: 39.29292
+- longitude: -77.85869
+- licensing: West Virginia Lottery Commission
+- games_offered: Cash NLHE; Limit Hold'em; Omaha Hi/Lo
+- specialties: 17-table room with rotating promotions (Top Two hourly, jackpot ladders)
+- notes: December promos include $1,000 NYE hot seats and Texas Hold'em jackpot ladders
+- contact_hours: Wed–Thu 9 a.m.–3 a.m.; Fri–Sat 9 a.m.–6 a.m.; Sun 9 a.m.–3 a.m.; closed Mon–Tue
+- support_channels: phone
+- data_sources: hollywoodcasinocharlestown.com/casino/poker | mapcarta.com/22163528
+## Turning Stone Resort Casino Poker Room (Verona, NY)
+- provider_id: turning-stone-verona
+- official_name: Turning Stone Poker Room
+- brand_name: Turning Stone Resort Casino
+- operator_company: Oneida Nation Enterprises
+- address: 5218 Patrick Rd, Verona, NY 13478, USA
+- phone: +1-315-361-8676
+- email: poker@turningstone.com
+- website: https://www.turningstone.com/gaming/poker-room
+- timezone: America/New_York
+- latitude: 43.10053
+- longitude: -75.58319
+- licensing: Oneida Indian Nation Gaming Commission
+- games_offered: Cash NLHE; Cash LHE; Daily tournaments; Bad beat jackpots
+- specialties: 32-table room with Bravo waitlists, chargers, complimentary Wi-Fi
+- notes: NYE Triple Stack Turbo ($180 NLH) and rolling high-hand giveaways eligible for Hold'em tables
+- contact_hours: 24/7
+- support_channels: phone, email
+- data_sources: turningstone.com/gaming/poker-room | mapcarta.com/26515829
+## Thunder Valley Casino Resort Poker Room (Lincoln, CA)
+- provider_id: thunder-valley-lincoln
+- official_name: Thunder Valley Casino Resort Poker Room
+- brand_name: Thunder Valley Casino Resort
+- operator_company: United Auburn Indian Community
+- address: 1200 Athens Ave, Lincoln, CA 95648, USA
+- phone: +1-916-408-9095
+- email: N/A
+- website: https://thundervalleyresort.com/casino/poker
+- timezone: America/Los_Angeles
+- latitude: 38.90685
+- longitude: -121.30015
+- licensing: United Auburn Indian Community Tribal Gaming Agency
+- games_offered: Cash NLHE; Cash PLO; Daily tournaments; WSOP Circuit events
+- specialties: 28-table room expandable to 48 with Thunder Jackpot tracker, hosts WPT/WSOPC/PAT/RunGood
+- notes: WSOP Circuit Jan 12–26 2026 and daily tournaments 9:30 a.m./5:30 p.m.
+- contact_hours: 24/7
+- support_channels: phone
+- data_sources: thundervalleyresort.com/casino/poker | mapcarta.com/24743388
+## Harrah's Cherokee Casino Resort Poker Room (Cherokee, NC)
+- provider_id: harrahs-cherokee
+- official_name: Harrah's Cherokee Poker Room
+- brand_name: Harrah's Cherokee Casino Resort
+- operator_company: Caesars Entertainment
+- address: 777 Casino Dr, Cherokee, NC 28719, USA
+- phone: +1-828-497-8284
+- email: N/A
+- website: https://www.caesars.com/harrahs-cherokee/casino/poker
+- timezone: America/New_York
+- latitude: 35.47779
+- longitude: -83.31288
+- licensing: Eastern Band of Cherokee Indians Gaming Commission
+- games_offered: Cash NLHE; Cash PLO; Tournaments; Mystery bounties
+- specialties: 24/7 during majors with eight-handed tables and WSOP Circuit host
+- notes: WSOP Circuit May 1–12 2025 (18 ring events) plus weekly $140/$80/$250 tournaments
+- contact_hours: Weekdays 10 a.m.–6 a.m.; 24/7 during events
+- support_channels: phone
+- data_sources: caesars.com/harrahs-cherokee/casino/poker | wsop.com/news/wsop-circuit-players-return-to-harrahs-cherokee-casino-resort-in-north-carolina | mapcarta.com/21179576
+## Hard Rock Hotel & Casino Tulsa Poker Room (Catoosa, OK)
+- provider_id: hard-rock-tulsa
+- official_name: Hard Rock Tulsa Poker Room
+- brand_name: Hard Rock Hotel & Casino Tulsa
+- operator_company: Cherokee Nation Entertainment
+- address: 777 W Cherokee St, Catoosa, OK 74015, USA
+- phone: +1-918-384-6113
+- email: N/A
+- website: https://www.hardrockcasinotulsa.com/newsroom/tulsa-best-poker-room
+- timezone: America/Chicago
+- latitude: 36.16813
+- longitude: -95.80389
+- licensing: Cherokee Nation Gaming Commission
+- games_offered: Cash NLHE; Short Deck; Omaha; Big O; Weekly tournaments
+- specialties: 14-table non-smoking room with themed tournaments (Ultimate Freeze Out) and splash pots
+- notes: Weekly $120 NLH Tue/Thu, first-Sunday $180 Ultimate Freeze Out, sports tie-in promotions
+- contact_hours: Sun–Thu noon–3 a.m., Fri–Sat noon–4 a.m.
+- support_channels: phone
+- data_sources: hardrockcasinotulsa.com/newsroom/tulsa-best-poker-room | mapcarta.com/22273946

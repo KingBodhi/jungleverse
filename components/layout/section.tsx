@@ -14,8 +14,12 @@ export function Section({ id, className, title, description, children }: Section
       <div className="container space-y-6">
         {(title || description) && (
           <div className="space-y-2">
-            {title && <h2 className="text-2xl font-semibold tracking-tight">{title}</h2>}
-            {description && <p className="text-muted-foreground">{description}</p>}
+            {title && (
+              <h2 className="font-display text-3xl tracking-[0.08em] text-secondary">
+                {title}
+              </h2>
+            )}
+            {description && <p className="text-sm text-muted-foreground">{description}</p>}
           </div>
         )}
         {children}

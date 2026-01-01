@@ -4,7 +4,7 @@ export interface CacheEntry<T> {
 }
 
 export class ProviderCache {
-  private cache = new Map<string, CacheEntry<any>>();
+  private cache = new Map<string, CacheEntry<unknown>>();
   private readonly defaultTTL: number;
 
   constructor(defaultTTLMs: number = 3600000) { // 1 hour default

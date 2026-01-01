@@ -1,38 +1,41 @@
 import { PrismaClient, GameType } from "@prisma/client";
 import bcrypt from "bcryptjs";
 import { addDays, addHours } from "date-fns";
-import { seedCasinos } from './seed_casinos';
+import fs from "fs/promises";
+import path from "path";
+import { parse } from "csv-parse/sync";
+import { seedCasinos } from "./seed_casinos";
 
 const prisma = new PrismaClient();
 const SALT_ROUNDS = 10;
 
-const roomsSeed = [
-  {
-    name: "Commerce Casino",
-    brand: "Commerce",
-    address: "6131 Telegraph Rd",
-    city: "Los Angeles",
-    state: "CA",
-    country: "USA",
-    latitude: 34.0087,
-    longitude: -118.1487,
-    timezone: "America/Los_Angeles",
-    website: "https://www.commercecasino.com",
-    phone: "(323) 721-2100",
-  },
-  {
-    name: "Wynn Poker Room",
-    brand: "Wynn Resorts",
-    address: "3131 S Las Vegas Blvd",
-    city: "Las Vegas",
-    state: "NV",
-    country: "USA",
-    latitude: 36.1263,
-    longitude: -115.1668,
-    timezone: "America/Los_Angeles",
-    website: "https://www.wynnlasvegas.com",
-    phone: "(702) 770-7000",
-  },
+type RoomSeed = {
+  name: string;
+  brand: string;
+  address: string;
+  city: string;
+  state: string;
+  country: string;
+  latitude: number;
+  longitude: number;
+  timezone: string;
+  website: string;
+  phone: string;
+  imageUrl?: string | null;
+};
+
+const ROOM_IMAGE_POOL = [
+  "https://images.unsplash.com/photo-1469474968028-56623f02e42e?auto=format&fit=crop&w=1200&q=80",
+  "https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=1200&q=80",
+  "https://images.unsplash.com/photo-1477959858617-67f85cf4f1df?auto=format&fit=crop&w=1200&q=80",
+  "https://images.unsplash.com/photo-1511512578047-dfb367046420?auto=format&fit=crop&w=1200&q=80",
+  "https://images.unsplash.com/photo-1529688530647-93a1222214e1?auto=format&fit=crop&w=1200&q=80",
+  "https://images.unsplash.com/photo-1516450360452-9312f5e86fc7?auto=format&fit=crop&w=1200&q=80",
+  "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=1200&q=80",
+  "https://images.unsplash.com/photo-1549921296-3b4a4f3b66fc?auto=format&fit=crop&w=1200&q=80",
+];
+
+const roomsSeed: RoomSeed[] = [
   {
     name: "Texas Card House Austin",
     brand: "Texas Card House",
@@ -58,19 +61,6 @@ const roomsSeed = [
     timezone: "America/Chicago",
     website: "https://shuffle214.com",
     phone: "(469) 609-3065",
-  },
-  {
-    name: "Hard Rock Hollywood",
-    brand: "Seminole",
-    address: "1 Seminole Way",
-    city: "Hollywood",
-    state: "FL",
-    country: "USA",
-    latitude: 26.0512,
-    longitude: -80.2110,
-    timezone: "America/New_York",
-    website: "https://www.seminolehardrockhollywood.com",
-    phone: "(866) 502-7529",
   },
   {
     name: "Hippodrome Casino",
@@ -138,45 +128,6 @@ const roomsSeed = [
     phone: "(904) 646-0001",
   },
   {
-    name: "MGM National Harbor Poker Room",
-    brand: "MGM Resorts",
-    address: "101 MGM National Avenue",
-    city: "Oxon Hill",
-    state: "MD",
-    country: "USA",
-    latitude: 38.78595,
-    longitude: -77.015505,
-    timezone: "America/New_York",
-    website: "https://mgmnationalharbor.mgmresorts.com/en/casino/poker-room.html",
-    phone: "(844) 346-4664",
-  },
-  {
-    name: "Resorts World Las Vegas Poker Room",
-    brand: "Resorts World",
-    address: "3000 S Las Vegas Blvd",
-    city: "Las Vegas",
-    state: "NV",
-    country: "USA",
-    latitude: 36.133961,
-    longitude: -115.163792,
-    timezone: "America/Los_Angeles",
-    website: "https://www.rwlasvegas.com/casino/poker-room/",
-    phone: "(702) 676-7000",
-  },
-  {
-    name: "Live! Casino Philadelphia Poker Room",
-    brand: "Live! Casino & Hotel",
-    address: "900 Packer Avenue",
-    city: "Philadelphia",
-    state: "PA",
-    country: "USA",
-    latitude: 39.910317,
-    longitude: -75.164415,
-    timezone: "America/New_York",
-    website: "https://philadelphia.livecasinohotel.com/casino/poker-room",
-    phone: "(267) 682-9700",
-  },
-  {
     name: "Playground Poker Club",
     brand: "Playground",
     address: "1500 QC-138",
@@ -203,6 +154,69 @@ const roomsSeed = [
     phone: "+421 915 510 510",
   },
 ];
+
+type ProviderCsvRow = {
+  official_name: string;
+  brand_name: string;
+  hq_address: string;
+  municipality: string;
+  state_or_region: string;
+  country: string;
+  latitude: string;
+  longitude: string;
+  timezone: string;
+  website_url: string;
+  contact_phone: string;
+  logo_url: string;
+};
+
+const PROVIDERS_CSV_PATH = path.resolve(__dirname, "..", "data", "providers_physical.csv");
+
+async function loadCsvRooms(): Promise<RoomSeed[]> {
+  try {
+    const csvRaw = await fs.readFile(PROVIDERS_CSV_PATH, "utf-8");
+    const records = parse(csvRaw, {
+      columns: true,
+      skip_empty_lines: true,
+      trim: true,
+    }) as ProviderCsvRow[];
+
+    return records.map((row) => ({
+      name: row.official_name?.trim() ?? "",
+      brand: row.brand_name?.trim() || row.official_name?.trim() || "",
+      address: row.hq_address?.trim() ?? "",
+      city: row.municipality?.trim() ?? "",
+      state: row.state_or_region?.trim() ?? "",
+      country: row.country?.trim() ?? "",
+      latitude: Number(row.latitude),
+      longitude: Number(row.longitude),
+      timezone: row.timezone?.trim() ?? "",
+      website: row.website_url?.trim() ?? "",
+      phone: row.contact_phone?.trim() ?? "",
+      imageUrl: row.logo_url && row.logo_url !== "N/A" ? row.logo_url.trim() : null,
+    }));
+  } catch (error) {
+    const err = error as NodeJS.ErrnoException;
+    if (err.code === "ENOENT") {
+      console.warn("providers_physical.csv not found; skipping CSV load");
+    } else {
+      console.warn("Failed to parse providers_physical.csv", error);
+    }
+    return [];
+  }
+}
+
+function mergeRoomSeeds(base: RoomSeed[], csvRooms: RoomSeed[]): RoomSeed[] {
+  const map = new Map<string, RoomSeed>();
+  for (const room of base) {
+    map.set(room.name, room);
+  }
+  for (const room of csvRooms) {
+    if (!room.name) continue;
+    map.set(room.name, room);
+  }
+  return Array.from(map.values());
+}
 
 const usersSeed = [
   {
@@ -247,8 +261,10 @@ const usersSeed = [
 ];
 
 async function seedRooms() {
+  const csvRooms = await loadCsvRooms();
+  const roomsToSeed = mergeRoomSeeds(roomsSeed, csvRooms);
   const created: Record<string, string> = {};
-  for (const room of roomsSeed) {
+  for (const [index, room] of roomsToSeed.entries()) {
     const existing = await prisma.pokerRoom.findFirst({
       where: { name: room.name },
     });
@@ -260,7 +276,11 @@ async function seedRooms() {
       currentPromo: `${room.city} high-hand jackpot ${new Date().getFullYear()}`,
       promoExpiresAt: addDays(new Date(), 21 + Math.floor(Math.random() * 14)),
     };
-    const payload = { ...room, ...amenityDefaults };
+    const payload = {
+      ...room,
+      imageUrl: room.imageUrl ?? ROOM_IMAGE_POOL[index % ROOM_IMAGE_POOL.length],
+      ...amenityDefaults,
+    };
     const result = existing
       ? await prisma.pokerRoom.update({
           where: { id: existing.id },
@@ -379,7 +399,7 @@ async function seedFavorites(roomMap: Record<string, string>, userMap: Record<st
   const favoritesPlan = [
     {
       email: "vegasgrinder@example.com",
-      rooms: ["Aria Poker Room", "Bellagio", "Wynn Poker Room"],
+      rooms: ["ARIA Poker Room", "Bellagio Poker Room", "Wynn Las Vegas Poker Room"],
     },
     {
       email: "texascrusher@example.com",

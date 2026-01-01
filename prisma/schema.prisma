@@ -99,6 +99,7 @@ model PokerRoom {
   timezone  String?
   website   String?
   phone     String?
+  imageUrl  String?
 
   // M1: Hours of operation and amenities
   hoursJson       Json?

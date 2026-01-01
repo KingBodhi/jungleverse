@@ -1,13 +1,17 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useSyncExternalStore } from "react";
+
+type StoreSubscriber = (onStoreChange: () => void) => () => void;
+
+const noop = () => {};
+const clientSubscribe: StoreSubscriber = (onStoreChange) => {
+  onStoreChange();
+  return noop;
+};
+const serverSubscribe: StoreSubscriber = () => noop;
 
 export function useHydration() {
-  const [isClient, setIsClient] = useState(false);
-
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
-
-  return isClient;
+  const subscribe = typeof window === "undefined" ? serverSubscribe : clientSubscribe;
+  return useSyncExternalStore(subscribe, () => true, () => false);
 }

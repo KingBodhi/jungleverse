@@ -18,6 +18,10 @@ const config: Config = {
       },
     },
     extend: {
+      fontFamily: {
+        sans: ["var(--font-body)", "Inter", "system-ui", "sans-serif"],
+        display: ["var(--font-display)", "Bebas Neue", "Inter", "sans-serif"],
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
@@ -59,6 +63,18 @@ const config: Config = {
           4: "hsl(var(--chart-4))",
           5: "hsl(var(--chart-5))",
         },
+      },
+      boxShadow: {
+        brand: "0 20px 40px -24px rgba(3, 26, 26, 0.9), 0 12px 26px -20px rgba(217, 45, 32, 0.4)",
+        "brand-soft": "0 12px 20px -18px rgba(3, 26, 26, 0.75)",
+      },
+      backgroundImage: {
+        "hero-canopy":
+          "linear-gradient(125deg, rgba(10,42,37,0.95), rgba(3,26,26,0.85)), radial-gradient(circle at 20% 20%, rgba(217,45,32,0.3), transparent 45%), radial-gradient(circle at 80% 10%, rgba(242,183,5,0.25), transparent 40%)",
+        "chip-glow": "radial-gradient(circle at 30% 30%, rgba(217,45,32,0.45), transparent 55%)",
+      },
+      fontVariantNumeric: {
+        tabular: "tabular-nums",
       },
       borderRadius: {
         lg: "var(--radius)",
