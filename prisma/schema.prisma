@@ -33,6 +33,7 @@ enum Provider {
   WPT_GLOBAL
   WSOP_ONLINE
   LIVE_ROLL
+  CLUB_GG
   OTHER
 }
 

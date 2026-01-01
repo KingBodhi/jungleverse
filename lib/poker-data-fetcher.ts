@@ -3,6 +3,7 @@
 import { PrismaClient } from '@prisma/client';
 import { createTournament } from './services/tournaments';
 import { GameVariant } from '@prisma/client';
+import { scrapeClubGG, getUpcomingTournaments as getClubGGTournaments } from './scrapers/clubgg';
 
 const prisma = new PrismaClient();
 
@@ -37,6 +38,21 @@ const siteConnectors: { [key: string]: () => Promise<any[]> } = {
         blindLevelMinutes: 12,
       },
     ];
+  },
+  // ClubGG connector
+  ClubGG: async () => {
+    console.log('Fetching data for ClubGG...');
+    const tournaments = await getClubGGTournaments();
+    return tournaments
+      .filter(t => t.tournament)
+      .map(t => ({
+        variant: t.variant,
+        startTime: t.tournament!.startTime,
+        buyinAmount: t.tournament!.buyIn * 100, // Convert to cents
+        startingStack: 10000, // Default starting stack
+        blindLevelMinutes: 10, // Default blind level
+        estimatedPrizePool: t.tournament!.guaranteedPrize ? t.tournament!.guaranteedPrize * 100 : undefined,
+      }));
   },
 };
 
