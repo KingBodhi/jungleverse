@@ -1,1 +1,1 @@
-ALTER TABLE "PokerRoom" ADD COLUMN "imageUrl" TEXT;
+ALTER TABLE "PokerRoom" ADD COLUMN IF NOT EXISTS "imageUrl" TEXT;
