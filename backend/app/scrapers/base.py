@@ -74,14 +74,30 @@ class BaseScraper(ABC):
         delay = random.uniform(settings.scrape_delay_min, settings.scrape_delay_max)
         await asyncio.sleep(delay)
 
-    async def navigate(self, url: str) -> None:
-        """Navigate to a URL with retry logic."""
+    async def navigate(self, url: str, wait_for_js: bool = True) -> None:
+        """Navigate to a URL with retry logic and smart waiting."""
         if not self.page:
             raise RuntimeError("Browser not started")
 
         for attempt in range(settings.max_retries):
             try:
-                await self.page.goto(url, wait_until="networkidle")
+                # Use domcontentloaded instead of networkidle - much faster
+                await self.page.goto(url, wait_until="domcontentloaded", timeout=20000)
+
+                if wait_for_js:
+                    # Wait for JS frameworks to render (Vue, React, Wix, etc.)
+                    # Give the page time to execute JavaScript
+                    await asyncio.sleep(2)
+
+                    # Try to wait for body content to be non-empty
+                    try:
+                        await self.page.wait_for_function(
+                            "document.body && document.body.innerText.length > 100",
+                            timeout=10000
+                        )
+                    except Exception:
+                        pass  # Continue even if this times out
+
                 return
             except Exception as e:
                 if attempt == settings.max_retries - 1:
