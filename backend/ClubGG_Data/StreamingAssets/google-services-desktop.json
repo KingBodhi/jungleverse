@@ -1,0 +1,43 @@
+{
+  "project_info": {
+    "project_number": "330297466524",
+    "firebase_url": "https://clubgg-ff97e.firebaseio.com",
+    "project_id": "clubgg-ff97e",
+    "storage_bucket": "clubgg-ff97e.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:330297466524:android:d31165f24c836bf8861759",
+        "android_client_info": {
+          "package_name": "com.nsus.clubgg"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDY82vR1D-vIu0RmUMUOUdc4BNwOZwB0cg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "330297466524-eb5aqtdeephhnmgme93dv9nd5jpk6oj7.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "330297466524-fkqtc0rdkop22s9btonbe6ll83t0j2dh.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.nsus.clubgg",
+                "app_store_id": "1529839330"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

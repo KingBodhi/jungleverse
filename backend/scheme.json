@@ -1,0 +1,891 @@
+﻿{
+  "version": "25.05.0249",
+  "header": "202512160715-761397288",
+  "files": [
+    {
+      "file": "baselib.dll",
+      "directory": "",
+      "hash": "2752060F9288D69CD2564673C0147B6C59C14618"
+    },
+    {
+      "file": "ClubGG.exe",
+      "directory": "",
+      "hash": "24C2BE194E3D20D6E4F1CC6CF6B17075AAD90314"
+    },
+    {
+      "file": "ClubGGHub.exe",
+      "directory": "",
+      "hash": "5BC5DD448B4E28721340A9CC53A7BCC1EA9ACB47"
+    },
+    {
+      "file": "GameAssembly.dll",
+      "directory": "",
+      "hash": "22921B2AB57CCE6CAD806FF027CA307595A33A27"
+    },
+    {
+      "file": "launcher.exe",
+      "directory": "",
+      "hash": "B36115713F4019484820BF84FC298CCDFBEBF480"
+    },
+    {
+      "file": "UnityCrashHandler32.exe",
+      "directory": "",
+      "hash": "721DC3EADA3BA8C69947D1F97CAD23D176146D52"
+    },
+    {
+      "file": "UnityPlayer.dll",
+      "directory": "",
+      "hash": "11F0668BEAA9C226339959B1E47CDA7F9B2E2A2E"
+    },
+    {
+      "file": "app.info",
+      "directory": "ClubGG_Data",
+      "hash": "052BDDA1A9B09B76866799CBF696920FB4F6820B"
+    },
+    {
+      "file": "boot.config",
+      "directory": "ClubGG_Data",
+      "hash": "D38A3E7E27FB8EF884EDAFD25BA3CB39093A4C20"
+    },
+    {
+      "file": "globalgamemanagers",
+      "directory": "ClubGG_Data",
+      "hash": "F1223FAAF0D8455D6440F4A89E5845FF21E8EAD9"
+    },
+    {
+      "file": "globalgamemanagers.assets",
+      "directory": "ClubGG_Data",
+      "hash": "4472814BC62B52176B873A30C114A36B8BD3653C"
+    },
+    {
+      "file": "level0",
+      "directory": "ClubGG_Data",
+      "hash": "AE82C3A28A29FAE0D315C6EEBA8DCC0D0D955F2E"
+    },
+    {
+      "file": "level1",
+      "directory": "ClubGG_Data",
+      "hash": "F98E3509A32A05814AA58F09C84B915D4E054782"
+    },
+    {
+      "file": "level2",
+      "directory": "ClubGG_Data",
+      "hash": "74E26EA58E5003E68AFB47EF915941B890EE6272"
+    },
+    {
+      "file": "level3",
+      "directory": "ClubGG_Data",
+      "hash": "E09AD8461A369D3141CFBE0BEEED122932FE878D"
+    },
+    {
+      "file": "level4",
+      "directory": "ClubGG_Data",
+      "hash": "21E87797250D262B978BE133831CF395263A89C2"
+    },
+    {
+      "file": "level5",
+      "directory": "ClubGG_Data",
+      "hash": "9FE5267AA6259BF490FE0D58066FC2CE96F2AD1C"
+    },
+    {
+      "file": "resources.assets",
+      "directory": "ClubGG_Data",
+      "hash": "CE2BE4E1156D21B2DBEAF69C58DC1898BEFD425E"
+    },
+    {
+      "file": "resources.assets.resS",
+      "directory": "ClubGG_Data",
+      "hash": "AABB898A70B2AC3821E5BC699AD2DB96A500155C"
+    },
+    {
+      "file": "resources.resource",
+      "directory": "ClubGG_Data",
+      "hash": "A58F739FD0019E1428203E657DE86BAB50871ED9"
+    },
+    {
+      "file": "RuntimeInitializeOnLoads.json",
+      "directory": "ClubGG_Data",
+      "hash": "237B09D0325B45BDFF111D1DFE2572E395A2AD6A"
+    },
+    {
+      "file": "ScriptingAssemblies.json",
+      "directory": "ClubGG_Data",
+      "hash": "10F9BB99D44F5277C423DA7C1A8C40B7D28CB09C"
+    },
+    {
+      "file": "sharedassets0.assets",
+      "directory": "ClubGG_Data",
+      "hash": "0EC5B7ACBEB68CE50B5AA6FCB473A31894E29B45"
+    },
+    {
+      "file": "sharedassets0.assets.resS",
+      "directory": "ClubGG_Data",
+      "hash": "6D9B95840D5D7636E29A76E81456CC81B6578B35"
+    },
+    {
+      "file": "sharedassets1.assets",
+      "directory": "ClubGG_Data",
+      "hash": "F19BFFD5D138D212878C4D5CFD4687070C85D5CC"
+    },
+    {
+      "file": "sharedassets1.assets.resS",
+      "directory": "ClubGG_Data",
+      "hash": "EF050A27F49218BAD171FF33C166741A69FD6013"
+    },
+    {
+      "file": "sharedassets2.assets",
+      "directory": "ClubGG_Data",
+      "hash": "A5BF37B3C3D23E7248DBBA7809A199C55E9187C7"
+    },
+    {
+      "file": "sharedassets3.assets",
+      "directory": "ClubGG_Data",
+      "hash": "3EDADCE49FD28F47674849217AA38F1EDA9AD427"
+    },
+    {
+      "file": "sharedassets4.assets",
+      "directory": "ClubGG_Data",
+      "hash": "8672D9B381DD7CE5D56A933D9CBEF79C05571C33"
+    },
+    {
+      "file": "sharedassets4.assets.resS",
+      "directory": "ClubGG_Data",
+      "hash": "0EF9A607C5610AB2EE320BFB8738E0C014AAAA27"
+    },
+    {
+      "file": "sharedassets5.assets",
+      "directory": "ClubGG_Data",
+      "hash": "FA2D514784EA2B8C0E6DF0E7A1E0D71A04127C34"
+    },
+    {
+      "file": "global-metadata.dat",
+      "directory": "ClubGG_Data\\il2cpp_data\\Metadata",
+      "hash": "E06118B085AD8F4E4D6EC91D22E5E4F921A560C8"
+    },
+    {
+      "file": "mscorlib.dll-resources.dat",
+      "directory": "ClubGG_Data\\il2cpp_data\\Resources",
+      "hash": "11A1C0E2AB2F8C06FE4507535ED47E0DD279A60D"
+    },
+    {
+      "file": "Newtonsoft.Json.dll-resources.dat",
+      "directory": "ClubGG_Data\\il2cpp_data\\Resources",
+      "hash": "34BF3F1B87E3D7C6686D2AA1A6CC006FD9C55873"
+    },
+    {
+      "file": "System.Data.dll-resources.dat",
+      "directory": "ClubGG_Data\\il2cpp_data\\Resources",
+      "hash": "493C03E9CFEF6F72A00F92023CDB88527DFDF72C"
+    },
+    {
+      "file": "System.Drawing.dll-resources.dat",
+      "directory": "ClubGG_Data\\il2cpp_data\\Resources",
+      "hash": "34D46D957520CB1A525EA9EAB36CC40D57A3715A"
+    },
+    {
+      "file": "advapi32.dll",
+      "directory": "ClubGG_Data\\Plugins\\x86",
+      "hash": "0C41B7D2E4CA069D0B706F61C697C8AF9226ECE5"
+    },
+    {
+      "file": "ClubGG.dll",
+      "directory": "ClubGG_Data\\Plugins\\x86",
+      "hash": "560996F2FE3136DFAFED50F21FF754B87F43EA8F"
+    },
+    {
+      "file": "FileOpenDialog.dll",
+      "directory": "ClubGG_Data\\Plugins\\x86",
+      "hash": "E74C9E6F4B94B45F50EC1973B18E9087B805D13F"
+    },
+    {
+      "file": "lib_burst_generated.dll",
+      "directory": "ClubGG_Data\\Plugins\\x86",
+      "hash": "5A82BD456149BABC87293617F191F431D49C2C9A"
+    },
+    {
+      "file": "Loki32.dll",
+      "directory": "ClubGG_Data\\Plugins\\x86",
+      "hash": "4889E07B37D3764AD44B73BDD91A39AC20070BE7"
+    },
+    {
+      "file": "msvcp140.dll",
+      "directory": "ClubGG_Data\\Plugins\\x86",
+      "hash": "551EFCDD93ECAFC6B54EBB6F8F38C505D42D61CA"
+    },
+    {
+      "file": "vcruntime140.dll",
+      "directory": "ClubGG_Data\\Plugins\\x86",
+      "hash": "AC5BD77FD06ED29BEBCEB65371387555658870D9"
+    },
+    {
+      "file": "unity default resources",
+      "directory": "ClubGG_Data\\Resources",
+      "hash": "325A4FC21CF883BCEFDE28A81A256DDE94D8E137"
+    },
+    {
+      "file": "unity_builtin_extra",
+      "directory": "ClubGG_Data\\Resources",
+      "hash": "AF7A7D83D7C45AFBB1AE647EDD18899D9DA32EDD"
+    },
+    {
+      "file": "branch.json",
+      "directory": "ClubGG_Data\\StreamingAssets",
+      "hash": "72E88A53A16EF33C1A97020DAE0CA92292F22259"
+    },
+    {
+      "file": "google-services-desktop.json",
+      "directory": "ClubGG_Data\\StreamingAssets",
+      "hash": "4320DAF91D63A735E97F0FC415D27341444B2CB1"
+    },
+    {
+      "file": "UnityServicesProjectConfiguration.json",
+      "directory": "ClubGG_Data\\StreamingAssets",
+      "hash": "29D74E3A6399A025BAC91EBA1C4FA93455136A1E"
+    },
+    {
+      "file": "catalog.bin",
+      "directory": "ClubGG_Data\\StreamingAssets\\aa",
+      "hash": "9CE392550128AEEB5D1D0171B4546F096820C489"
+    },
+    {
+      "file": "catalog.hash",
+      "directory": "ClubGG_Data\\StreamingAssets\\aa",
+      "hash": "EC0F2101EEB02C3A5DCAB1BF2D3B64D182086AB5"
+    },
+    {
+      "file": "settings.json",
+      "directory": "ClubGG_Data\\StreamingAssets\\aa",
+      "hash": "864E634E28132F0F85F0EC53A5DDB5C46BF85815"
+    },
+    {
+      "file": "link.xml",
+      "directory": "ClubGG_Data\\StreamingAssets\\aa\\AddressablesLink",
+      "hash": "DDA994BD8C0F15CB8E6EF6A682CAEF8199A4D3EC"
+    },
+    {
+      "file": "avatar_assets_all_78e5a25663b427f31241d0c7b41daf07.bundle",
+      "directory": "ClubGG_Data\\StreamingAssets\\aa\\StandaloneWindows",
+      "hash": "3C89F3DE38E1B975B7CB98535C5CF3054DE542DF"
+    },
+    {
+      "file": "avatar_ggp_assets_all_0faad3c31103b0f8b2cbcd4caddfcf53.bundle",
+      "directory": "ClubGG_Data\\StreamingAssets\\aa\\StandaloneWindows",
+      "hash": "DD5E232082FCDBB7BBE9462E018A58BE0F7C0537"
+    },
+    {
+      "file": "brand_assets_all_ac39aa1f80b18603de8b466d64435f7b.bundle",
+      "directory": "ClubGG_Data\\StreamingAssets\\aa\\StandaloneWindows",
+      "hash": "4D4E19A50AA9FBC1AA286DAE2280A153E84FD8BE"
+    },
+    {
+      "file": "clublogo_assets_all_8c0c30e29da26695943c7bf4c316fea0.bundle",
+      "directory": "ClubGG_Data\\StreamingAssets\\aa\\StandaloneWindows",
+      "hash": "45CF77E1C943FCB5443D3F37B0F0E06275DF02F6"
+    },
+    {
+      "file": "gametable_hh_assets_ggi_hh_brand_logo_clubgg_6b1717da84134a38be05af6577e15b9f.bundle",
+      "directory": "ClubGG_Data\\StreamingAssets\\aa\\StandaloneWindows",
+      "hash": "C34AA799AC93D621502D433CFE35DC2840C3D188"
+    },
+    {
+      "file": "gametable_hh_assets_ggi_hh_table_aof_bcd0596b36e57fbcb9d001c509927725.bundle",
+      "directory": "ClubGG_Data\\StreamingAssets\\aa\\StandaloneWindows",
+      "hash": "AFC010084F56E9FD6C526372CFC9B827DE6632FE"
+    },
+    {
+      "file": "gametable_hh_assets_ggi_hh_table_aof_bg_ringgame_4fef598e4ece75ae7fb887af588cbed5.bundle",
+      "directory": "ClubGG_Data\\StreamingAssets\\aa\\StandaloneWindows",
+      "hash": "382546153C994EF3B9CA7EC96AA753982DDD4269"
+    },
+    {
+      "file": "gametable_hh_assets_ggi_hh_table_bounty_58d83ade2a0784cdefafd673bb4e5b15.bundle",
+      "directory": "ClubGG_Data\\StreamingAssets\\aa\\StandaloneWindows",
+      "hash": "359AFED63C379855F45DE44E150D89BA6368A46E"
+    },
+    {
+      "file": "gametable_hh_assets_ggi_hh_table_bounty_bg_tournament_8a2bc1fe78829b35e19bdc3801fbcf1d.bundle",
+      "directory": "ClubGG_Data\\StreamingAssets\\aa\\StandaloneWindows",
+      "hash": "1AAD489EEC769A581D938A033F73341E5774B2D0"
+    },
+    {
+      "file": "gametable_hh_assets_ggi_hh_table_bounty_bg_tournament_final_c1bcd093e8782bc477a0705c59ff432d.bundle",
+      "directory": "ClubGG_Data\\StreamingAssets\\aa\\StandaloneWindows",
+      "hash": "8448B14205B27E9F8DE555AD45013F5475C8C8AC"
+    },
+    {
+      "file": "gametable_hh_assets_ggi_hh_table_bounty_final_c11a61ae0b552d28fc3480923426c7b7.bundle",
+      "directory": "ClubGG_Data\\StreamingAssets\\aa\\StandaloneWindows",
+      "hash": "7EC73E5C6D03AA36176A01B44FBE467DEF147FFD"
+    },
+    {
+      "file": "gametable_hh_assets_ggi_hh_table_final_34184af8fd9f4cff52edb2840fdb9b4f.bundle",
+      "directory": "ClubGG_Data\\StreamingAssets\\aa\\StandaloneWindows",
+      "hash": "F7869051390F3415F5417F1D06833EA7DB62C990"
+    },
+    {
+      "file": "gametable_hh_assets_ggi_hh_table_final_bg_9bfb67ff9bd6b5603c6ba6533e7a829d.bundle",
+      "directory": "ClubGG_Data\\StreamingAssets\\aa\\StandaloneWindows",
+      "hash": "4DF4406B12C9B9839458D3EF6504163EE4BA320A"
+    },
+    {
+      "file": "gametable_hh_assets_ggi_hh_table_logo_afh_ea2b99e3161ad53f596c705da83c949f.bundle",
+      "directory": "ClubGG_Data\\StreamingAssets\\aa\\StandaloneWindows",
+      "hash": "6A41092FB6091851D10F916D7E8A0F8DBA4AD319"
+    },
+    {
+      "file": "gametable_hh_assets_ggi_hh_table_logo_afo_eabf3f0c43a14a16eb93495fa67f893d.bundle",
+      "directory": "ClubGG_Data\\StreamingAssets\\aa\\StandaloneWindows",
+      "hash": "3BF1561DDC8808B68E6D31BC24B880DDD8AFA444"
+    },
+    {
+      "file": "gametable_hh_assets_ggi_hh_table_logo_nlh_0bbebae25d44c1ff4c3dbd3c8a64b3d7.bundle",
+      "directory": "ClubGG_Data\\StreamingAssets\\aa\\StandaloneWindows",
+      "hash": "1ACA5A3D92A9A66105B577FFD61018CEB5CD16D1"
+    },
+    {
+      "file": "gametable_hh_assets_ggi_hh_table_logo_pko_bab84cd7327cb38fc72e299f5bfc744b.bundle",
+      "directory": "ClubGG_Data\\StreamingAssets\\aa\\StandaloneWindows",
+      "hash": "7086B7DDD66C6C3837DB3F8C6DBAA55000FE506A"
+    },
+    {
+      "file": "gametable_hh_assets_ggi_hh_table_logo_plo5_3ba7297ccb78e85dacfc143e43b600af.bundle",
+      "directory": "ClubGG_Data\\StreamingAssets\\aa\\StandaloneWindows",
+      "hash": "1B4899D7CCCACB29884B1354E3B420415FBC09B7"
+    },
+    {
+      "file": "gametable_hh_assets_ggi_hh_table_logo_plo5_hi-lo_f1d0c6ce0d98527bf95d24b1c898c0d7.bundle",
+      "directory": "ClubGG_Data\\StreamingAssets\\aa\\StandaloneWindows",
+      "hash": "389241D5E8982763B0FCEC2BD672A99BE762ABAE"
+    },
+    {
+      "file": "gametable_hh_assets_ggi_hh_table_logo_plo6_e11fe79444bbd80db1326e7733e39836.bundle",
+      "directory": "ClubGG_Data\\StreamingAssets\\aa\\StandaloneWindows",
+      "hash": "E4474BC6827ABA66659BDF02B3515C552BD4470C"
+    },
+    {
+      "file": "gametable_hh_assets_ggi_hh_table_logo_plo6_hi-lo_71f210ed0e5641ec969ee6323b3994cd.bundle",
+      "directory": "ClubGG_Data\\StreamingAssets\\aa\\StandaloneWindows",
+      "hash": "71ACDCDC96240612B50522415DE9AB065F95EE16"
+    },
+    {
+      "file": "gametable_hh_assets_ggi_hh_table_logo_plo_f21363314c5e08c04a82d23c0c7178ec.bundle",
+      "directory": "ClubGG_Data\\StreamingAssets\\aa\\StandaloneWindows",
+      "hash": "C3CB24D80BF04247A951F040DC898AA3B5156476"
+    },
+    {
+      "file": "gametable_hh_assets_ggi_hh_table_logo_plo_hi-lo_d7ad1813919ca368c871da58ce9ab4d8.bundle",
+      "directory": "ClubGG_Data\\StreamingAssets\\aa\\StandaloneWindows",
+      "hash": "76418118109533A63095C220FF054862C46F04B6"
+    },
+    {
+      "file": "gametable_hh_assets_ggi_hh_table_logo_sho_8e97b6afe0e43c7c64dcc74d551bbe07.bundle",
+      "directory": "ClubGG_Data\\StreamingAssets\\aa\\StandaloneWindows",
+      "hash": "5A9D5203E948809315B921A1C1841A4A495887BA"
+    },
+    {
+      "file": "gametable_hh_assets_ggi_hh_table_mb_01_2259817a654e3fbf9c6b9192fe525007.bundle",
+      "directory": "ClubGG_Data\\StreamingAssets\\aa\\StandaloneWindows",
+      "hash": "7AFE96DE0FC8EA56FF374C2F7CE2688E4FD54E39"
+    },
+    {
+      "file": "gametable_hh_assets_ggi_hh_table_mb_02_f7ce338b0c6908a8e33947d627d061e0.bundle",
+      "directory": "ClubGG_Data\\StreamingAssets\\aa\\StandaloneWindows",
+      "hash": "DFFED0F41A7DF7D348EB6637CE33AA45EE8071DC"
+    },
+    {
+      "file": "gametable_hh_assets_ggi_hh_table_mb_bg_tournament_01_923154e51dbbee0b395840e984c8e362.bundle",
+      "directory": "ClubGG_Data\\StreamingAssets\\aa\\StandaloneWindows",
+      "hash": "99A7775A1FD49BC46C42C425F05690704893E95D"
+    },
+    {
+      "file": "gametable_hh_assets_ggi_hh_table_mb_bg_tournament_02_2ce987cae57f9d10c03814bffde474d6.bundle",
+      "directory": "ClubGG_Data\\StreamingAssets\\aa\\StandaloneWindows",
+      "hash": "D0C38B0915C01ED8680FCEE3F92D4D63EC5C2DC6"
+    },
+    {
+      "file": "gametable_hh_assets_ggi_hh_table_nlh_2c8178be12f1f21438f9e5263981e840.bundle",
+      "directory": "ClubGG_Data\\StreamingAssets\\aa\\StandaloneWindows",
+      "hash": "788E148B07AA62B15F11733E4E373F52D2F20080"
+    },
+    {
+      "file": "gametable_hh_assets_ggi_hh_table_nlh_bg_ringgame_8575cd87f7819869dc81b7e90796eeb5.bundle",
+      "directory": "ClubGG_Data\\StreamingAssets\\aa\\StandaloneWindows",
+      "hash": "ADB5FD9C2A7C10708018578E722B367B76742685"
+    },
+    {
+      "file": "gametable_hh_assets_ggi_hh_table_nlh_bg_tournament_381005d515c951732e8fc55814ee51f2.bundle",
+      "directory": "ClubGG_Data\\StreamingAssets\\aa\\StandaloneWindows",
+      "hash": "31436B83BF0DD4AFA54D58937E114A4746D85D10"
+    },
+    {
+      "file": "gametable_hh_assets_ggi_hh_table_plo_b8fd5cca8542056e667d2872836792e3.bundle",
+      "directory": "ClubGG_Data\\StreamingAssets\\aa\\StandaloneWindows",
+      "hash": "93021768BA1FEB7FA16FFEE41568BA9FA1B0C9A3"
+    },
+    {
+      "file": "gametable_hh_assets_ggi_hh_table_plo_bg_ringgame_3da08a59b2233088f14083bd9e9e93a8.bundle",
+      "directory": "ClubGG_Data\\StreamingAssets\\aa\\StandaloneWindows",
+      "hash": "9B38E203D5651D0981F1CC25CC1AA63CFF1D09DE"
+    },
+    {
+      "file": "gametable_hh_assets_ggi_hh_table_plo_bg_tournament_922909429835ab155c37468f972c8109.bundle",
+      "directory": "ClubGG_Data\\StreamingAssets\\aa\\StandaloneWindows",
+      "hash": "73DF8070ACC01D0AEE2578656D8B99FA11BA71F0"
+    },
+    {
+      "file": "gametable_hh_assets_ggi_hh_table_public_bg_final_0f847b55d2fdca807df742c5e01754a4.bundle",
+      "directory": "ClubGG_Data\\StreamingAssets\\aa\\StandaloneWindows",
+      "hash": "312BE0260F1E0EC1D934DCB91D1800BE077207B2"
+    },
+    {
+      "file": "gametable_hh_assets_ggi_hh_table_public_bg_normal_d1a2b1a0fd1a7b16a0bcb1240f3e8d2e.bundle",
+      "directory": "ClubGG_Data\\StreamingAssets\\aa\\StandaloneWindows",
+      "hash": "CC7A523AD24E0B58805B8462F5B70DAB92A58A84"
+    },
+    {
+      "file": "gametable_hh_assets_ggi_hh_table_public_final_0821de388f00dfd86186fd2a4f22769b.bundle",
+      "directory": "ClubGG_Data\\StreamingAssets\\aa\\StandaloneWindows",
+      "hash": "51B012E2A8A4F0049CF559709F461026A12474A7"
+    },
+    {
+      "file": "gametable_hh_assets_ggi_hh_table_public_normal_ec61e1cc533faf82ae85dcb861ee15c7.bundle",
+      "directory": "ClubGG_Data\\StreamingAssets\\aa\\StandaloneWindows",
+      "hash": "28271728368E12D4B322719A3E347745F3BE6892"
+    },
+    {
+      "file": "gametable_hh_assets_ggi_hh_table_shortdeck_bb5c1aec1bf97b55eecc6e5a819b974b.bundle",
+      "directory": "ClubGG_Data\\StreamingAssets\\aa\\StandaloneWindows",
+      "hash": "4FA7B6CF61562F68B865E6B330FBF8CE97C2F782"
+    },
+    {
+      "file": "gametable_hh_assets_ggi_hh_table_shortdeck_bg_ringgame_eeb31830dbcf2425e233cfde2fed4c76.bundle",
+      "directory": "ClubGG_Data\\StreamingAssets\\aa\\StandaloneWindows",
+      "hash": "685640E505F504256CA54BA4AD452126208602C9"
+    },
+    {
+      "file": "gametable_hh_assets_ggi_hh_table_shortdeck_bg_tournament_e95e788172adde3b376d61fe5be469d1.bundle",
+      "directory": "ClubGG_Data\\StreamingAssets\\aa\\StandaloneWindows",
+      "hash": "77395D48341B8D89D293EAFB868B2142E6A12DCC"
+    },
+    {
+      "file": "gametable_hh_assets_ggi_hh_table_spinngold_42d8f855b2a1edf8b9ca79555a3108eb.bundle",
+      "directory": "ClubGG_Data\\StreamingAssets\\aa\\StandaloneWindows",
+      "hash": "FE9D2EE7E6FC1C39BCAA319CC24C81A63A31761E"
+    },
+    {
+      "file": "gametable_hh_assets_ggi_hh_table_spinngold_bg_e2c6c661a2bcdeeb787608febdcfa280.bundle",
+      "directory": "ClubGG_Data\\StreamingAssets\\aa\\StandaloneWindows",
+      "hash": "089DE20046A04CC398634CB84A6D320031F5835F"
+    },
+    {
+      "file": "gametable_hh_assets_ggi_hh_table_stage_0f1fceaaf1f81a7c5f61d1e42b648d4c.bundle",
+      "directory": "ClubGG_Data\\StreamingAssets\\aa\\StandaloneWindows",
+      "hash": "32CC22706C82D0A6D38D7F4E4B50F6F3DAFC8EF2"
+    },
+    {
+      "file": "ggi_mob_brand_logo_clubgg_77424ed1ecfc53d21f0278c1f08b8919.bundle",
+      "directory": "ClubGG_Data\\StreamingAssets\\aa\\StandaloneWindows\\gametable_assets_mobile",
+      "hash": "DFDE141074D8DDA78172D7201845BA53CC36A6E6"
+    },
+    {
+      "file": "ggi_mob_table_aof_9bb8284bc01f4eb4365de54bd803e0cd.bundle",
+      "directory": "ClubGG_Data\\StreamingAssets\\aa\\StandaloneWindows\\gametable_assets_mobile",
+      "hash": "1DDCF3C6A3ED2F2AD23249F4129029AC3A1EA8D5"
+    },
+    {
+      "file": "ggi_mob_table_aof_bg_ringgame_7e4b9b1e63a2fae862a29e269b7a68d5.bundle",
+      "directory": "ClubGG_Data\\StreamingAssets\\aa\\StandaloneWindows\\gametable_assets_mobile",
+      "hash": "41051819ED0DEAE49D2125EFBE8E4BD14E323DC9"
+    },
+    {
+      "file": "ggi_mob_table_bounty_449bdc18e571b4c642a1607dff590ed7.bundle",
+      "directory": "ClubGG_Data\\StreamingAssets\\aa\\StandaloneWindows\\gametable_assets_mobile",
+      "hash": "42C1429DBF170FC15BB78B44940E8B1FC2B3938D"
+    },
+    {
+      "file": "ggi_mob_table_bounty_bg_tournament_933b6b822a7e5b740e409eaf8efe7941.bundle",
+      "directory": "ClubGG_Data\\StreamingAssets\\aa\\StandaloneWindows\\gametable_assets_mobile",
+      "hash": "01F50827C40136C63EA9AAFEA0F36675A307C7FA"
+    },
+    {
+      "file": "ggi_mob_table_bounty_bg_tournament_final_af44d162978bbf48500d390ed7d7eb88.bundle",
+      "directory": "ClubGG_Data\\StreamingAssets\\aa\\StandaloneWindows\\gametable_assets_mobile",
+      "hash": "8BA3B26B6885C96C1A83CD0575F43D70923D4B98"
+    },
+    {
+      "file": "ggi_mob_table_bounty_final_59b270a0f45a27b967a6cb25b9fc5e1d.bundle",
+      "directory": "ClubGG_Data\\StreamingAssets\\aa\\StandaloneWindows\\gametable_assets_mobile",
+      "hash": "1267FA9391CD3CF8CADB512DCF1957FEDA05C1CC"
+    },
+    {
+      "file": "ggi_mob_table_final_5f78944a508f756554dcc5c7932ee788.bundle",
+      "directory": "ClubGG_Data\\StreamingAssets\\aa\\StandaloneWindows\\gametable_assets_mobile",
+      "hash": "3A6A85DA9B9084BA47C837FD379B8F62E02BAE4C"
+    },
+    {
+      "file": "ggi_mob_table_final_bg_52aab3579eaa34c7087230e44b62bd1b.bundle",
+      "directory": "ClubGG_Data\\StreamingAssets\\aa\\StandaloneWindows\\gametable_assets_mobile",
+      "hash": "80034BB41BF4186EE9A5F93DCD9CB96AB345F276"
+    },
+    {
+      "file": "ggi_mob_table_mysterybounty_01_148e005506a6bf35c20a2a2b0531daad.bundle",
+      "directory": "ClubGG_Data\\StreamingAssets\\aa\\StandaloneWindows\\gametable_assets_mobile",
+      "hash": "C42F59BE4379EB2F68703F93E992C480AB57D2C1"
+    },
+    {
+      "file": "ggi_mob_table_mysterybounty_02_0151a9097a0771392b42e2396ee02132.bundle",
+      "directory": "ClubGG_Data\\StreamingAssets\\aa\\StandaloneWindows\\gametable_assets_mobile",
+      "hash": "E13EAB82DB4FF74DA5546D4DC21152EE7EB1A757"
+    },
+    {
+      "file": "ggi_mob_table_mysterybounty_bg_tournament_01_92b499def54966fe774f36fe77b50547.bundle",
+      "directory": "ClubGG_Data\\StreamingAssets\\aa\\StandaloneWindows\\gametable_assets_mobile",
+      "hash": "52449B1C6566C5E36E4B3A2FB93421C62FF635B6"
+    },
+    {
+      "file": "ggi_mob_table_mysterybounty_bg_tournament_02_feb20964b3c0045c0e54e1c8e27ad3b7.bundle",
+      "directory": "ClubGG_Data\\StreamingAssets\\aa\\StandaloneWindows\\gametable_assets_mobile",
+      "hash": "867E0424E9DFD833F80AA7E76DD1210A11E2E92C"
+    },
+    {
+      "file": "ggi_mob_table_nlh_5703555f8d8b03b1684ef234b30d2853.bundle",
+      "directory": "ClubGG_Data\\StreamingAssets\\aa\\StandaloneWindows\\gametable_assets_mobile",
+      "hash": "F3F2DE661F1C31E4CB2A42B8C1D6520AB20A1C89"
+    },
+    {
+      "file": "ggi_mob_table_nlh_bg_ringgame_464472746026488c94805e45f6ca5b5a.bundle",
+      "directory": "ClubGG_Data\\StreamingAssets\\aa\\StandaloneWindows\\gametable_assets_mobile",
+      "hash": "5537A604C9973A8699EDC6CEEC60C3855BC25407"
+    },
+    {
+      "file": "ggi_mob_table_nlh_bg_tournament_3c171d19143f6fd2e4a435d37290af9a.bundle",
+      "directory": "ClubGG_Data\\StreamingAssets\\aa\\StandaloneWindows\\gametable_assets_mobile",
+      "hash": "43C5DB4070144C4B0744400C71B291A3E14EF7D8"
+    },
+    {
+      "file": "ggi_mob_table_plo_65124e1ecd887ed930c3632bce72cb01.bundle",
+      "directory": "ClubGG_Data\\StreamingAssets\\aa\\StandaloneWindows\\gametable_assets_mobile",
+      "hash": "97DB8D456804C9ABC1C24253E4B734BE5A01361D"
+    },
+    {
+      "file": "ggi_mob_table_plo_bg_ringgame_a56dc58e69a364881cd6c0ca9d0d714d.bundle",
+      "directory": "ClubGG_Data\\StreamingAssets\\aa\\StandaloneWindows\\gametable_assets_mobile",
+      "hash": "3BBB75775B2E84EB1135B868AC812C660C1CD91E"
+    },
+    {
+      "file": "ggi_mob_table_plo_bg_tournament_54cf5ee19590df204adb7983ec2b9554.bundle",
+      "directory": "ClubGG_Data\\StreamingAssets\\aa\\StandaloneWindows\\gametable_assets_mobile",
+      "hash": "6858D301F08769F62DD545040A8C00CE228FDED7"
+    },
+    {
+      "file": "ggi_mob_table_public_bg_final_d79a484d8e6c622dd9f97791e0b71123.bundle",
+      "directory": "ClubGG_Data\\StreamingAssets\\aa\\StandaloneWindows\\gametable_assets_mobile",
+      "hash": "4B5BE7CC397486A0E43D012E759242E560686C42"
+    },
+    {
+      "file": "ggi_mob_table_public_bg_normal_bff481bd2d8ef07f063a078d458aabaf.bundle",
+      "directory": "ClubGG_Data\\StreamingAssets\\aa\\StandaloneWindows\\gametable_assets_mobile",
+      "hash": "E0B83088B75A6045B848361CCF7092DFE0403D9E"
+    },
+    {
+      "file": "ggi_mob_table_public_final_c9cea8f69cfeddae443a91538a0b0cef.bundle",
+      "directory": "ClubGG_Data\\StreamingAssets\\aa\\StandaloneWindows\\gametable_assets_mobile",
+      "hash": "C8A66038C66E7657A097E1C93ED5E0E0DF293089"
+    },
+    {
+      "file": "ggi_mob_table_public_normal_203d1fb5c85205ca08416b3e8b1fd96f.bundle",
+      "directory": "ClubGG_Data\\StreamingAssets\\aa\\StandaloneWindows\\gametable_assets_mobile",
+      "hash": "0D3F7D0CD5ECA589FB165841E2F6046584755E99"
+    },
+    {
+      "file": "ggi_mob_table_shortdeck_1cdae7d2c22041653719e093a5f4d4df.bundle",
+      "directory": "ClubGG_Data\\StreamingAssets\\aa\\StandaloneWindows\\gametable_assets_mobile",
+      "hash": "B5FCAD55A39155F175C53B45325DAC94FC3AB885"
+    },
+    {
+      "file": "ggi_mob_table_shortdeck_bg_ringgame_fc098578e68eb46ffbfa289f54dbd001.bundle",
+      "directory": "ClubGG_Data\\StreamingAssets\\aa\\StandaloneWindows\\gametable_assets_mobile",
+      "hash": "9C7802E7F3DBD1C7B5CB6D34CE298AF0428BBA83"
+    },
+    {
+      "file": "ggi_mob_table_shortdeck_bg_tournament_d496a1a23e27d3bc8e06a02a4eb8fbb2.bundle",
+      "directory": "ClubGG_Data\\StreamingAssets\\aa\\StandaloneWindows\\gametable_assets_mobile",
+      "hash": "4D9CFDE44D557A10B6339FB7CE0A3411257E3D7E"
+    },
+    {
+      "file": "ggi_mob_table_spinngold_0a50514147013e8cc089a06ff3ada43f.bundle",
+      "directory": "ClubGG_Data\\StreamingAssets\\aa\\StandaloneWindows\\gametable_assets_mobile",
+      "hash": "9C2B8C3DA7FAF94A7B790916AB6FB8E0456B2D78"
+    },
+    {
+      "file": "ggi_mob_table_spinngold_bg_c2d42b067a98e8b19face421d0afac37.bundle",
+      "directory": "ClubGG_Data\\StreamingAssets\\aa\\StandaloneWindows\\gametable_assets_mobile",
+      "hash": "7809903A11763C679000FE037EB03FC8E1382821"
+    },
+    {
+      "file": "ggi_mob_table_stage_c89e0f4e1e58bf150b50e132ec2c1410.bundle",
+      "directory": "ClubGG_Data\\StreamingAssets\\aa\\StandaloneWindows\\gametable_assets_mobile",
+      "hash": "84AD3DC80238BC704712042D9864C7E3FC9C5D94"
+    },
+    {
+      "file": "ggi_table_logo_afh_5f83919cbddc223962dd58f067eb52e6.bundle",
+      "directory": "ClubGG_Data\\StreamingAssets\\aa\\StandaloneWindows\\gametable_assets_mobile",
+      "hash": "D42949CC09FBDCF1FF4A7F73CF39FE2B81DAC502"
+    },
+    {
+      "file": "ggi_table_logo_afo_ed28dc388bb20691d60cd29a4d130c3b.bundle",
+      "directory": "ClubGG_Data\\StreamingAssets\\aa\\StandaloneWindows\\gametable_assets_mobile",
+      "hash": "539AA45E8787A86364DBE5F14056074AE1C20C0D"
+    },
+    {
+      "file": "ggi_table_logo_nlh_1dc41233627c47d676994337fb0828ab.bundle",
+      "directory": "ClubGG_Data\\StreamingAssets\\aa\\StandaloneWindows\\gametable_assets_mobile",
+      "hash": "A8997A44F321960C41EE575363B5DABF61364868"
+    },
+    {
+      "file": "ggi_table_logo_pko_97a20e53dd9d7c34268601e28a447999.bundle",
+      "directory": "ClubGG_Data\\StreamingAssets\\aa\\StandaloneWindows\\gametable_assets_mobile",
+      "hash": "7F84914355C2D7B7F224A96D263A189C18144B17"
+    },
+    {
+      "file": "ggi_table_logo_plo5_55cc3ec852d70eb1983bf0bcf45e8e80.bundle",
+      "directory": "ClubGG_Data\\StreamingAssets\\aa\\StandaloneWindows\\gametable_assets_mobile",
+      "hash": "F203DFDE010A754A0FF2ABBA6D1338C265EB807F"
+    },
+    {
+      "file": "ggi_table_logo_plo5_hi-lo_e8c9b48bb0a97916c876de9802f2c4d4.bundle",
+      "directory": "ClubGG_Data\\StreamingAssets\\aa\\StandaloneWindows\\gametable_assets_mobile",
+      "hash": "254D15617E34F53B41F8A4B8FB6E36563659FB26"
+    },
+    {
+      "file": "ggi_table_logo_plo6_ad62de5bf7f8d51a7fb05883590b29bd.bundle",
+      "directory": "ClubGG_Data\\StreamingAssets\\aa\\StandaloneWindows\\gametable_assets_mobile",
+      "hash": "5702F3B6099FFD82ADBF630453F498EE5F735684"
+    },
+    {
+      "file": "ggi_table_logo_plo6_hi-lo_d97ebab263d5faa382163e0012af9672.bundle",
+      "directory": "ClubGG_Data\\StreamingAssets\\aa\\StandaloneWindows\\gametable_assets_mobile",
+      "hash": "112D9B32FF71F847DA857004D8F6BD4802DE2144"
+    },
+    {
+      "file": "ggi_table_logo_plo_e184851cf498bb81dd594417088a01a7.bundle",
+      "directory": "ClubGG_Data\\StreamingAssets\\aa\\StandaloneWindows\\gametable_assets_mobile",
+      "hash": "ECA077CD877F8021B72372E46DF27F8EC54EC2BA"
+    },
+    {
+      "file": "ggi_table_logo_plo_hi-lo_3056921c1c0d9696df7c4303d6f56ec3.bundle",
+      "directory": "ClubGG_Data\\StreamingAssets\\aa\\StandaloneWindows\\gametable_assets_mobile",
+      "hash": "08C182EB9F2953ED8295EDBF4C97BF01D3043E49"
+    },
+    {
+      "file": "ggi_table_logo_sho_6cf2780c86a1e0f6ea6d4288d67865cd.bundle",
+      "directory": "ClubGG_Data\\StreamingAssets\\aa\\StandaloneWindows\\gametable_assets_mobile",
+      "hash": "FE2553C53948E39BB258739B95E0B09A54AE348C"
+    },
+    {
+      "file": "ggi_pc_brand_logo_clubgg_dab8b8ccb12b49d76569dae04e1de020.bundle",
+      "directory": "ClubGG_Data\\StreamingAssets\\aa\\StandaloneWindows\\gametable_assets_pc",
+      "hash": "492B4AE7BF6D1C41B266587B6B583FE0C8470DC3"
+    },
+    {
+      "file": "ggi_pc_table_aof_150c069d3fadf66bf621c90f07c47a40.bundle",
+      "directory": "ClubGG_Data\\StreamingAssets\\aa\\StandaloneWindows\\gametable_assets_pc",
+      "hash": "EBFE4A98776BA1DC58F744BC0A62AF6FA62A6780"
+    },
+    {
+      "file": "ggi_pc_table_aof_bg_ringgame_5583ce8a977ed0015e6f7f722d8ceb43.bundle",
+      "directory": "ClubGG_Data\\StreamingAssets\\aa\\StandaloneWindows\\gametable_assets_pc",
+      "hash": "F6015C37DEF6CB16300FAF3A54C5F49E9C0BD486"
+    },
+    {
+      "file": "ggi_pc_table_bounty_bg_tournament_0815934f098d08b78ef54d78aea0986a.bundle",
+      "directory": "ClubGG_Data\\StreamingAssets\\aa\\StandaloneWindows\\gametable_assets_pc",
+      "hash": "A1D92E640F8E8C700C82DBAE1765C48040968722"
+    },
+    {
+      "file": "ggi_pc_table_bounty_bg_tournament_final_8d5ddaacea9c82f11e753acd90f0181c.bundle",
+      "directory": "ClubGG_Data\\StreamingAssets\\aa\\StandaloneWindows\\gametable_assets_pc",
+      "hash": "E87AEE2C1F412CDD129F5AED76AC1D1D30B537CD"
+    },
+    {
+      "file": "ggi_pc_table_bounty_cd548883d6a3932c6ee8ace748dc4a23.bundle",
+      "directory": "ClubGG_Data\\StreamingAssets\\aa\\StandaloneWindows\\gametable_assets_pc",
+      "hash": "082D0082D5D2BDEF3A6FD8A239DF253FA03D3BE8"
+    },
+    {
+      "file": "ggi_pc_table_bounty_final_0bb23d700c52a900b03afa4bb82e20ab.bundle",
+      "directory": "ClubGG_Data\\StreamingAssets\\aa\\StandaloneWindows\\gametable_assets_pc",
+      "hash": "D7622A28FD7482D9099C6EDF1717C44666E99C78"
+    },
+    {
+      "file": "ggi_pc_table_final_8900e061ae7de94c522428c05d4d685c.bundle",
+      "directory": "ClubGG_Data\\StreamingAssets\\aa\\StandaloneWindows\\gametable_assets_pc",
+      "hash": "8EEEF330B4B18AB2738312F779A8B0DE68FBCE3F"
+    },
+    {
+      "file": "ggi_pc_table_final_bg_49253a2d5b56605de162a9bf95961506.bundle",
+      "directory": "ClubGG_Data\\StreamingAssets\\aa\\StandaloneWindows\\gametable_assets_pc",
+      "hash": "4AA66955256D06131BB724D200C4972B3647FFDF"
+    },
+    {
+      "file": "ggi_pc_table_mysterybounty_01_e2a7b3873039676727522b019a5a02fb.bundle",
+      "directory": "ClubGG_Data\\StreamingAssets\\aa\\StandaloneWindows\\gametable_assets_pc",
+      "hash": "EE5805E55764E101F0FB1DC2AAFFD75E0ECF2201"
+    },
+    {
+      "file": "ggi_pc_table_mysterybounty_02_dd99ee3c8a5baf61d05c0e31efe52c37.bundle",
+      "directory": "ClubGG_Data\\StreamingAssets\\aa\\StandaloneWindows\\gametable_assets_pc",
+      "hash": "105986FA01F59F3F707C872676FD2FE000BCEFE7"
+    },
+    {
+      "file": "ggi_pc_table_mysterybounty_bg_tournament_01_97ac18bbc28621ce9ee505fd522c86f5.bundle",
+      "directory": "ClubGG_Data\\StreamingAssets\\aa\\StandaloneWindows\\gametable_assets_pc",
+      "hash": "6B8FAC9E579F349102FC8383533E9D35F7343385"
+    },
+    {
+      "file": "ggi_pc_table_mysterybounty_bg_tournament_02_7c3ddf3f03e21f994e55bb4fb83b0e9b.bundle",
+      "directory": "ClubGG_Data\\StreamingAssets\\aa\\StandaloneWindows\\gametable_assets_pc",
+      "hash": "000F7B1CF472EECD28FAEB8FCB6AF3063305134E"
+    },
+    {
+      "file": "ggi_pc_table_nlh_b7d4afc7eb5b5a17bdfdc6e661b215f6.bundle",
+      "directory": "ClubGG_Data\\StreamingAssets\\aa\\StandaloneWindows\\gametable_assets_pc",
+      "hash": "78D0837A7E0489E7A5D2E4C0B8A622929FB5DEE2"
+    },
+    {
+      "file": "ggi_pc_table_nlh_bg_ringgame_75821ed705d6decb4995a82adb268e1a.bundle",
+      "directory": "ClubGG_Data\\StreamingAssets\\aa\\StandaloneWindows\\gametable_assets_pc",
+      "hash": "A0111D69DCB52116B4FF99CFFD6CFCAD26F73E28"
+    },
+    {
+      "file": "ggi_pc_table_nlh_bg_tournament_aba16028734ec32774be567bd0825dfd.bundle",
+      "directory": "ClubGG_Data\\StreamingAssets\\aa\\StandaloneWindows\\gametable_assets_pc",
+      "hash": "3C9C5BA0E235FDCB7B6BF101EF6897069C3CDA59"
+    },
+    {
+      "file": "ggi_pc_table_plo_bg_ringgame_00c4def8bd0892d5a88ae1d4ba835b6d.bundle",
+      "directory": "ClubGG_Data\\StreamingAssets\\aa\\StandaloneWindows\\gametable_assets_pc",
+      "hash": "6D547ADF8B6282C1E8D5D3C926776D365E2EA135"
+    },
+    {
+      "file": "ggi_pc_table_plo_bg_tournament_509f0fa4855a034c9bb2b5044b2ce45a.bundle",
+      "directory": "ClubGG_Data\\StreamingAssets\\aa\\StandaloneWindows\\gametable_assets_pc",
+      "hash": "9767F0C0B067CCF0007B2996BC4E46587B1ACC5F"
+    },
+    {
+      "file": "ggi_pc_table_plo_e192d8b4e61b5400af10abcfa78fc039.bundle",
+      "directory": "ClubGG_Data\\StreamingAssets\\aa\\StandaloneWindows\\gametable_assets_pc",
+      "hash": "F606A9BC823A3AEB2B7F8F903345D8C1EABC2E9E"
+    },
+    {
+      "file": "ggi_pc_table_public_bg_final_5c57b1d5fd09b9800eeb2d604113b626.bundle",
+      "directory": "ClubGG_Data\\StreamingAssets\\aa\\StandaloneWindows\\gametable_assets_pc",
+      "hash": "60E5BD24E4A9B8BF9B8F8A5AA4484940DA3EB480"
+    },
+    {
+      "file": "ggi_pc_table_public_bg_normal_26683bebce035a2700ff8ed3145a2ed5.bundle",
+      "directory": "ClubGG_Data\\StreamingAssets\\aa\\StandaloneWindows\\gametable_assets_pc",
+      "hash": "BB9E6A8B5CF4393CCB14748EFCEBBE2852E201EB"
+    },
+    {
+      "file": "ggi_pc_table_public_final_e83d6678b2442e2ea82084d5043fe544.bundle",
+      "directory": "ClubGG_Data\\StreamingAssets\\aa\\StandaloneWindows\\gametable_assets_pc",
+      "hash": "C584844022742A0AC952F9CA4439421F37AD320E"
+    },
+    {
+      "file": "ggi_pc_table_public_normal_0981983e31bf06516c44ffcffd017332.bundle",
+      "directory": "ClubGG_Data\\StreamingAssets\\aa\\StandaloneWindows\\gametable_assets_pc",
+      "hash": "E9C0FBB39B86EE81A5B799FFDF42CBCE21BD483D"
+    },
+    {
+      "file": "ggi_pc_table_shortdeck_bg_ringgame_59edf13e5f9e95f209c4788648cb34ea.bundle",
+      "directory": "ClubGG_Data\\StreamingAssets\\aa\\StandaloneWindows\\gametable_assets_pc",
+      "hash": "CD95AEE5DD190B2D1786289DD3F5D0B2579B1265"
+    },
+    {
+      "file": "ggi_pc_table_shortdeck_bg_tournament_2a747f74505861b686e6c3d725d99466.bundle",
+      "directory": "ClubGG_Data\\StreamingAssets\\aa\\StandaloneWindows\\gametable_assets_pc",
+      "hash": "46913F3D1B8D719266BD980087805A005761B7F8"
+    },
+    {
+      "file": "ggi_pc_table_shortdeck_f23af9e9696e233e15fd2815452b728b.bundle",
+      "directory": "ClubGG_Data\\StreamingAssets\\aa\\StandaloneWindows\\gametable_assets_pc",
+      "hash": "3C79447DCB8AE0A9DAE0012964F68106FFA8F16D"
+    },
+    {
+      "file": "ggi_pc_table_spinngold_bg_949fac8c165a590f218b92377f311189.bundle",
+      "directory": "ClubGG_Data\\StreamingAssets\\aa\\StandaloneWindows\\gametable_assets_pc",
+      "hash": "A0DE2FDFE4092FA6768CBA242477A140D75844CB"
+    },
+    {
+      "file": "ggi_pc_table_spinngold_cee1300c3f4abddec312a59b47f8b1e5.bundle",
+      "directory": "ClubGG_Data\\StreamingAssets\\aa\\StandaloneWindows\\gametable_assets_pc",
+      "hash": "D550BD69D692F3BFEC54CBBF285D89E5312D82A8"
+    },
+    {
+      "file": "ggi_pc_table_stage_f3c253b00f5ed9368ed13c030c119871.bundle",
+      "directory": "ClubGG_Data\\StreamingAssets\\aa\\StandaloneWindows\\gametable_assets_pc",
+      "hash": "5F21DFC5FC3FAA2B8E69562EF6918C569D0C16C7"
+    },
+    {
+      "file": "ggi_table_logo_afh_a49911bbcd9a3f6d67f5618b06964df1.bundle",
+      "directory": "ClubGG_Data\\StreamingAssets\\aa\\StandaloneWindows\\gametable_assets_pc",
+      "hash": "5CA00371C17F1F10907FA665CF5902CC22F6060B"
+    },
+    {
+      "file": "ggi_table_logo_afo_f585d90b248809e7db08bcf44d0d87e1.bundle",
+      "directory": "ClubGG_Data\\StreamingAssets\\aa\\StandaloneWindows\\gametable_assets_pc",
+      "hash": "ADCCB38310DEFA7D335464DFA2385A7C5B877D2F"
+    },
+    {
+      "file": "ggi_table_logo_nlh_d7b5e9165a1c776e9e09750df4af8ec0.bundle",
+      "directory": "ClubGG_Data\\StreamingAssets\\aa\\StandaloneWindows\\gametable_assets_pc",
+      "hash": "84598BE114FD1FEBFBCB4DEA5E7FAA492F627B85"
+    },
+    {
+      "file": "ggi_table_logo_pko_8e6dbee3e4721d4935b9d2a779af4595.bundle",
+      "directory": "ClubGG_Data\\StreamingAssets\\aa\\StandaloneWindows\\gametable_assets_pc",
+      "hash": "3FA6622F21F9647FE4B268F08BBC7A8D4DCDD0BF"
+    },
+    {
+      "file": "ggi_table_logo_plo5_1eec2d7e6f6b6f2a3361f7738806812b.bundle",
+      "directory": "ClubGG_Data\\StreamingAssets\\aa\\StandaloneWindows\\gametable_assets_pc",
+      "hash": "2FB1DFD602698242981AFDFFEA1330EF250FA6FE"
+    },
+    {
+      "file": "ggi_table_logo_plo5_hi-lo_d5bd9b54459e8c3d4fcaa7a707750cd2.bundle",
+      "directory": "ClubGG_Data\\StreamingAssets\\aa\\StandaloneWindows\\gametable_assets_pc",
+      "hash": "A22F1E1D69583CEF96B95722EF7A3E4458F20E80"
+    },
+    {
+      "file": "ggi_table_logo_plo6_f02b1013ffb6b4077a1500ba5b584261.bundle",
+      "directory": "ClubGG_Data\\StreamingAssets\\aa\\StandaloneWindows\\gametable_assets_pc",
+      "hash": "1FEA4596A8D419EBC283AF6B7346FD201E665491"
+    },
+    {
+      "file": "ggi_table_logo_plo6_hi-lo_940cc1a54b17e0b33131e3f3b9545876.bundle",
+      "directory": "ClubGG_Data\\StreamingAssets\\aa\\StandaloneWindows\\gametable_assets_pc",
+      "hash": "A435A0AC9FEFBB82816315874C24150C7EFA5CC0"
+    },
+    {
+      "file": "ggi_table_logo_plo_2ec313685804a6daae2ab98c6610fd80.bundle",
+      "directory": "ClubGG_Data\\StreamingAssets\\aa\\StandaloneWindows\\gametable_assets_pc",
+      "hash": "C2088BEDC82886044061747FC6246DA8FEE03DBD"
+    },
+    {
+      "file": "ggi_table_logo_plo_hi-lo_67512e56ed4d41572d85c93786acefee.bundle",
+      "directory": "ClubGG_Data\\StreamingAssets\\aa\\StandaloneWindows\\gametable_assets_pc",
+      "hash": "2586005B3DB792CDC0805DF027FA2279B2624394"
+    },
+    {
+      "file": "ggi_table_logo_sho_bae8f2e69355e15dd312f3994bebe297.bundle",
+      "directory": "ClubGG_Data\\StreamingAssets\\aa\\StandaloneWindows\\gametable_assets_pc",
+      "hash": "4036A6494DCF71FC4739C3AAFEAAEE347B955435"
+    },
+    {
+      "file": "D3D12Core.dll",
+      "directory": "D3D12",
+      "hash": "ABD3F88CA7CB25592790088A0907C5458F8893CA"
+    }
+  ]
+}

@@ -5,3 +5,9 @@ pydantic>=2.5.0
 pydantic-settings>=2.1.0
 httpx>=0.26.0
 python-dotenv>=1.0.0
+# Desktop app scraping dependencies
+pywinauto>=0.6.8
+Pillow>=10.0.0
+pytesseract>=0.3.10
+opencv-python>=4.8.0
+mss>=9.0.0
