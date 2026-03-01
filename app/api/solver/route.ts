@@ -11,7 +11,7 @@ import { NextRequest, NextResponse } from "next/server";
  */
 
 const SOLVER_URL =
-  process.env.SOLVER_API_URL || "http://localhost:8001/api/v1/solver";
+  (process.env.SOLVER_API_URL || "http://localhost:8001/api/v1/solver").trim();
 
 export async function GET(request: NextRequest) {
   const { searchParams } = request.nextUrl;
@@ -30,8 +30,9 @@ export async function GET(request: NextRequest) {
 
     switch (action) {
       case "health": {
-        // Direct health check — does not require an id
-        const base = SOLVER_URL.replace(/\/api\/v1\/solver\/?$/, "");
+        // Direct health check — strip path suffix to get base URL
+        const idx = SOLVER_URL.indexOf("/api/v1/solver");
+        const base = idx > 0 ? SOLVER_URL.substring(0, idx) : SOLVER_URL;
         url = `${base}/health`;
         break;
       }
