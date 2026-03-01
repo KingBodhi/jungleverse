@@ -63,6 +63,14 @@ def _mgr(request: Request) -> SolverManager:
 @app.post("/api/v1/solver/solve", response_model=SolveResponse)
 async def start_solve(request: Request, body: SolveRequest):
     mgr = _mgr(request)
+
+    # On Vercel, clamp iterations to avoid serverless timeout
+    num_iterations = body.num_iterations
+    if os.environ.get("VERCEL"):
+        limits = {"kuhn": 50_000, "leduc": 1_000, "nlhe_subgame": 200}
+        cap = limits.get(body.variant.value, 1_000)
+        num_iterations = min(num_iterations, cap)
+
     config = None
     if body.variant == GameVariant.NLHE_SUBGAME:
         config = {k: v for k, v in {
@@ -71,7 +79,7 @@ async def start_solve(request: Request, body: SolveRequest):
             "stack": body.stack, "bet_sizes": body.bet_sizes,
         }.items() if v is not None}
     try:
-        solve_id = await mgr.create_solve(body.variant, body.num_iterations, config)
+        solve_id = await mgr.create_solve(body.variant, num_iterations, config)
     except Exception as e:
         raise HTTPException(400, str(e))
 
@@ -80,13 +88,13 @@ async def start_solve(request: Request, body: SolveRequest):
     if state and state.status == SolveStatus.COMPLETED:
         return SolveResponse(
             solve_id=solve_id, status=SolveStatus.COMPLETED,
-            variant=body.variant, num_iterations=body.num_iterations,
+            variant=body.variant, num_iterations=num_iterations,
             progress=1.0, ev_p0=state.solver.get_average_ev(),
             exploitability=state.solver.get_exploitability(),
             num_info_sets=len(state.info_store),
         )
     return SolveResponse(solve_id=solve_id, status=SolveStatus.RUNNING,
-                         variant=body.variant, num_iterations=body.num_iterations)
+                         variant=body.variant, num_iterations=num_iterations)
 
 
 @app.get("/api/v1/solver/solve/{solve_id}", response_model=SolveResponse)
@@ -160,4 +168,14 @@ async def delete_solve(request: Request, solve_id: str):
 
 @app.get("/health")
 async def health():
-    return {"status": "ok", "service": "poker-cfr-solver"}
+    is_vercel = bool(os.environ.get("VERCEL"))
+    return {
+        "status": "ok",
+        "service": "poker-cfr-solver",
+        "serverless": is_vercel,
+        "max_iterations": {
+            "kuhn": 100_000 if not is_vercel else 50_000,
+            "leduc": 100_000 if not is_vercel else 1_000,
+            "nlhe_subgame": 100_000 if not is_vercel else 200,
+        },
+    }

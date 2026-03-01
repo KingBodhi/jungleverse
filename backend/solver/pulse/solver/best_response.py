@@ -133,11 +133,12 @@ def _eval_with_br(node: GameNode, info_store: InfoSetStore,
         return _eval_with_br(child, info_store, br_player, br_actions,
                              opp_reach, chance_reach)
     else:
-        # Opponent plays average strategy
+        # Opponent plays average strategy — accumulate reach into opp_reach
+        # (do NOT also multiply by strategy[i] at this level, or it double-counts)
         ev = 0.0
         for i, action in enumerate(node.actions):
             child = node.children[action.label]
-            ev += strategy[i] * _eval_with_br(
+            ev += _eval_with_br(
                 child, info_store, br_player, br_actions,
                 opp_reach * strategy[i], chance_reach)
         return ev

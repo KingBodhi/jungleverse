@@ -20,7 +20,7 @@ def kuhn_solver():
     root = builder.build_tree()
     store = InfoSetStore()
     solver = CFRPlusSolver(root, store)
-    solver.solve(num_iterations=2000)
+    solver.solve(num_iterations=5000)
     return solver, store
 
 

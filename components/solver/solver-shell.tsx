@@ -30,6 +30,8 @@ export function SolverShell() {
   const [mobileInfoOpen, setMobileInfoOpen] = useState(false);
   const [backendUp, setBackendUp] = useState<boolean | null>(null);
   const [checkingBackend, setCheckingBackend] = useState(false);
+  const [serverless, setServerless] = useState(false);
+  const [iterLimits, setIterLimits] = useState<Record<string, number> | null>(null);
 
   // Health check on mount
   const checkBackend = useCallback(async () => {
@@ -37,6 +39,11 @@ export function SolverShell() {
     try {
       const res = await fetch("/api/solver?action=health");
       setBackendUp(res.ok);
+      if (res.ok) {
+        const data = await res.json();
+        if (data.serverless) setServerless(true);
+        if (data.max_iterations) setIterLimits(data.max_iterations);
+      }
     } catch {
       setBackendUp(false);
     } finally {
@@ -184,7 +191,7 @@ export function SolverShell() {
                   <SheetTitle>Configuration</SheetTitle>
                 </SheetHeader>
                 <div className="mt-4">
-                  <ConfigPanel onSolve={handleSolve} isSolving={isSolving} backendUp={backendUp} />
+                  <ConfigPanel onSolve={handleSolve} isSolving={isSolving} backendUp={backendUp} serverless={serverless} iterLimits={iterLimits} />
                 </div>
               </SheetContent>
             </Sheet>
@@ -300,7 +307,7 @@ export function SolverShell() {
         {/* Left: Config (hidden on mobile, in Sheet instead) */}
         <aside className="hidden lg:block">
           <div className="sticky top-6">
-            <ConfigPanel onSolve={handleSolve} isSolving={isSolving} backendUp={backendUp} />
+            <ConfigPanel onSolve={handleSolve} isSolving={isSolving} backendUp={backendUp} serverless={serverless} iterLimits={iterLimits} />
           </div>
         </aside>
 

@@ -13,13 +13,17 @@ interface ConfigPanelProps {
   onSolve: () => void;
   isSolving: boolean;
   backendUp?: boolean | null;
+  serverless?: boolean;
+  iterLimits?: Record<string, number> | null;
 }
 
-export function ConfigPanel({ onSolve, isSolving, backendUp }: ConfigPanelProps) {
+export function ConfigPanel({ onSolve, isSolving, backendUp, serverless, iterLimits }: ConfigPanelProps) {
   const variant = useSolverStore((s) => s.variant);
   const numIterations = useSolverStore((s) => s.numIterations);
   const setNumIterations = useSolverStore((s) => s.setNumIterations);
   const reset = useSolverStore((s) => s.reset);
+
+  const maxIter = iterLimits?.[variant] ?? 100_000;
 
   // Format iteration display: 1000 → "1K", 10000 → "10K"
   const formatIter = (n: number) => {
@@ -66,17 +70,22 @@ export function ConfigPanel({ onSolve, isSolving, backendUp }: ConfigPanelProps)
             </span>
           </div>
           <Slider
-            value={[numIterations]}
+            value={[Math.min(numIterations, maxIter)]}
             onValueChange={([v]) => setNumIterations(v)}
             min={100}
-            max={100000}
+            max={maxIter}
             step={100}
             className="mt-2"
           />
           <div className="mt-1 flex justify-between text-[10px] text-muted-foreground/50">
             <span>100</span>
-            <span>100K</span>
+            <span>{formatIter(maxIter)}</span>
           </div>
+          {serverless && maxIter < 100_000 && (
+            <p className="mt-1 text-[10px] text-amber-400/70">
+              Serverless mode — iterations capped at {formatIter(maxIter)} for {variant}
+            </p>
+          )}
         </div>
 
         <Button
