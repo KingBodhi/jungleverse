@@ -1,6 +1,7 @@
 """Standalone FastAPI server for the poker CFR solver."""
 
 import logging
+import os
 from contextlib import asynccontextmanager
 
 from fastapi import FastAPI, HTTPException, Request
@@ -26,7 +27,9 @@ logger = logging.getLogger(__name__)
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    mgr = SolverManager()
+    # Use /tmp on Vercel (only writable directory in serverless)
+    db_path = "/tmp/solver.db" if os.environ.get("VERCEL") else "data/solver.db"
+    mgr = SolverManager(db_path=db_path)
     await mgr.start()
     app.state.solver_manager = mgr
     logger.info("Solver manager started")
