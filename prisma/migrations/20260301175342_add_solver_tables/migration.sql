@@ -4,8 +4,12 @@ CREATE TYPE "SolverVariant" AS ENUM ('KUHN', 'LEDUC', 'NLHE_SUBGAME');
 -- CreateEnum
 CREATE TYPE "SolveStatus" AS ENUM ('PENDING', 'RUNNING', 'COMPLETED', 'FAILED', 'CANCELLED');
 
--- AlterEnum
-ALTER TYPE "Provider" ADD VALUE 'CLUB_GG';
+-- AlterEnum (IF NOT EXISTS to handle idempotency)
+DO $$ BEGIN
+  ALTER TYPE "Provider" ADD VALUE 'CLUB_GG';
+EXCEPTION
+  WHEN duplicate_object THEN NULL;
+END $$;
 
 -- CreateTable
 CREATE TABLE "PokerNews" (

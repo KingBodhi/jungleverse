@@ -15,6 +15,7 @@ import { CFRPlusSolver } from "./cfr";
 import { InfoSetStore } from "./info-set";
 import { NodeLocker } from "./node-lock";
 import { computeEvComparison } from "./best-response";
+import { clearEvalCache } from "./evaluator";
 import type { GameNode, ActionNode, ChanceNode, GameVariant } from "./types";
 import { KuhnTreeBuilder } from "./variants/kuhn";
 import { LeducTreeBuilder } from "./variants/leduc";
@@ -24,8 +25,14 @@ import { NLHESubgameBuilder } from "./variants/nlhe-subgame";
 const ITERATION_LIMITS: Record<string, number> = {
   kuhn: 50_000,
   leduc: 1_000,
-  nlhe_subgame: 100,
+  nlhe_subgame: 10_000,
 };
+
+/**
+ * Time budget for NLHE solves (ms).
+ * Leaves ~10s margin for tree building + DB persistence within the 60s limit.
+ */
+const NLHE_TIME_BUDGET_MS = 45_000;
 
 function generateSolveId(): string {
   const chars = "abcdefghijklmnopqrstuvwxyz0123456789";
@@ -146,12 +153,21 @@ export class SolverManager {
     });
 
     try {
+      // Clear eval cache from prior solves
+      clearEvalCache();
+
       // Build tree and solve
       const { root, actionLabels } = buildTree(variant, config);
       const infoStore = new InfoSetStore();
       const solver = new CFRPlusSolver(root, infoStore);
 
-      const ev = solver.solve(numIterations);
+      // Use time-budgeted solving for NLHE to avoid Vercel timeout
+      let ev: number;
+      if (variant === "nlhe_subgame") {
+        ev = solver.solveWithTimeBudget(numIterations, NLHE_TIME_BUDGET_MS);
+      } else {
+        ev = solver.solve(numIterations);
+      }
       const exploitability = solver.getExploitability();
 
       // Persist strategies in batch

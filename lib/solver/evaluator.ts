@@ -147,18 +147,48 @@ function* combinations<T>(arr: T[], k: number): Generator<T[]> {
   }
 }
 
+// Evaluation cache — avoids recomputing identical hand+board combos
+// across CFR iterations and deal permutations.
+const _evalCache = new Map<string, number>();
+const _EVAL_CACHE_MAX = 200_000;
+
+function evalCacheKey(cards: number[]): string {
+  // Sort a copy for canonical key
+  const s = cards.slice().sort((a, b) => a - b);
+  let key = "";
+  for (let i = 0; i < s.length; i++) {
+    if (i > 0) key += ",";
+    key += s[i];
+  }
+  return key;
+}
+
+/** Clear the evaluation cache (call between solves). */
+export function clearEvalCache(): void {
+  _evalCache.clear();
+}
+
 /**
  * Evaluate 5-7 cards, returning the best 5-card hand rank.
+ * Results are cached for repeated lookups.
  */
 export function evaluateHand(cards: number[]): number {
   const n = cards.length;
-  if (n === 5) return evaluate5(cards);
   if (n < 5 || n > 7) throw new Error(`Expected 5-7 cards, got ${n}`);
+  if (n === 5) return evaluate5(cards);
+
+  const key = evalCacheKey(cards);
+  const cached = _evalCache.get(key);
+  if (cached !== undefined) return cached;
 
   let best = -1;
   for (const combo of combinations(cards, 5)) {
     const rank = evaluate5(combo);
     if (rank > best) best = rank;
+  }
+
+  if (_evalCache.size < _EVAL_CACHE_MAX) {
+    _evalCache.set(key, best);
   }
   return best;
 }

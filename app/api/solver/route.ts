@@ -40,8 +40,9 @@ export async function GET(request: NextRequest) {
           max_iterations: {
             kuhn: 50_000,
             leduc: 1_000,
-            nlhe_subgame: 100,
+            nlhe_subgame: 10_000,
           },
+          nlhe_time_budget_ms: 45_000,
         });
       }
 

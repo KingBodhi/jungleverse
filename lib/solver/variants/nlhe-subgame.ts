@@ -30,7 +30,40 @@ import {
 const DEFAULT_BET_SIZES = [0.33, 0.67, 1.0];
 const DEFAULT_RAISE_SIZES = [0.5, 1.0];
 const MAX_RAISES = 3;
-const MAX_RUNOUT_CARDS = 6;
+
+/**
+ * Adaptive parameters by street to keep the tree tractable
+ * within Vercel's 60-second serverless timeout.
+ */
+const STREET_CONFIG: Record<string, {
+  maxRunoutCards: number;
+  betSizes: number[];
+  raiseSizes: number[];
+  maxRaises: number;
+  maxRangeCombos: number;
+}> = {
+  flop: {
+    maxRunoutCards: 3,
+    betSizes: [0.5, 1.0],
+    raiseSizes: [1.0],
+    maxRaises: 2,
+    maxRangeCombos: 20,
+  },
+  turn: {
+    maxRunoutCards: 4,
+    betSizes: [0.5, 1.0],
+    raiseSizes: [0.5, 1.0],
+    maxRaises: 2,
+    maxRangeCombos: 30,
+  },
+  river: {
+    maxRunoutCards: 0,
+    betSizes: DEFAULT_BET_SIZES,
+    raiseSizes: DEFAULT_RAISE_SIZES,
+    maxRaises: MAX_RAISES,
+    maxRangeCombos: 50,
+  },
+};
 
 export class NLHESubgameBuilder implements TreeBuilder {
   boardStr: string;
@@ -40,6 +73,9 @@ export class NLHESubgameBuilder implements TreeBuilder {
   pot: number;
   stack: number;
   betSizes: number[];
+  raiseSizes: number[];
+  maxRaises: number;
+  maxRunoutCards: number;
   street: string;
 
   constructor(opts: {
@@ -54,15 +90,6 @@ export class NLHESubgameBuilder implements TreeBuilder {
     this.boardCards = this._parseBoard(this.boardStr);
     this.pot = opts.pot ?? 100;
     this.stack = opts.stack ?? 200;
-    this.betSizes = opts.bet_sizes ?? DEFAULT_BET_SIZES;
-
-    const boardSet = new Set(this.boardCards);
-    this.rangeP0 = parseRange(opts.range_p0 ?? "AA,KK,QQ,JJ,AKs,AKo").filter(
-      ([c1, c2]) => !boardSet.has(c1) && !boardSet.has(c2),
-    );
-    this.rangeP1 = parseRange(opts.range_p1 ?? "AA,KK,QQ,JJ,AKs,AKo").filter(
-      ([c1, c2]) => !boardSet.has(c1) && !boardSet.has(c2),
-    );
 
     const streetMap: Record<number, string> = {
       3: "flop",
@@ -74,6 +101,28 @@ export class NLHESubgameBuilder implements TreeBuilder {
       throw new Error(
         `Board must be 3-5 cards, got ${this.boardCards.length}`,
       );
+
+    // Use street-adaptive config for tree tractability
+    const cfg = STREET_CONFIG[this.street];
+    this.betSizes = opts.bet_sizes ?? cfg.betSizes;
+    this.raiseSizes = cfg.raiseSizes;
+    this.maxRaises = cfg.maxRaises;
+    this.maxRunoutCards = cfg.maxRunoutCards;
+
+    const boardSet = new Set(this.boardCards);
+    let p0 = parseRange(opts.range_p0 ?? "AA,KK,QQ,JJ,AKs,AKo").filter(
+      ([c1, c2]) => !boardSet.has(c1) && !boardSet.has(c2),
+    );
+    let p1 = parseRange(opts.range_p1 ?? "AA,KK,QQ,JJ,AKs,AKo").filter(
+      ([c1, c2]) => !boardSet.has(c1) && !boardSet.has(c2),
+    );
+
+    // Cap range combos for tractability on early streets
+    if (p0.length > cfg.maxRangeCombos) p0 = p0.slice(0, cfg.maxRangeCombos);
+    if (p1.length > cfg.maxRangeCombos) p1 = p1.slice(0, cfg.maxRangeCombos);
+
+    this.rangeP0 = p0;
+    this.rangeP1 = p1;
   }
 
   private _parseBoard(board: string): number[] {
@@ -312,9 +361,9 @@ export class NLHESubgameBuilder implements TreeBuilder {
         makeActionInfo(Action.CALL, betAmount, "call"),
       ];
       // Raise options
-      if (numRaises < MAX_RAISES && playerStack > betAmount) {
+      if (numRaises < this.maxRaises && playerStack > betAmount) {
         let lastRaiseAmt = 0;
-        for (const frac of DEFAULT_RAISE_SIZES) {
+        for (const frac of this.raiseSizes) {
           let raiseAmt = betAmount + pot * frac;
           raiseAmt = Math.min(raiseAmt, playerStack);
           lastRaiseAmt = raiseAmt;
@@ -395,10 +444,10 @@ export class NLHESubgameBuilder implements TreeBuilder {
     }
 
     // Subsample for tractability
-    if (remaining.length > MAX_RUNOUT_CARDS) {
-      const step = remaining.length / MAX_RUNOUT_CARDS;
+    if (remaining.length > this.maxRunoutCards) {
+      const step = remaining.length / this.maxRunoutCards;
       const sampled: number[] = [];
-      for (let i = 0; i < MAX_RUNOUT_CARDS; i++) {
+      for (let i = 0; i < this.maxRunoutCards; i++) {
         sampled.push(remaining[Math.floor(i * step)]);
       }
       remaining = sampled;

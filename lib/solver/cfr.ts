@@ -44,6 +44,29 @@ export class CFRPlusSolver {
     return this.getAverageEv();
   }
 
+  /**
+   * Run CFR+ with a wall-clock time budget (milliseconds).
+   * Stops when either maxIterations or timeBudgetMs is reached.
+   * Returns the estimated game value (player 0 EV).
+   */
+  solveWithTimeBudget(maxIterations: number, timeBudgetMs: number): number {
+    const deadline = Date.now() + timeBudgetMs;
+
+    for (let i = 0; i < maxIterations; i++) {
+      if (Date.now() >= deadline) break;
+
+      this.iteration++;
+      const updatingPlayer = i % 2;
+
+      const ev = this._cfr(this.root, updatingPlayer, 1.0, 1.0, 1.0);
+
+      if (updatingPlayer === 0) {
+        this._evHistory.push(ev);
+      }
+    }
+    return this.getAverageEv();
+  }
+
   getAverageEv(): number {
     if (this._evHistory.length === 0) return 0;
     // Use the latter half for better estimate
