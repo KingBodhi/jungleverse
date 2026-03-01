@@ -67,7 +67,7 @@ async def start_solve(request: Request, body: SolveRequest):
     # On Vercel, clamp iterations to avoid serverless timeout
     num_iterations = body.num_iterations
     if os.environ.get("VERCEL"):
-        limits = {"kuhn": 50_000, "leduc": 1_000, "nlhe_subgame": 200}
+        limits = {"kuhn": 50_000, "leduc": 1_000, "nlhe_subgame": 100}
         cap = limits.get(body.variant.value, 1_000)
         num_iterations = min(num_iterations, cap)
 
@@ -176,6 +176,6 @@ async def health():
         "max_iterations": {
             "kuhn": 100_000 if not is_vercel else 50_000,
             "leduc": 100_000 if not is_vercel else 1_000,
-            "nlhe_subgame": 100_000 if not is_vercel else 200,
+            "nlhe_subgame": 100_000 if not is_vercel else 100,
         },
     }

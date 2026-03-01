@@ -13,6 +13,8 @@ import { NextRequest, NextResponse } from "next/server";
 const SOLVER_URL =
   (process.env.SOLVER_API_URL || "http://localhost:8001/api/v1/solver").trim();
 
+export const maxDuration = 60;
+
 export async function GET(request: NextRequest) {
   const { searchParams } = request.nextUrl;
   const action = searchParams.get("action");
