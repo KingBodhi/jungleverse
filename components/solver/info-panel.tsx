@@ -80,8 +80,8 @@ export function InfoPanel() {
 
   // Health check
   useEffect(() => {
-    fetch("/api/solver?action=status&id=__ping__")
-      .then(() => setBackendUp(true))
+    fetch("/api/solver?action=health")
+      .then((r) => setBackendUp(r.ok))
       .catch(() => setBackendUp(false));
   }, [solveId]);
 

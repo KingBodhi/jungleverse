@@ -12,9 +12,10 @@ import { NlheConfigForm } from "./nlhe-config-form";
 interface ConfigPanelProps {
   onSolve: () => void;
   isSolving: boolean;
+  backendUp?: boolean | null;
 }
 
-export function ConfigPanel({ onSolve, isSolving }: ConfigPanelProps) {
+export function ConfigPanel({ onSolve, isSolving, backendUp }: ConfigPanelProps) {
   const variant = useSolverStore((s) => s.variant);
   const numIterations = useSolverStore((s) => s.numIterations);
   const setNumIterations = useSolverStore((s) => s.setNumIterations);
@@ -80,12 +81,14 @@ export function ConfigPanel({ onSolve, isSolving }: ConfigPanelProps) {
 
         <Button
           onClick={onSolve}
-          disabled={isSolving}
+          disabled={isSolving || backendUp === false}
           className="w-full"
           size="lg"
         >
           {isSolving ? (
             <>Solving...</>
+          ) : backendUp === false ? (
+            <>Backend Offline</>
           ) : (
             <>
               <Play className="mr-2 h-4 w-4" />

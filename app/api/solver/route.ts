@@ -29,6 +29,12 @@ export async function GET(request: NextRequest) {
     let url: string;
 
     switch (action) {
+      case "health": {
+        // Direct health check — does not require an id
+        const base = SOLVER_URL.replace(/\/api\/v1\/solver\/?$/, "");
+        url = `${base}/health`;
+        break;
+      }
       case "status":
         if (!id) return NextResponse.json({ error: "id required" }, { status: 400 });
         url = `${SOLVER_URL}/solve/${id}`;

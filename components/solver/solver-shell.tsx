@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { Menu, PanelRight } from "lucide-react";
+import { Menu, PanelRight, WifiOff, RefreshCw } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
@@ -28,6 +28,25 @@ export function SolverShell() {
   const pollRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const [mobileConfigOpen, setMobileConfigOpen] = useState(false);
   const [mobileInfoOpen, setMobileInfoOpen] = useState(false);
+  const [backendUp, setBackendUp] = useState<boolean | null>(null);
+  const [checkingBackend, setCheckingBackend] = useState(false);
+
+  // Health check on mount
+  const checkBackend = useCallback(async () => {
+    setCheckingBackend(true);
+    try {
+      const res = await fetch("/api/solver?action=health");
+      setBackendUp(res.ok);
+    } catch {
+      setBackendUp(false);
+    } finally {
+      setCheckingBackend(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    checkBackend();
+  }, [checkBackend]);
 
   // Clean up polling on unmount
   useEffect(() => {
@@ -126,6 +145,7 @@ export function SolverShell() {
       store.setSolveId(res.solve_id);
       store.setStatus(res.status);
       setMobileConfigOpen(false);
+      setBackendUp(true);
 
       if (res.status === "completed") {
         store.setProgress(1);
@@ -164,7 +184,7 @@ export function SolverShell() {
                   <SheetTitle>Configuration</SheetTitle>
                 </SheetHeader>
                 <div className="mt-4">
-                  <ConfigPanel onSolve={handleSolve} isSolving={isSolving} />
+                  <ConfigPanel onSolve={handleSolve} isSolving={isSolving} backendUp={backendUp} />
                 </div>
               </SheetContent>
             </Sheet>
@@ -206,6 +226,57 @@ export function SolverShell() {
         </div>
       )}
 
+      {/* Backend offline banner */}
+      {backendUp === false && (
+        <div className="mb-4 rounded-md border border-amber-500/40 bg-amber-500/10 px-4 py-4 text-sm">
+          <div className="flex items-start gap-3">
+            <WifiOff className="mt-0.5 h-5 w-5 shrink-0 text-amber-400" />
+            <div className="space-y-2">
+              <p className="font-semibold text-amber-300">
+                Solver backend not connected
+              </p>
+              <p className="text-xs text-muted-foreground leading-relaxed">
+                The CFR solver runs as a separate Python service. To use the
+                solver, start the backend locally or deploy it:
+              </p>
+              <div className="rounded bg-muted/30 px-3 py-2 font-mono text-xs text-muted-foreground">
+                <p className="text-amber-400/80"># Local</p>
+                <p>cd backend/solver</p>
+                <p>pip install -r requirements.txt</p>
+                <p>uvicorn main:app --port 8001</p>
+                <p className="mt-2 text-amber-400/80"># Docker</p>
+                <p>cd backend/solver</p>
+                <p>docker build -t solver . && docker run -p 8001:8001 solver</p>
+              </div>
+              <p className="text-xs text-muted-foreground">
+                For production, deploy to{" "}
+                <span className="text-amber-400/80">Fly.io</span>,{" "}
+                <span className="text-amber-400/80">Railway</span>, or{" "}
+                <span className="text-amber-400/80">Render</span> and set the{" "}
+                <code className="rounded bg-muted/40 px-1 py-0.5">
+                  SOLVER_API_URL
+                </code>{" "}
+                env var in Vercel.
+              </p>
+              <Button
+                variant="outline"
+                size="sm"
+                className="mt-1 text-xs"
+                onClick={checkBackend}
+                disabled={checkingBackend}
+              >
+                {checkingBackend ? (
+                  <RefreshCw className="mr-1.5 h-3 w-3 animate-spin" />
+                ) : (
+                  <RefreshCw className="mr-1.5 h-3 w-3" />
+                )}
+                Retry Connection
+              </Button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Error display */}
       {store.error && (
         <div className="mb-4 rounded-md border border-destructive/50 bg-destructive/10 px-4 py-3 text-sm text-destructive">
@@ -229,7 +300,7 @@ export function SolverShell() {
         {/* Left: Config (hidden on mobile, in Sheet instead) */}
         <aside className="hidden lg:block">
           <div className="sticky top-6">
-            <ConfigPanel onSolve={handleSolve} isSolving={isSolving} />
+            <ConfigPanel onSolve={handleSolve} isSolving={isSolving} backendUp={backendUp} />
           </div>
         </aside>
 

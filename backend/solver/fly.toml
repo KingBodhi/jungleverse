@@ -1,0 +1,21 @@
+# Fly.io deployment config for the CFR solver backend.
+# Deploy: cd backend/solver && fly launch
+# Set SOLVER_API_URL in Vercel to https://<app-name>.fly.dev/api/v1/solver
+
+app = "jungleverse-solver"
+primary_region = "iad"
+
+[build]
+  dockerfile = "Dockerfile"
+
+[http_service]
+  internal_port = 8001
+  force_https = true
+  auto_stop_machines = "suspend"
+  auto_start_machines = true
+  min_machines_running = 0
+
+[[vm]]
+  memory = "512mb"
+  cpu_kind = "shared"
+  cpus = 1
