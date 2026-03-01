@@ -1,19 +1,22 @@
 import { NextRequest, NextResponse } from "next/server";
+import { SolverManager } from "@/lib/solver/solver-manager";
 
 /**
- * Solver API proxy — forwards requests to the Python CFR solver backend.
+ * Solver API — integrated TypeScript CFR solver (no external backend).
  *
- * GET  /api/solver?action=status&id=xxx     → solver status
- * GET  /api/solver?action=strategy&id=xxx   → strategy data
- * GET  /api/solver?action=info-sets&id=xxx  → info set keys
- * GET  /api/solver?action=compare&id=xxx    → EV comparison
- * POST /api/solver                          → start solve / nodelock
+ * GET  /api/solver?action=health              → health check
+ * GET  /api/solver?action=status&id=xxx       → solver status
+ * GET  /api/solver?action=strategy&id=xxx     → strategy data
+ * GET  /api/solver?action=info-sets&id=xxx    → info set keys
+ * GET  /api/solver?action=compare&id=xxx      → EV comparison
+ * POST /api/solver?action=solve               → start solve (synchronous)
+ * POST /api/solver?action=nodelock            → apply node lock + re-solve
+ * DELETE /api/solver?id=xxx                   → delete solve
  */
 
-const SOLVER_URL =
-  (process.env.SOLVER_API_URL || "http://localhost:8001/api/v1/solver").trim();
-
 export const maxDuration = 60;
+
+const manager = new SolverManager();
 
 export async function GET(request: NextRequest) {
   const { searchParams } = request.nextUrl;
@@ -22,56 +25,76 @@ export async function GET(request: NextRequest) {
 
   if (!action) {
     return NextResponse.json(
-      { error: "action parameter required (status, strategy, info-sets, compare)" },
-      { status: 400 }
+      { error: "action parameter required (health, status, strategy, info-sets, compare)" },
+      { status: 400 },
     );
   }
 
   try {
-    let url: string;
-
     switch (action) {
       case "health": {
-        // Direct health check — strip path suffix to get base URL
-        const idx = SOLVER_URL.indexOf("/api/v1/solver");
-        const base = idx > 0 ? SOLVER_URL.substring(0, idx) : SOLVER_URL;
-        url = `${base}/health`;
-        break;
+        return NextResponse.json({
+          status: "ok",
+          service: "poker-cfr-solver",
+          integrated: true,
+          max_iterations: {
+            kuhn: 50_000,
+            leduc: 1_000,
+            nlhe_subgame: 100,
+          },
+        });
       }
-      case "status":
-        if (!id) return NextResponse.json({ error: "id required" }, { status: 400 });
-        url = `${SOLVER_URL}/solve/${id}`;
-        break;
-      case "strategy":
-        if (!id) return NextResponse.json({ error: "id required" }, { status: 400 });
-        const keys = searchParams.get("keys") || "";
-        const prefix = searchParams.get("prefix") || "";
-        url = `${SOLVER_URL}/strategy/${id}?keys=${keys}&prefix=${prefix}`;
-        break;
-      case "info-sets":
-        if (!id) return NextResponse.json({ error: "id required" }, { status: 400 });
-        url = `${SOLVER_URL}/info-sets/${id}`;
-        break;
-      case "compare":
-        if (!id) return NextResponse.json({ error: "id required" }, { status: 400 });
-        url = `${SOLVER_URL}/compare/${id}`;
-        break;
+
+      case "status": {
+        if (!id)
+          return NextResponse.json({ error: "id required" }, { status: 400 });
+        const data = await manager.getSolveStatus(id);
+        if (!data)
+          return NextResponse.json(
+            { error: `Solve ${id} not found` },
+            { status: 404 },
+          );
+        return NextResponse.json(data);
+      }
+
+      case "strategy": {
+        if (!id)
+          return NextResponse.json({ error: "id required" }, { status: 400 });
+        const keys = searchParams.get("keys");
+        const prefix = searchParams.get("prefix");
+        const keyList = keys ? keys.split(",").filter(Boolean) : undefined;
+        const result = await manager.getStrategies(
+          id,
+          keyList,
+          prefix || undefined,
+        );
+        return NextResponse.json(result);
+      }
+
+      case "info-sets": {
+        if (!id)
+          return NextResponse.json({ error: "id required" }, { status: 400 });
+        const result = await manager.getInfoSetKeys(id);
+        return NextResponse.json(result);
+      }
+
+      case "compare": {
+        if (!id)
+          return NextResponse.json({ error: "id required" }, { status: 400 });
+        const result = await manager.getEVComparison(id);
+        return NextResponse.json(result);
+      }
+
       default:
         return NextResponse.json(
           { error: `Unknown action: ${action}` },
-          { status: 400 }
+          { status: 400 },
         );
     }
-
-    const resp = await fetch(url);
-    const data = await resp.json();
-    return NextResponse.json(data, { status: resp.status });
   } catch (err) {
-    console.error("Solver proxy error:", err);
-    return NextResponse.json(
-      { error: "Solver backend unavailable" },
-      { status: 503 }
-    );
+    console.error("Solver API error:", err);
+    const message = err instanceof Error ? err.message : "Internal server error";
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }
 
@@ -81,35 +104,28 @@ export async function POST(request: NextRequest) {
 
   try {
     const body = await request.json();
-    let url: string;
 
     switch (action) {
-      case "solve":
-        url = `${SOLVER_URL}/solve`;
-        break;
-      case "nodelock":
-        url = `${SOLVER_URL}/nodelock`;
-        break;
+      case "solve": {
+        const result = await manager.createAndSolve(body);
+        return NextResponse.json(result);
+      }
+
+      case "nodelock": {
+        const result = await manager.applyNodeLock(body);
+        return NextResponse.json(result);
+      }
+
       default:
         return NextResponse.json(
           { error: `Unknown action: ${action}` },
-          { status: 400 }
+          { status: 400 },
         );
     }
-
-    const resp = await fetch(url, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(body),
-    });
-    const data = await resp.json();
-    return NextResponse.json(data, { status: resp.status });
   } catch (err) {
-    console.error("Solver proxy error:", err);
-    return NextResponse.json(
-      { error: "Solver backend unavailable" },
-      { status: 503 }
-    );
+    console.error("Solver API error:", err);
+    const message = err instanceof Error ? err.message : "Internal server error";
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }
 
@@ -122,14 +138,16 @@ export async function DELETE(request: NextRequest) {
   }
 
   try {
-    const resp = await fetch(`${SOLVER_URL}/solve/${id}`, { method: "DELETE" });
-    const data = await resp.json();
-    return NextResponse.json(data, { status: resp.status });
+    const deleted = await manager.deleteSolve(id);
+    if (!deleted)
+      return NextResponse.json(
+        { error: `Solve ${id} not found` },
+        { status: 404 },
+      );
+    return NextResponse.json({ status: "deleted", solve_id: id });
   } catch (err) {
-    console.error("Solver proxy error:", err);
-    return NextResponse.json(
-      { error: "Solver backend unavailable" },
-      { status: 503 }
-    );
+    console.error("Solver API error:", err);
+    const message = err instanceof Error ? err.message : "Internal server error";
+    return NextResponse.json({ error: message }, { status: 500 });
   }
 }

@@ -23,6 +23,7 @@ enum GameVariant {
 enum Role {
   USER
   ADMIN
+  CASINO
 }
 
 enum Provider {
@@ -97,9 +98,13 @@ model PokerRoom {
   latitude  Float?
   longitude Float?
   timezone  String?
-  website   String?
-  phone     String?
-  imageUrl  String?
+  website            String?
+  phone              String?
+  imageUrl           String?
+  logoUrl            String?
+  heroImageUrl       String?
+  cashSourceUrl      String?
+  tournamentSourceUrl String?
 
   // M1: Hours of operation and amenities
   hoursJson       Json?
@@ -112,6 +117,7 @@ model PokerRoom {
   games           Game[]
   favoriteRooms   FavoriteRoom[]
   reviews         Review[]
+  managers        User[]       @relation("RoomManagers")
   createdAt       DateTime @default(now())
   updatedAt       DateTime @updatedAt
 
@@ -223,6 +229,8 @@ model User {
   reviews             Review[]
   waitTimes           WaitTime[]
   bankrollAccounts    BankrollAccount[]
+  managedPokerRoomId  String?
+  managedPokerRoom    PokerRoom? @relation("RoomManagers", fields: [managedPokerRoomId], references: [id])
 }
 
 model FavoriteRoom {
@@ -351,4 +359,89 @@ model BankrollTransaction {
   @@index([bankrollAccountId])
   @@index([createdAt])
   @@index([type])
+}
+
+// Pulse Engine — Poker News Feed
+model PokerNews {
+  id           String   @id @default(cuid())
+  contentHash  String   @unique
+  sourceId     String
+  sourceType   String   @default("rss")
+  url          String
+  title        String
+  body         String?
+  author       String?
+  publishedAt  DateTime?
+  collectedAt  DateTime @default(now())
+  summary      String?
+  relevance    Float?
+  isAlert      Boolean  @default(false)
+  alertRuleId  String?
+  notified     Boolean  @default(false)
+  createdAt    DateTime @default(now())
+
+  @@index([collectedAt])
+  @@index([sourceId])
+  @@index([isAlert])
+}
+
+// --- CFR Solver Models ---
+
+enum SolverVariant {
+  KUHN
+  LEDUC
+  NLHE_SUBGAME
+}
+
+enum SolveStatus {
+  PENDING
+  RUNNING
+  COMPLETED
+  FAILED
+  CANCELLED
+}
+
+model SolverJob {
+  id                  String        @id @default(cuid())
+  solveId             String        @unique
+  variant             SolverVariant
+  status              SolveStatus   @default(PENDING)
+  numIterations       Int
+  completedIterations Int           @default(0)
+  evP0                Float?
+  exploitability      Float?
+  numInfoSets         Int           @default(0)
+  configJson          Json?
+  error               String?
+  createdAt           DateTime      @default(now())
+  updatedAt           DateTime      @updatedAt
+  strategies          SolverStrategy[]
+  nodeLocks           SolverNodeLock[]
+
+  @@index([status])
+}
+
+model SolverStrategy {
+  id                String    @id @default(cuid())
+  solverJobId       String
+  solverJob         SolverJob @relation(fields: [solverJobId], references: [id], onDelete: Cascade)
+  infoSetKey        String
+  actionsJson       Json
+  probabilitiesJson Json
+  isLocked          Boolean   @default(false)
+
+  @@unique([solverJobId, infoSetKey])
+  @@index([solverJobId])
+}
+
+model SolverNodeLock {
+  id           String    @id @default(cuid())
+  solverJobId  String
+  solverJob    SolverJob @relation(fields: [solverJobId], references: [id], onDelete: Cascade)
+  infoSetKey   String
+  strategyJson Json
+  appliedAt    DateTime  @default(now())
+
+  @@unique([solverJobId, infoSetKey])
+  @@index([solverJobId])
 }

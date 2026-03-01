@@ -12,12 +12,10 @@ import { NlheConfigForm } from "./nlhe-config-form";
 interface ConfigPanelProps {
   onSolve: () => void;
   isSolving: boolean;
-  backendUp?: boolean | null;
-  serverless?: boolean;
   iterLimits?: Record<string, number> | null;
 }
 
-export function ConfigPanel({ onSolve, isSolving, backendUp, serverless, iterLimits }: ConfigPanelProps) {
+export function ConfigPanel({ onSolve, isSolving, iterLimits }: ConfigPanelProps) {
   const variant = useSolverStore((s) => s.variant);
   const numIterations = useSolverStore((s) => s.numIterations);
   const setNumIterations = useSolverStore((s) => s.setNumIterations);
@@ -81,23 +79,16 @@ export function ConfigPanel({ onSolve, isSolving, backendUp, serverless, iterLim
             <span>100</span>
             <span>{formatIter(maxIter)}</span>
           </div>
-          {serverless && maxIter < 100_000 && (
-            <p className="mt-1 text-[10px] text-amber-400/70">
-              Serverless mode — iterations capped at {formatIter(maxIter)} for {variant}
-            </p>
-          )}
         </div>
 
         <Button
           onClick={onSolve}
-          disabled={isSolving || backendUp === false}
+          disabled={isSolving}
           className="w-full"
           size="lg"
         >
           {isSolving ? (
             <>Solving...</>
-          ) : backendUp === false ? (
-            <>Backend Offline</>
           ) : (
             <>
               <Play className="mr-2 h-4 w-4" />
