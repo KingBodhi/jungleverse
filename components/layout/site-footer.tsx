@@ -1,3 +1,6 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { Github, MapPin, Mail } from "lucide-react";
 
@@ -15,6 +18,9 @@ const resourceLinks = [
 
 export function SiteFooter() {
   const currentYear = new Date().getFullYear();
+  // Defer icons until after hydration to avoid browser-extension mismatch
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
 
   return (
     <footer className="border-t border-border/60 bg-background">
@@ -29,13 +35,13 @@ export function SiteFooter() {
           </p>
           <div className="flex flex-wrap gap-4 text-sm text-muted-foreground">
             <span className="inline-flex items-center gap-1">
-              <MapPin className="h-4 w-4" /> Global coverage
+              {mounted ? <MapPin className="h-4 w-4" /> : <span className="h-4 w-4" />} Global coverage
             </span>
             <Link href="mailto:ops@jungleverse.gg" className="inline-flex items-center gap-1 hover:text-secondary">
-              <Mail className="h-4 w-4" /> ops@jungleverse.gg
+              {mounted ? <Mail className="h-4 w-4" /> : <span className="h-4 w-4" />} ops@jungleverse.gg
             </Link>
             <Link href="https://github.com" className="inline-flex items-center gap-1 hover:text-secondary">
-              <Github className="h-4 w-4" /> Github
+              {mounted ? <Github className="h-4 w-4" /> : <span className="h-4 w-4" />} Github
             </Link>
           </div>
         </div>
@@ -44,7 +50,7 @@ export function SiteFooter() {
       </div>
       <div className="border-t border-border/60">
         <div className="container flex flex-col gap-4 py-6 text-sm text-muted-foreground md:flex-row md:items-center md:justify-between">
-          <span>© {currentYear} Jungleverse. All rights reserved.</span>
+          <span>&copy; {currentYear} Jungleverse. All rights reserved.</span>
           <div className="flex gap-4">
             <Link href="#privacy" className="hover:text-secondary">
               Privacy

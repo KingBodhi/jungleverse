@@ -4,11 +4,13 @@ import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { getCurrentUser } from "@/lib/auth-helpers";
 import { UserNav } from "@/components/layout/user-nav";
+import { MobileNav } from "@/components/layout/mobile-nav";
 
 const links = [
   { href: "/rooms", label: "Rooms" },
   { href: "/tournaments", label: "Tournaments" },
   { href: "/cash-games", label: "Cash Games" },
+  { href: "/solver", label: "Solver" },
 ];
 
 export async function SiteHeader({ children }: PropsWithChildren) {
@@ -17,11 +19,16 @@ export async function SiteHeader({ children }: PropsWithChildren) {
   return (
     <header className="border-b border-border/60 bg-background/90 backdrop-blur supports-[backdrop-filter]:bg-background/70">
       <div className="container flex items-center justify-between py-4">
-        <Link href="/" className="flex items-center gap-2 font-semibold">
-          <span className="font-display text-2xl uppercase tracking-[0.35em] text-secondary">
-            Jungleverse
-          </span>
-        </Link>
+        <div className="flex items-center gap-3">
+          <div className="md:hidden">
+            <MobileNav links={links} />
+          </div>
+          <Link href="/" className="flex items-center gap-2 font-semibold">
+            <span className="font-display text-2xl uppercase tracking-[0.35em] text-secondary">
+              Jungleverse
+            </span>
+          </Link>
+        </div>
         <nav className="hidden flex-1 items-center justify-center gap-6 text-sm font-medium md:flex">
           {links.map((link) => (
             <Link

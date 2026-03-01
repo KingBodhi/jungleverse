@@ -3,7 +3,7 @@
 import logging
 from contextlib import asynccontextmanager
 
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 
 from pulse.solver.manager import SolverManager
@@ -50,8 +50,7 @@ app.add_middleware(
 )
 
 
-def _mgr(request):
-    from fastapi import HTTPException, Request
+def _mgr(request: Request) -> SolverManager:
     mgr = getattr(request.app.state, "solver_manager", None)
     if not mgr:
         raise HTTPException(503, "Solver not ready")
@@ -59,8 +58,7 @@ def _mgr(request):
 
 
 @app.post("/api/v1/solver/solve", response_model=SolveResponse)
-async def start_solve(request, body: SolveRequest):
-    from fastapi import HTTPException
+async def start_solve(request: Request, body: SolveRequest):
     mgr = _mgr(request)
     config = None
     if body.variant == GameVariant.NLHE_SUBGAME:
@@ -78,8 +76,7 @@ async def start_solve(request, body: SolveRequest):
 
 
 @app.get("/api/v1/solver/solve/{solve_id}", response_model=SolveResponse)
-async def get_solve(request, solve_id: str):
-    from fastapi import HTTPException
+async def get_solve(request: Request, solve_id: str):
     mgr = _mgr(request)
     data = await mgr.get_solve_status(solve_id)
     if not data:
@@ -98,7 +95,7 @@ async def get_solve(request, solve_id: str):
 
 
 @app.get("/api/v1/solver/strategy/{solve_id}", response_model=StrategyResponse)
-async def get_strategy(request, solve_id: str, keys: str = None, prefix: str = None):
+async def get_strategy(request: Request, solve_id: str, keys: str = None, prefix: str = None):
     mgr = _mgr(request)
     key_list = keys.split(",") if keys else None
     rows = await mgr.get_strategies(solve_id, keys=key_list, prefix=prefix)
@@ -110,15 +107,14 @@ async def get_strategy(request, solve_id: str, keys: str = None, prefix: str = N
 
 
 @app.get("/api/v1/solver/info-sets/{solve_id}", response_model=InfoSetsResponse)
-async def get_info_sets(request, solve_id: str):
+async def get_info_sets(request: Request, solve_id: str):
     mgr = _mgr(request)
     keys = await mgr.get_info_set_keys(solve_id)
     return InfoSetsResponse(solve_id=solve_id, info_set_keys=keys, total=len(keys))
 
 
 @app.post("/api/v1/solver/nodelock", response_model=NodeLockResponse)
-async def nodelock(request, body: NodeLockRequest):
-    from fastapi import HTTPException
+async def nodelock(request: Request, body: NodeLockRequest):
     mgr = _mgr(request)
     try:
         results = await mgr.apply_node_locks(body.solve_id, body.locks,
@@ -131,8 +127,7 @@ async def nodelock(request, body: NodeLockRequest):
 
 
 @app.get("/api/v1/solver/compare/{solve_id}", response_model=EVComparisonResponse)
-async def compare(request, solve_id: str):
-    from fastapi import HTTPException
+async def compare(request: Request, solve_id: str):
     mgr = _mgr(request)
     try:
         c = await mgr.get_ev_comparison(solve_id)
@@ -142,8 +137,7 @@ async def compare(request, solve_id: str):
 
 
 @app.delete("/api/v1/solver/solve/{solve_id}")
-async def delete_solve(request, solve_id: str):
-    from fastapi import HTTPException
+async def delete_solve(request: Request, solve_id: str):
     mgr = _mgr(request)
     if not await mgr.cancel_solve(solve_id):
         raise HTTPException(404, f"Solve {solve_id} not found")
