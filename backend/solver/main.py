@@ -74,6 +74,17 @@ async def start_solve(request: Request, body: SolveRequest):
         solve_id = await mgr.create_solve(body.variant, body.num_iterations, config)
     except Exception as e:
         raise HTTPException(400, str(e))
+
+    # On Vercel, solve runs synchronously — return completed status
+    state = mgr._solvers.get(solve_id)
+    if state and state.status == SolveStatus.COMPLETED:
+        return SolveResponse(
+            solve_id=solve_id, status=SolveStatus.COMPLETED,
+            variant=body.variant, num_iterations=body.num_iterations,
+            progress=1.0, ev_p0=state.solver.get_average_ev(),
+            exploitability=state.solver.get_exploitability(),
+            num_info_sets=len(state.info_store),
+        )
     return SolveResponse(solve_id=solve_id, status=SolveStatus.RUNNING,
                          variant=body.variant, num_iterations=body.num_iterations)
 

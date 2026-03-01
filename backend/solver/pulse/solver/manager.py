@@ -8,6 +8,7 @@ from __future__ import annotations
 
 import asyncio
 import logging
+import os
 import uuid
 from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass, field
@@ -112,10 +113,14 @@ class SolverManager:
         # Persist
         await self.db.create_solve(solve_id, variant.value, num_iterations, config)
 
-        # Start solve in background
-        state.task = asyncio.create_task(
-            self._run_solve(state)
-        )
+        # On Vercel serverless, run synchronously within the request
+        # (background tasks freeze between requests)
+        if os.environ.get("VERCEL"):
+            await self._run_solve(state)
+        else:
+            state.task = asyncio.create_task(
+                self._run_solve(state)
+            )
 
         return solve_id
 
@@ -233,9 +238,12 @@ class SolverManager:
         state.target_iterations += resolve_iterations
         await self.db.update_solve_status(solve_id, "running")
 
-        state.task = asyncio.create_task(
-            self._run_solve(state)
-        )
+        if os.environ.get("VERCEL"):
+            await self._run_solve(state)
+        else:
+            state.task = asyncio.create_task(
+                self._run_solve(state)
+            )
 
         return results
 
