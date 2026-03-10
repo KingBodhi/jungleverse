@@ -1,5 +1,4 @@
 import { load } from "cheerio";
-import { GameVariant } from "@prisma/client";
 import { NormalizedCashGame, NormalizedTournament, ProviderConnector } from "./types";
 import {
   inferVariantFromName,

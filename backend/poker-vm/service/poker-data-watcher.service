@@ -1,0 +1,20 @@
+[Unit]
+Description=Poker Client Data Watcher Service
+Documentation=https://github.com/jungleverse/jungleverse
+After=network.target
+
+[Service]
+Type=simple
+ExecStart=/usr/bin/python3 %h/.local/share/poker-vm/service/watcher.py
+WorkingDirectory=%h/.local/share/poker-vm
+Environment=POKER_VM_SHARED_DIR=%h/.local/share/poker-vm/shared-data
+Environment=LOG_LEVEL=INFO
+Restart=on-failure
+RestartSec=10
+
+# Resource limits
+MemoryMax=512M
+CPUQuota=50%
+
+[Install]
+WantedBy=default.target

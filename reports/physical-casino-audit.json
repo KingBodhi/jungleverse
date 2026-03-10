@@ -1,0 +1,339 @@
+{
+  "generatedAt": "2026-01-02T16:10:48.089Z",
+  "totalRooms": 43,
+  "missingLogos": [],
+  "missingHero": [
+    {
+      "name": "Banco Casino Bratislava",
+      "brand": "Banco Casino",
+      "city": "Bratislava",
+      "state": "",
+      "country": "Slovakia",
+      "imageUrl": "https://unavatar.io/bancocasino.sk"
+    },
+    {
+      "name": "Hard Rock Tulsa Poker Room",
+      "brand": "Hard Rock Hotel & Casino Tulsa",
+      "city": "Catoosa",
+      "state": "Oklahoma",
+      "country": "United States",
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/en/d/d8/Hard_Rock_Cafe_logo.svg"
+    },
+    {
+      "name": "Hippodrome Casino",
+      "brand": "Hippodrome",
+      "city": "London",
+      "state": "",
+      "country": "United Kingdom",
+      "imageUrl": "https://unavatar.io/hippodromecasino.com"
+    },
+    {
+      "name": "King's Resort Poker Room",
+      "brand": "King's Resort",
+      "city": "Rozvadov",
+      "state": null,
+      "country": "Czech Republic",
+      "imageUrl": "https://kings-resort.com/icons/logos/default.png"
+    },
+    {
+      "name": "Okada Manila Poker",
+      "brand": "Okada",
+      "city": "Manila",
+      "state": "",
+      "country": "Philippines",
+      "imageUrl": "https://unavatar.io/okadamanila.com"
+    },
+    {
+      "name": "Parkwest Bicycle Casino Poker Room",
+      "brand": "Parkwest Bicycle Casino",
+      "city": "Bell Gardens",
+      "state": "California",
+      "country": "United States",
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/en/thumb/b/be/Parkwest_Bicycle_Casino_logo.svg/512px-Parkwest_Bicycle_Casino_logo.svg.png"
+    },
+    {
+      "name": "Peppermill Resort Spa Casino Poker Room",
+      "brand": "Peppermill Resort Spa Casino",
+      "city": "Reno",
+      "state": "Nevada",
+      "country": "United States",
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/commons/9/9d/Peppermill_Reno_casino_logo.png"
+    },
+    {
+      "name": "Playground Poker Club",
+      "brand": "Playground",
+      "city": "Kahnawake",
+      "state": "QC",
+      "country": "Canada",
+      "imageUrl": "https://unavatar.io/playground.ca"
+    },
+    {
+      "name": "Seminole Hard Rock Tampa Poker Room",
+      "brand": "Seminole Hard Rock Hotel & Casino Tampa",
+      "city": "Tampa",
+      "state": "Florida",
+      "country": "United States",
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/en/0/08/Seminole_Hard_Rock_Hotel_and_Casino_Tampa_Logo.jpg"
+    },
+    {
+      "name": "Shuffle 214",
+      "brand": "Shuffle",
+      "city": "Dallas",
+      "state": "TX",
+      "country": "USA",
+      "imageUrl": "https://unavatar.io/shuffle214.com"
+    },
+    {
+      "name": "Texas Card House Austin",
+      "brand": "Texas Card House",
+      "city": "Austin",
+      "state": "TX",
+      "country": "USA",
+      "imageUrl": "https://unavatar.io/texascardhouse.com"
+    },
+    {
+      "name": "Thunder Valley Casino Resort Poker Room",
+      "brand": "Thunder Valley Casino Resort",
+      "city": "Lincoln",
+      "state": "California",
+      "country": "United States",
+      "imageUrl": "https://upload.wikimedia.org/wikipedia/en/5/55/TVC_Vertical_Logo.jpg"
+    },
+    {
+      "name": "bestbet Jacksonville",
+      "brand": "bestbet",
+      "city": "Jacksonville",
+      "state": "FL",
+      "country": "USA",
+      "imageUrl": "https://unavatar.io/bestbetjax.com"
+    },
+    {
+      "name": "bestbet Orange Park",
+      "brand": "bestbet",
+      "city": "Orange Park",
+      "state": "FL",
+      "country": "USA",
+      "imageUrl": "https://unavatar.io/bestbetjax.com"
+    },
+    {
+      "name": "bestbet St. Augustine",
+      "brand": "bestbet",
+      "city": "St. Augustine",
+      "state": "FL",
+      "country": "USA",
+      "imageUrl": "https://unavatar.io/bestbetjax.com"
+    }
+  ],
+  "sourceGaps": [
+    {
+      "provider_id": "aria-las-vegas",
+      "official_name": "Aria Poker Room",
+      "website_url": "https://aria.mgmresorts.com/en/casino/poker.html",
+      "notes": "Hosts ARIA Poker Classic May 28–July 13 2025 and BetMGM Championship July 4 weekend",
+      "data_source": "aria.mgmresorts.com/en/casino/poker.html|mapcarta.com/ChIJSx21Lp1DyIARBcluKKm9gE"
+    },
+    {
+      "provider_id": "mandalay-bay-las-vegas",
+      "official_name": "Mandalay Bay Poker Room",
+      "website_url": "https://mandalaybay.mgmresorts.com/en/casino/poker-tables.html",
+      "notes": "Schedule includes $100-to-$500 buy-in events and call-ahead signups; closed Tuesdays",
+      "data_source": "mandalaybay.mgmresorts.com/en/casino/poker-tables.html|mapcarta.com/27150008"
+    },
+    {
+      "provider_id": "venetian-las-vegas",
+      "official_name": "Venetian Poker Room",
+      "website_url": "https://www.venetianlasvegas.com/resort/casino/poker/promotions.html",
+      "notes": "Weekly $30k freeroll entry via 30 promo hours and ability to customize tournaments via concierge",
+      "data_source": "venetianlasvegas.com/resort/casino/poker/promotions.html|worldcasinodirectory.com/casino/the-venetian-resort-hotel-casino-las-vegas#poker|mapcarta.com/27223406"
+    },
+    {
+      "provider_id": "resorts-world-las-vegas",
+      "official_name": "Resorts World Las Vegas Poker Room",
+      "website_url": "https://www.rwlasvegas.com/casino/poker-room/",
+      "notes": "Hosts daily NLH/PLO mixed tournaments and features Waitlist via Bravo",
+      "data_source": "rwlasvegas.com/casino/poker-room|mapcarta.com/27198660"
+    },
+    {
+      "provider_id": "borgata-atlantic-city",
+      "official_name": "Borgata Poker Room",
+      "website_url": "https://borgata.mgmresorts.com/en/casino/poker.html",
+      "notes": "Winter Poker Open Jan 2–18 2026 with $8M guaranteed across 37 events",
+      "data_source": "borgata.mgmresorts.com/en/casino/poker.html|worldcasinodirectory.com/poker-room/borgata-poker|coordinatesfinder.com/usa/new-jersey/atlantic-city/borgata-hotel-casino-spa"
+    },
+    {
+      "provider_id": "foxwoods-mashantucket",
+      "official_name": "Foxwoods Poker Room",
+      "website_url": "https://www.foxwoods.com/game/poker/",
+      "notes": "Weekly $395/$135/$255 NLH tournaments plus tier multipliers",
+      "data_source": "foxwoods.com/game/poker|mapcarta.com/26049226"
+    },
+    {
+      "provider_id": "live-casino-maryland",
+      "official_name": "Live! Casino & Hotel Maryland Poker Room",
+      "website_url": "https://maryland.livecasinohotel.com/casino-and-gaming/poker",
+      "notes": "Hosts PokerStars Open Maryland (Oct 19–26 2025) and offers comps + Bravo waitlists",
+      "data_source": "maryland.livecasinohotel.com/casino-and-gaming/poker|mapcarta.com/28468806"
+    },
+    {
+      "provider_id": "mgm-national-harbor",
+      "official_name": "MGM National Harbor Poker Room",
+      "website_url": "https://mgmnationalharbor.mgmresorts.com/en/casino/poker.html",
+      "notes": "Potomac Winter Poker Open Feb 11–23 2026 (23 trophy events) and 24/7 operations",
+      "data_source": "mgmnationalharbor.mgmresorts.com/en/casino/poker.html|mapcarta.com/27175130"
+    },
+    {
+      "provider_id": "live-casino-philadelphia",
+      "official_name": "Live! Casino & Hotel Philadelphia Poker Room",
+      "website_url": "https://philadelphia.livecasinohotel.com/casino/table-games/poker",
+      "notes": "Frequent $20k-$50k guaranteed tournaments and comped parking for poker players",
+      "data_source": "philadelphia.livecasinohotel.com/casino/table-games/poker|uscasinoadvantage.com/poker-rooms/pennsylvania/live-philadelphia|mapcarta.com/26753488"
+    },
+    {
+      "provider_id": "rivers-casino-pittsburgh",
+      "official_name": "Rivers Casino Pittsburgh Poker Room",
+      "website_url": "https://www.riverscasino.com/pittsburgh/casino/poker-room/",
+      "notes": "Wednesday $160 bounty, Friday $125 NLH, plus standard 1/3 NLH $100–$300 buy-ins",
+      "data_source": "riverscasino.com/pittsburgh/casino/poker-room|mapcarta.com/26781646"
+    },
+    {
+      "provider_id": "mgm-grand-detroit",
+      "official_name": "MGM Grand Detroit Poker Room",
+      "website_url": "https://mgmgranddetroit.mgmresorts.com/en/casino/poker-room.html",
+      "notes": "Rewards include comped parking and November–January hours promo for freeroll entry",
+      "data_source": "mgmgranddetroit.mgmresorts.com/en/casino/poker-room.html|mapcarta.com/23108194"
+    },
+    {
+      "provider_id": "seminole-hard-rock-hollywood",
+      "official_name": "Seminole Hard Rock Hollywood Poker Room",
+      "website_url": "https://www.seminolehardrockpokeropen.com/poker-room/",
+      "notes": "Hosts Seminole Hard Rock Poker Showdown and other WPT events",
+      "data_source": "seminolehardrockpokeropen.com/poker-room|mapcarta.com/25680168"
+    },
+    {
+      "provider_id": "seminole-hard-rock-tampa",
+      "official_name": "Seminole Hard Rock Tampa Poker Room",
+      "website_url": "https://www.seminolehardrocktampa.com/casino/poker",
+      "notes": "Hosts WPT regional festivals and premium comps for poker hours",
+      "data_source": "seminolehardrocktampa.com/casino/poker|mapcarta.com/26634766"
+    },
+    {
+      "provider_id": "choctaw-durant",
+      "official_name": "Choctaw Casino & Resort Durant Poker Room",
+      "website_url": "https://www.choctawcasinos.com/durant/",
+      "notes": "Hosts Monster Stack, Gargantuan, $1,700 Main Event ($1M GTD)",
+      "data_source": "choctawcasinos.com/durant|wsop.com/tournaments/2026-wsop-circuit-choctaw-durant|mapcarta.com/23529490"
+    },
+    {
+      "provider_id": "winstar-thackerville",
+      "official_name": "WinStar Poker Room",
+      "website_url": "https://www.winstar.com/blog/winstar-new-poker-room/",
+      "notes": "Weekly tournaments Mon–Fri 1 p.m./7 p.m., Sat 11 a.m., Sun 1 p.m.; hosts River Poker Series",
+      "data_source": "winstar.com/blog/winstar-new-poker-room|mapcarta.com/25653110"
+    },
+    {
+      "provider_id": "talking-stick-scottsdale",
+      "official_name": "The ARENA Poker Room at Talking Stick Resort",
+      "website_url": "https://www.talkingstickresort.com/phoenix-scottsdale-casino/poker/",
+      "notes": "Reopened Feb 8 2025 after expansion; hosts Arizona State Poker Championship",
+      "data_source": "talkingstickresort.com/phoenix-scottsdale-casino/poker|mapcarta.com/24798306"
+    },
+    {
+      "provider_id": "bicycle-casino",
+      "official_name": "Parkwest Bicycle Casino Poker Room",
+      "website_url": "https://www.thebike.com/",
+      "notes": "Hosts WSOP Circuit Tournament of Champions & 18 events May 8–24 2025",
+      "data_source": "thebike.com|pokernews.com/poker-rooms/bicycle-hotel-casino.htm|mapcarta.com/24668018"
+    },
+    {
+      "provider_id": "wynn-las-vegas",
+      "official_name": "Wynn Las Vegas Poker Room",
+      "website_url": "https://www.wynnlasvegas.com/casino/poker",
+      "notes": "Wynn Signature Series Jan 5–19 2026 with 29 events and $400k GTD multi-day",
+      "data_source": "wynnlasvegas.com/casino/poker|pokernews.com/poker-rooms/wynn-las-vegas.htm|mapcarta.com/27278336"
+    },
+    {
+      "provider_id": "encore-boston-harbor",
+      "official_name": "Encore Boston Harbor Poker Room",
+      "website_url": "https://encorebostonharbor.com/casino/poker",
+      "notes": "Offers $1/$3 to $10/$25 NLH and PLO, high-hand promos",
+      "data_source": "encorebostonharbor.com/casino/poker|worldcasinodirectory.com/casino/wynn-boston-harbor-resort#poker|mapcarta.com/35122606"
+    },
+    {
+      "provider_id": "caesars-palace-las-vegas",
+      "official_name": "Caesars Palace Poker Room",
+      "website_url": "https://www.caesars.com/caesars-palace/casino/poker",
+      "notes": "Daily tournaments at 10 a.m., 2 p.m., 6 p.m., 9 p.m. with $1k guarantees",
+      "data_source": "caesars.com/caesars-palace/casino/poker|poker.org/inside-vegas/latest-news/caesars-palace-poker-room-on-the-move-to-a-new-old-spot-a6irF0V24hMS|mapcarta.com/27096436"
+    },
+    {
+      "provider_id": "horseshoe-las-vegas",
+      "official_name": "Horseshoe Las Vegas Poker Room (WSOP Hall of Fame)",
+      "website_url": "https://www.caesars.com/horseshoe-las-vegas/casino/poker",
+      "notes": "WSOP Circuit stop Mar 20–Apr 1 2025 with 18 rings and $1,700 Main ($750k GTD)",
+      "data_source": "caesars.com/horseshoe-las-vegas/casino/poker|vegasadvantage.com/open-las-vegas-poker-rooms/ballys-poker-room|mapcarta.com/27243110"
+    },
+    {
+      "provider_id": "commerce-casino",
+      "official_name": "Commerce Casino Poker Room",
+      "website_url": "https://www.commercecasino.com/poker/",
+      "notes": "Hosting WSOP Tournament of Champions & Circuit May 8–24 2025 with $2M GTD Main Event",
+      "data_source": "commercecasino.com/poker|pokernews.com/poker-rooms/commerce-casino.htm|mapcarta.com/24682202"
+    },
+    {
+      "provider_id": "peppermill-reno",
+      "official_name": "Peppermill Resort Spa Casino Poker Room",
+      "website_url": "https://www.peppermillreno.com/gaming/poker/",
+      "notes": "Fall Poker Palooza Nov 7–17 2025 and special lineup (Mon/ Wed dealer's choice)",
+      "data_source": "peppermillreno.com/gaming/poker|mapcarta.com/24371050|studiopoker.live/signature-festival-2025-peppermill"
+    },
+    {
+      "provider_id": "hard-rock-cincinnati",
+      "official_name": "Hard Rock Casino Cincinnati Poker Room",
+      "website_url": "https://uscasinoadvantage.com/poker-rooms/ohio/hard-rock-cincinnati/",
+      "notes": "Frequent black-chip bounty events and comp dollars for hours played",
+      "data_source": "uscasinoadvantage.com/poker-rooms/ohio/hard-rock-cincinnati|mapcarta.com/25539610"
+    },
+    {
+      "provider_id": "harrahs-new-orleans",
+      "official_name": "Harrah's New Orleans WSOP Poker Room",
+      "website_url": "https://www.caesars.com/harrahs-new-orleans/casino/poker",
+      "notes": "Weekly tournaments Sun/Mon/Wed and WSOP Circuit returns during 2025 upgrade",
+      "data_source": "caesars.com/harrahs-new-orleans/casino/poker|cdcgaming.com/caesars-updates-sportsbook-and-poker-room-at-harrahs-new-orleans-as-part-of-325-million-transformation|mapcarta.com/24057382"
+    },
+    {
+      "provider_id": "hollywood-charles-town",
+      "official_name": "Hollywood Casino at Charles Town Races Poker Room",
+      "website_url": "https://www.hollywoodcasinocharlestown.com/casino/poker",
+      "notes": "December promos include $1,000 NYE hot seats and Texas Hold'em jackpot ladders",
+      "data_source": "hollywoodcasinocharlestown.com/casino/poker|mapcarta.com/22163528"
+    },
+    {
+      "provider_id": "turning-stone-verona",
+      "official_name": "Turning Stone Poker Room",
+      "website_url": "https://www.turningstone.com/gaming/poker-room",
+      "notes": "NYE Triple Stack Turbo ($180 NLH) and rolling high-hand giveaways eligible for Hold'em tables",
+      "data_source": "turningstone.com/gaming/poker-room|mapcarta.com/26515829"
+    },
+    {
+      "provider_id": "thunder-valley-lincoln",
+      "official_name": "Thunder Valley Casino Resort Poker Room",
+      "website_url": "https://thundervalleyresort.com/casino/poker",
+      "notes": "WSOP Circuit Jan 12–26 2026 and daily tournaments 9:30 a.m./5:30 p.m.",
+      "data_source": "thundervalleyresort.com/casino/poker|mapcarta.com/24743388"
+    },
+    {
+      "provider_id": "harrahs-cherokee",
+      "official_name": "Harrah's Cherokee Poker Room",
+      "website_url": "https://www.caesars.com/harrahs-cherokee/casino/poker",
+      "notes": "WSOP Circuit May 1–12 2025 (18 ring events) plus weekly $140/$80/$250 tournaments",
+      "data_source": "caesars.com/harrahs-cherokee/casino/poker|wsop.com/news/wsop-circuit-players-return-to-harrahs-cherokee-casino-resort-in-north-carolina|mapcarta.com/21179576"
+    },
+    {
+      "provider_id": "hard-rock-tulsa",
+      "official_name": "Hard Rock Tulsa Poker Room",
+      "website_url": "https://www.hardrockcasinotulsa.com/newsroom/tulsa-best-poker-room",
+      "notes": "Weekly $120 NLH Tue/Thu, first-Sunday $180 Ultimate Freeze Out, sports tie-in promotions",
+      "data_source": "hardrockcasinotulsa.com/newsroom/tulsa-best-poker-room|mapcarta.com/22273946"
+    }
+  ]
+}

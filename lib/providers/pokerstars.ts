@@ -223,7 +223,7 @@ function parsePokerStarsTime(timeText: string): Date | null {
 
     return date;
   } catch (error) {
-    console.warn("[PokerStars] Failed to parse time:", timeText);
+    console.warn("[PokerStars] Failed to parse time:", timeText, (error as Error).message);
     return null;
   }
 }

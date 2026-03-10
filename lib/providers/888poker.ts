@@ -213,7 +213,7 @@ function parse888Time(timeText: string): Date | null {
     }
 
     return date;
-  } catch (error) {
+  } catch {
     return null;
   }
 }

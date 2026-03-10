@@ -1,21 +1,11 @@
-import { GameVariant } from "@prisma/client";
 import { NormalizedCashGame, ProviderConnector } from "./types";
 import { inferVariantFromName } from "./helpers";
 import { globalRateLimiter } from "./rate-limiter";
-import { providerCache, ProviderCache } from "./cache";
+import { providerCache } from "./cache";
 import { providerLogger } from "./logger";
 
 // PokerAtlas API - public endpoints
 const POKERATLAS_BASE_URL = "https://www.pokeratlas.com/api";
-
-interface PokerAtlasRoom {
-  id: number;
-  name: string;
-  city: string;
-  state: string;
-  country: string;
-  live_cash_games_key?: string;
-}
 
 interface PokerAtlasCashGame {
   game_name: string;

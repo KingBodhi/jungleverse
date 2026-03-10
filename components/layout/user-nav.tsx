@@ -19,6 +19,9 @@ interface UserNavProps {
 }
 
 export function UserNav({ user }: UserNavProps) {
+  const isAdmin = user.role === "ADMIN";
+  const managesRoom = user.role === "CASINO" && user.managedPokerRoomId;
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -42,6 +45,21 @@ export function UserNav({ user }: UserNavProps) {
         <DropdownMenuItem asChild>
           <Link href="/dashboard">Dashboard</Link>
         </DropdownMenuItem>
+        {isAdmin ? (
+          <DropdownMenuItem asChild>
+            <Link href="/admin">Admin console</Link>
+          </DropdownMenuItem>
+        ) : null}
+        {isAdmin ? (
+          <DropdownMenuItem asChild>
+            <Link href="/casino">Casino portal</Link>
+          </DropdownMenuItem>
+        ) : null}
+        {managesRoom ? (
+          <DropdownMenuItem asChild>
+            <Link href={`/casino/${user.managedPokerRoomId}`}>Manage my casino</Link>
+          </DropdownMenuItem>
+        ) : null}
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={() => signOut({ callbackUrl: "/" })}>
           Log out

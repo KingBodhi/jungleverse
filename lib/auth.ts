@@ -53,6 +53,7 @@ export const authOptions: NextAuthOptions = {
             name: user.name || user.username,
             image: user.image,
             role: user.role,
+            managedPokerRoomId: user.managedPokerRoomId,
           };
         } catch {
           return null;
@@ -65,6 +66,13 @@ export const authOptions: NextAuthOptions = {
       if (user) {
         token.id = user.id;
         token.role = user.role;
+        token.managedPokerRoomId = (user as { managedPokerRoomId?: string | null }).managedPokerRoomId ?? null;
+      } else if (token?.id && token.managedPokerRoomId === undefined) {
+        const dbUser = await prisma.user.findUnique({
+          where: { id: token.id as string },
+          select: { managedPokerRoomId: true },
+        });
+        token.managedPokerRoomId = dbUser?.managedPokerRoomId ?? null;
       }
       return token;
     },
@@ -72,6 +80,7 @@ export const authOptions: NextAuthOptions = {
       if (session.user) {
         session.user.id = token.id as string;
         session.user.role = token.role;
+        session.user.managedPokerRoomId = token.managedPokerRoomId as string | null | undefined;
       }
       return session;
     },

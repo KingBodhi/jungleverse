@@ -186,7 +186,6 @@ export class ProviderMonitor {
     recommendations: string[];
   } {
     const health = this.getSystemHealth();
-    const stats = this.getProviderStats();
     const recommendations: string[] = [];
 
     // Analyze each provider

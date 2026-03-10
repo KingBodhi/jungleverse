@@ -6,10 +6,14 @@ import { pokeratlasConnector } from "./pokeratlas";
 import { wsopConnector } from "./wsop";
 import { partypokerConnector } from "./partypoker";
 import { wptglobalConnector } from "./wptglobal";
+import { localVmConnector } from "./local-vm";
 import type { ProviderConnector } from "./types";
 
 export const providerRegistry: ProviderConnector[] = [
-  // Online providers
+  // Primary: Local VM connector (reads from authenticated poker clients)
+  localVmConnector,
+
+  // Fallback: Web scrapers (limited/unreliable without auth)
   ggpokerConnector,
   pokerstarsConnector,
   poker888Connector,
@@ -17,7 +21,7 @@ export const providerRegistry: ProviderConnector[] = [
   partypokerConnector,
   wptglobalConnector,
 
-  // IRL providers
+  // IRL providers (public data)
   bestbetConnector,
   pokeratlasConnector,
 ];
@@ -32,4 +36,5 @@ export {
   wsopConnector,
   partypokerConnector,
   wptglobalConnector,
+  localVmConnector,
 };

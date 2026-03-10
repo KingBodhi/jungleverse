@@ -79,7 +79,7 @@ async function scrapeWSOPOnline(): Promise<NormalizedTournament[]> {
         metadata: { source: "online", name },
       });
     } catch (error) {
-      console.warn("[WSOP] Failed to parse online tournament");
+      console.warn("[WSOP] Failed to parse online tournament", (error as Error).message);
     }
   });
 
@@ -120,7 +120,7 @@ async function scrapeWSOPCircuit(): Promise<NormalizedTournament[]> {
         metadata: { source: "circuit", name, location },
       });
     } catch (error) {
-      console.warn("[WSOP] Failed to parse circuit event");
+      console.warn("[WSOP] Failed to parse circuit event", (error as Error).message);
     }
   });
 

@@ -90,7 +90,7 @@ export async function getFlightTime(originIata: string, destinationIata: string)
     const departureTime = new Date(flight.departure.scheduled);
     const arrivalTime = new Date(flight.arrival.scheduled);
 
-    const durationMinutes = (arrivalTime.getTime() - arrivalTime.getTime()) / (1000 * 60); // Bug fix: Changed departureTime to arrivalTime
+    const durationMinutes = (arrivalTime.getTime() - departureTime.getTime()) / (1000 * 60);
     return durationMinutes;
   } catch (error) {
     console.error("Error fetching flight time from AviationStack:", error);

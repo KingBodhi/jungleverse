@@ -1,5 +1,5 @@
 import { prisma } from "@/lib/prisma";
-import { Provider, TransactionType } from "@prisma/client";
+import { Provider } from "@prisma/client";
 import {
   createBankrollAccountSchema,
   updateBankrollAccountSchema,

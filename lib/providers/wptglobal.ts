@@ -1,5 +1,4 @@
 import { load } from "cheerio";
-import { GameVariant } from "@prisma/client";
 import { NormalizedTournament, ProviderConnector } from "./types";
 import { inferVariantFromName, parseCurrency, sanitizeText } from "./helpers";
 import { globalRateLimiter } from "./rate-limiter";
@@ -72,7 +71,7 @@ async function scrapeWPTGlobalSchedule(): Promise<NormalizedTournament[]> {
         metadata: { source: "scraping", name },
       });
     } catch (error) {
-      console.warn("[WPT Global] Failed to parse tournament");
+      console.warn("[WPT Global] Failed to parse tournament", (error as Error).message);
     }
   });
 

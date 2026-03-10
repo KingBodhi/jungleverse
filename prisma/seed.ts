@@ -22,6 +22,10 @@ type RoomSeed = {
   website: string;
   phone: string;
   imageUrl?: string | null;
+  logoUrl?: string | null;
+  heroImageUrl?: string | null;
+  cashSourceUrl?: string | null;
+  tournamentSourceUrl?: string | null;
 };
 
 const ROOM_IMAGE_POOL = [
@@ -34,6 +38,40 @@ const ROOM_IMAGE_POOL = [
   "https://images.unsplash.com/photo-1504674900247-0877df9cc836?auto=format&fit=crop&w=1200&q=80",
   "https://images.unsplash.com/photo-1549921296-3b4a4f3b66fc?auto=format&fit=crop&w=1200&q=80",
 ];
+
+function extractHostname(url?: string | null) {
+  if (!url) return null;
+  try {
+    const hostname = new URL(url.startsWith("http") ? url : `https://${url}`).hostname;
+    return hostname.replace(/^www\./i, "");
+  } catch {
+    return null;
+  }
+}
+
+function buildLogoFallback(url?: string | null) {
+  const host = extractHostname(url ?? undefined);
+  return host ? `https://unavatar.io/${host}` : null;
+}
+
+function splitSources(source?: string) {
+  const values = source
+    ?.split("|")
+    .map((value) => value.trim())
+    .filter(Boolean) ?? [];
+  return {
+    cash: values[0] ?? null,
+    tournament: values[1] ?? values[0] ?? null,
+  };
+}
+
+function sanitizeUrl(value?: string | null) {
+  const trimmed = value?.trim();
+  if (!trimmed || trimmed.toUpperCase() === "N/A") {
+    return null;
+  }
+  return trimmed;
+}
 
 const roomsSeed: RoomSeed[] = [
   {
@@ -48,6 +86,7 @@ const roomsSeed: RoomSeed[] = [
     timezone: "America/Chicago",
     website: "https://texascardhouse.com",
     phone: "(512) 428-6393",
+    logoUrl: "https://unavatar.io/texascardhouse.com",
   },
   {
     name: "Shuffle 214",
@@ -61,6 +100,7 @@ const roomsSeed: RoomSeed[] = [
     timezone: "America/Chicago",
     website: "https://shuffle214.com",
     phone: "(469) 609-3065",
+    logoUrl: "https://unavatar.io/shuffle214.com",
   },
   {
     name: "Hippodrome Casino",
@@ -74,6 +114,7 @@ const roomsSeed: RoomSeed[] = [
     timezone: "Europe/London",
     website: "https://www.hippodromecasino.com",
     phone: "+44 20 7769 8888",
+    logoUrl: "https://unavatar.io/hippodromecasino.com",
   },
   {
     name: "Okada Manila Poker",
@@ -87,6 +128,7 @@ const roomsSeed: RoomSeed[] = [
     timezone: "Asia/Manila",
     website: "https://www.okadamanila.com",
     phone: "+63 2 8888 0777",
+    logoUrl: "https://unavatar.io/okadamanila.com",
   },
   {
     name: "bestbet Jacksonville",
@@ -100,6 +142,7 @@ const roomsSeed: RoomSeed[] = [
     timezone: "America/New_York",
     website: "https://bestbetjax.com/bestbet-jacksonville",
     phone: "(904) 646-0001",
+    logoUrl: "https://unavatar.io/bestbetjax.com",
   },
   {
     name: "bestbet Orange Park",
@@ -113,6 +156,7 @@ const roomsSeed: RoomSeed[] = [
     timezone: "America/New_York",
     website: "https://bestbetjax.com/bestbet-orange-park",
     phone: "(904) 646-0001",
+    logoUrl: "https://unavatar.io/bestbetjax.com",
   },
   {
     name: "bestbet St. Augustine",
@@ -126,6 +170,7 @@ const roomsSeed: RoomSeed[] = [
     timezone: "America/New_York",
     website: "https://bestbetjax.com/bestbet-st-augustine",
     phone: "(904) 646-0001",
+    logoUrl: "https://unavatar.io/bestbetjax.com",
   },
   {
     name: "Playground Poker Club",
@@ -139,6 +184,7 @@ const roomsSeed: RoomSeed[] = [
     timezone: "America/Toronto",
     website: "https://www.playground.ca/",
     phone: "+1 450-635-7653",
+    logoUrl: "https://unavatar.io/playground.ca",
   },
   {
     name: "Banco Casino Bratislava",
@@ -152,6 +198,7 @@ const roomsSeed: RoomSeed[] = [
     timezone: "Europe/Bratislava",
     website: "https://www.bancocasino.sk/",
     phone: "+421 915 510 510",
+    logoUrl: "https://unavatar.io/bancocasino.sk",
   },
 ];
 
@@ -168,6 +215,9 @@ type ProviderCsvRow = {
   website_url: string;
   contact_phone: string;
   logo_url: string;
+  data_source: string;
+  cash_source_url?: string;
+  tournament_source_url?: string;
 };
 
 const PROVIDERS_CSV_PATH = path.resolve(__dirname, "..", "data", "providers_physical.csv");
@@ -181,20 +231,27 @@ async function loadCsvRooms(): Promise<RoomSeed[]> {
       trim: true,
     }) as ProviderCsvRow[];
 
-    return records.map((row) => ({
-      name: row.official_name?.trim() ?? "",
-      brand: row.brand_name?.trim() || row.official_name?.trim() || "",
-      address: row.hq_address?.trim() ?? "",
-      city: row.municipality?.trim() ?? "",
-      state: row.state_or_region?.trim() ?? "",
-      country: row.country?.trim() ?? "",
-      latitude: Number(row.latitude),
-      longitude: Number(row.longitude),
-      timezone: row.timezone?.trim() ?? "",
-      website: row.website_url?.trim() ?? "",
-      phone: row.contact_phone?.trim() ?? "",
-      imageUrl: row.logo_url && row.logo_url !== "N/A" ? row.logo_url.trim() : null,
-    }));
+    return records.map((row) => {
+      const sources = splitSources(row.data_source);
+      const cashSourceUrl = sanitizeUrl(row.cash_source_url) ?? sources.cash;
+      const tournamentSourceUrl = sanitizeUrl(row.tournament_source_url) ?? sources.tournament;
+      return {
+        name: row.official_name?.trim() ?? "",
+        brand: row.brand_name?.trim() || row.official_name?.trim() || "",
+        address: row.hq_address?.trim() ?? "",
+        city: row.municipality?.trim() ?? "",
+        state: row.state_or_region?.trim() ?? "",
+        country: row.country?.trim() ?? "",
+        latitude: Number(row.latitude),
+        longitude: Number(row.longitude),
+        timezone: row.timezone?.trim() ?? "",
+        website: row.website_url?.trim() ?? "",
+        phone: row.contact_phone?.trim() ?? "",
+        logoUrl: sanitizeUrl(row.logo_url),
+        cashSourceUrl,
+        tournamentSourceUrl,
+      };
+    });
   } catch (error) {
     const err = error as NodeJS.ErrnoException;
     if (err.code === "ENOENT") {
@@ -206,14 +263,21 @@ async function loadCsvRooms(): Promise<RoomSeed[]> {
   }
 }
 
+function normalizeRoomKey(name?: string) {
+  return name?.toLowerCase().replace(/[^a-z0-9]/g, "") ?? "";
+}
+
 function mergeRoomSeeds(base: RoomSeed[], csvRooms: RoomSeed[]): RoomSeed[] {
   const map = new Map<string, RoomSeed>();
   for (const room of base) {
-    map.set(room.name, room);
+    const key = normalizeRoomKey(room.name);
+    if (!key) continue;
+    map.set(key, room);
   }
   for (const room of csvRooms) {
-    if (!room.name) continue;
-    map.set(room.name, room);
+    const key = normalizeRoomKey(room.name);
+    if (!key) continue;
+    map.set(key, room);
   }
   return Array.from(map.values());
 }
@@ -266,7 +330,7 @@ async function seedRooms() {
   const created: Record<string, string> = {};
   for (const [index, room] of roomsToSeed.entries()) {
     const existing = await prisma.pokerRoom.findFirst({
-      where: { name: room.name },
+      where: { name: { equals: room.name, mode: "insensitive" } },
     });
     const amenityDefaults = {
       hoursJson: { weekdays: "10a-4a", weekend: "24 hours" },
@@ -276,9 +340,19 @@ async function seedRooms() {
       currentPromo: `${room.city} high-hand jackpot ${new Date().getFullYear()}`,
       promoExpiresAt: addDays(new Date(), 21 + Math.floor(Math.random() * 14)),
     };
+    const heroImage =
+      room.heroImageUrl ??
+      room.imageUrl ??
+      existing?.heroImageUrl ??
+      existing?.imageUrl ??
+      ROOM_IMAGE_POOL[index % ROOM_IMAGE_POOL.length];
     const payload = {
       ...room,
-      imageUrl: room.imageUrl ?? ROOM_IMAGE_POOL[index % ROOM_IMAGE_POOL.length],
+      imageUrl: heroImage,
+      heroImageUrl: room.heroImageUrl ?? existing?.heroImageUrl ?? null,
+      logoUrl: room.logoUrl ?? existing?.logoUrl ?? buildLogoFallback(room.website ?? existing?.website),
+      cashSourceUrl: room.cashSourceUrl ?? existing?.cashSourceUrl ?? null,
+      tournamentSourceUrl: room.tournamentSourceUrl ?? existing?.tournamentSourceUrl ?? null,
       ...amenityDefaults,
     };
     const result = existing

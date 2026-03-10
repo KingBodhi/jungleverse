@@ -189,10 +189,12 @@ function getEasternOffsetMinutes(year: number, month: number, day: number, hour:
   const dstEndDay = nthDow(year, 10, 0, 1); // first Sunday in November
   const afterStart =
     month > 2 ||
-    (month === 2 && (day > dstStartDay || (day === dstStartDay && (hour >= 2))));
+    (month === 2 &&
+      (day > dstStartDay || (day === dstStartDay && (hour > 2 || (hour === 2 && minute >= 0)))));
   const beforeEnd =
     month < 10 ||
-    (month === 10 && (day < dstEndDay || (day === dstEndDay && hour < 2)));
+    (month === 10 &&
+      (day < dstEndDay || (day === dstEndDay && (hour < 2 || (hour === 2 && minute === 0)))));
   return afterStart && beforeEnd ? 240 : 300;
 }
 

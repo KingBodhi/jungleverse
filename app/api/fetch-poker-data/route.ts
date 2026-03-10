@@ -55,7 +55,7 @@ async function handleFetch(provider?: string) {
   const startTime = Date.now();
 
   try {
-    await fetchAllPokerData(provider);
+    const summary = await fetchAllPokerData(provider);
     const duration = Date.now() - startTime;
     const scope = provider ? `provider:${provider}` : "all-providers";
 
@@ -64,6 +64,7 @@ async function handleFetch(provider?: string) {
       message: `Data fetching completed successfully (${scope})`,
       duration: `${duration}ms`,
       timestamp: new Date().toISOString(),
+      providers: summary,
     });
   } catch (error) {
     console.error("Error fetching poker data:", error);

@@ -18,3 +18,30 @@ export async function requireAuth() {
   }
   return session.user;
 }
+
+export async function requireAdmin() {
+  const user = await requireAuth();
+  if (user.role !== "ADMIN") {
+    redirect("/login?error=admin-only");
+  }
+  return user;
+}
+
+export async function requireRoomAccess(roomId: string) {
+  const user = await requireAuth();
+  if (user.role === "ADMIN") {
+    return user;
+  }
+  if (user.role === "CASINO" && user.managedPokerRoomId === roomId) {
+    return user;
+  }
+  redirect("/login?error=restricted");
+}
+
+export async function requireAdminOrCasinoUser() {
+  const user = await requireAuth();
+  if (user.role === "ADMIN" || user.role === "CASINO") {
+    return user;
+  }
+  redirect("/login?error=restricted");
+}
