@@ -2,21 +2,128 @@ import { NextRequest, NextResponse } from "next/server";
 import { SolverManager } from "@/lib/solver/solver-manager";
 
 /**
- * Solver API — integrated TypeScript CFR solver (no external backend).
+ * Solver API — routes compute to APN marketplace, reads from local DB.
  *
- * GET  /api/solver?action=health              → health check
- * GET  /api/solver?action=status&id=xxx       → solver status
- * GET  /api/solver?action=strategy&id=xxx     → strategy data
- * GET  /api/solver?action=info-sets&id=xxx    → info set keys
- * GET  /api/solver?action=compare&id=xxx      → EV comparison
- * POST /api/solver?action=solve               → start solve (synchronous)
- * POST /api/solver?action=nodelock            → apply node lock + re-solve
- * DELETE /api/solver?id=xxx                   → delete solve
+ * Compute-heavy operations (solve, nodelock) are proxied through the APN
+ * marketplace gateway, which routes to the best available provider node,
+ * charges VIBE to Jungleverse's subscription, and rewards the servicing device.
+ *
+ * Lightweight reads (status, strategy, info-sets, compare, health) still run
+ * locally against the Prisma DB — no compute cost, no VIBE charge.
+ *
+ * GET  /api/solver?action=health              → local health check
+ * GET  /api/solver?action=status&id=xxx       → local DB read
+ * GET  /api/solver?action=strategy&id=xxx     → local DB read
+ * GET  /api/solver?action=info-sets&id=xxx    → local DB read
+ * GET  /api/solver?action=compare&id=xxx      → local (light compute)
+ * POST /api/solver?action=solve               → APN gateway → provider node
+ * POST /api/solver?action=nodelock            → APN gateway → provider node
+ * DELETE /api/solver?id=xxx                   → local DB delete
  */
 
 export const maxDuration = 60;
 
+const APN_GATEWAY_URL = process.env.APN_GATEWAY_URL;
+const APN_API_KEY = process.env.APN_API_KEY;
+
 const manager = new SolverManager();
+
+// ─── APN Gateway proxy ──────────────────────────────────────────────────────
+
+interface GatewayResponse {
+  data?: {
+    request_id: string;
+    provider_node_id: string;
+    status: string;
+    response: Record<string, unknown>;
+    vibe_charged: number;
+    response_ms: number;
+  };
+  error?: string;
+}
+
+/**
+ * Send a compute request through the APN marketplace gateway.
+ * The gateway finds the best provider, routes the request, charges VIBE,
+ * and rewards the servicing node.
+ */
+async function solveViaGateway(
+  action: string,
+  payload: Record<string, unknown>,
+): Promise<Response> {
+  if (!APN_GATEWAY_URL || !APN_API_KEY) {
+    // Fallback to local solver if gateway not configured
+    console.warn("APN gateway not configured, falling back to local solver");
+    return solveLocally(action, payload);
+  }
+
+  try {
+    const res = await fetch(APN_GATEWAY_URL, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${APN_API_KEY}`,
+      },
+      body: JSON.stringify({
+        service_type: "compute",
+        payload: {
+          action,
+          ...payload,
+        },
+      }),
+    });
+
+    if (!res.ok) {
+      const error = await res.json().catch(() => ({ error: res.statusText }));
+      const msg = (error as { error?: string }).error || `Gateway error ${res.status}`;
+
+      // If gateway fails with payment/availability issues, fall back to local
+      if (res.status === 402 || res.status === 404 || res.status === 503) {
+        console.warn(`APN gateway unavailable (${res.status}: ${msg}), falling back to local solver`);
+        return solveLocally(action, payload);
+      }
+
+      return NextResponse.json({ error: msg }, { status: res.status });
+    }
+
+    const gateway: GatewayResponse = await res.json();
+
+    if (!gateway.data?.response) {
+      return NextResponse.json(
+        { error: "Empty response from provider" },
+        { status: 502 },
+      );
+    }
+
+    // Return the provider's solver response directly, with APN metadata headers
+    const response = NextResponse.json(gateway.data.response);
+    response.headers.set("X-APN-Request-Id", gateway.data.request_id);
+    response.headers.set("X-APN-Provider", gateway.data.provider_node_id);
+    response.headers.set("X-APN-Vibe-Charged", String(gateway.data.vibe_charged));
+    response.headers.set("X-APN-Response-Ms", String(gateway.data.response_ms));
+    return response;
+  } catch (err) {
+    console.error("APN gateway error, falling back to local:", err);
+    return solveLocally(action, payload);
+  }
+}
+
+/** Fallback: run the solver locally (original behavior) */
+async function solveLocally(
+  action: string,
+  body: Record<string, unknown>,
+): Promise<Response> {
+  if (action === "solve") {
+    const result = await manager.createAndSolve(body as Parameters<typeof manager.createAndSolve>[0]);
+    return NextResponse.json(result);
+  } else if (action === "nodelock") {
+    const result = await manager.applyNodeLock(body as Parameters<typeof manager.applyNodeLock>[0]);
+    return NextResponse.json(result);
+  }
+  return NextResponse.json({ error: `Unknown action: ${action}` }, { status: 400 });
+}
+
+// ─── GET: lightweight reads (local) ─────────────────────────────────────────
 
 export async function GET(request: NextRequest) {
   const { searchParams } = request.nextUrl;
@@ -36,13 +143,14 @@ export async function GET(request: NextRequest) {
         return NextResponse.json({
           status: "ok",
           service: "poker-cfr-solver",
-          integrated: true,
+          apn_gateway: !!APN_GATEWAY_URL,
+          fallback: !APN_GATEWAY_URL ? "local" : "enabled",
           max_iterations: {
             kuhn: 50_000,
             leduc: 1_000,
-            nlhe_subgame: 10_000,
+            nlhe_subgame: APN_GATEWAY_URL ? 100_000 : 10_000,
           },
-          nlhe_time_budget_ms: 45_000,
+          nlhe_time_budget_ms: APN_GATEWAY_URL ? null : 45_000,
         });
       }
 
@@ -99,36 +207,23 @@ export async function GET(request: NextRequest) {
   }
 }
 
+// ─── POST: compute-heavy operations → APN gateway ──────────────────────────
+
 export async function POST(request: NextRequest) {
   const { searchParams } = request.nextUrl;
   const action = searchParams.get("action") || "solve";
 
   try {
     const body = await request.json();
-
-    switch (action) {
-      case "solve": {
-        const result = await manager.createAndSolve(body);
-        return NextResponse.json(result);
-      }
-
-      case "nodelock": {
-        const result = await manager.applyNodeLock(body);
-        return NextResponse.json(result);
-      }
-
-      default:
-        return NextResponse.json(
-          { error: `Unknown action: ${action}` },
-          { status: 400 },
-        );
-    }
+    return await solveViaGateway(action, body);
   } catch (err) {
     console.error("Solver API error:", err);
     const message = err instanceof Error ? err.message : "Internal server error";
     return NextResponse.json({ error: message }, { status: 500 });
   }
 }
+
+// ─── DELETE: local DB cleanup ───────────────────────────────────────────────
 
 export async function DELETE(request: NextRequest) {
   const { searchParams } = request.nextUrl;
