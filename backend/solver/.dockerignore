@@ -3,3 +3,9 @@ __pycache__
 .pytest_cache
 data/
 tests/
+cpp/build/
+*.so
+*.pyc
+__pycache__/
+.pytest_cache/
+data/

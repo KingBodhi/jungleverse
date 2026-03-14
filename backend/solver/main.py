@@ -7,7 +7,7 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 
-from pulse.solver.manager import SolverManager
+from pulse.solver.manager import SolverManager, CPP_SOLVER_AVAILABLE
 from pulse.solver.models import (
     EVComparisonResponse,
     GameVariant,
@@ -86,13 +86,23 @@ async def start_solve(request: Request, body: SolveRequest):
     state = mgr._solvers.get(solve_id)
     if state:
         if state.status == SolveStatus.COMPLETED:
-            return SolveResponse(
-                solve_id=solve_id, status=SolveStatus.COMPLETED,
-                variant=body.variant, num_iterations=state.target_iterations,
-                progress=1.0, ev_p0=state.solver.get_average_ev(),
-                exploitability=state.solver.get_exploitability(),
-                num_info_sets=len(state.info_store),
-            )
+            # Handle C++ solver state
+            if state.cpp_solver is not None:
+                return SolveResponse(
+                    solve_id=solve_id, status=SolveStatus.COMPLETED,
+                    variant=body.variant, num_iterations=state.target_iterations,
+                    progress=1.0, ev_p0=state.ev_p0,
+                    exploitability=state.exploitability,
+                    num_info_sets=state.cpp_solver.num_info_sets(),
+                )
+            else:
+                return SolveResponse(
+                    solve_id=solve_id, status=SolveStatus.COMPLETED,
+                    variant=body.variant, num_iterations=state.target_iterations,
+                    progress=1.0, ev_p0=state.solver.get_average_ev(),
+                    exploitability=state.solver.get_exploitability(),
+                    num_info_sets=len(state.info_store),
+                )
         elif state.status == SolveStatus.FAILED:
             return SolveResponse(
                 solve_id=solve_id, status=SolveStatus.FAILED,
@@ -182,10 +192,11 @@ async def health():
         "status": "ok",
         "service": "poker-cfr-solver",
         "serverless": is_vercel,
+        "cpp_solver_available": CPP_SOLVER_AVAILABLE,
         "crash_protection": "timeout-based",
         "timeouts_seconds": {
-            "tree_build": 30,
-            "solve": 30,
-            "exploitability": 30,
+            "tree_build": 120,
+            "solve": 120,
+            "exploitability": 120,
         },
     }

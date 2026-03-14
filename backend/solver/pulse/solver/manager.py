@@ -7,6 +7,8 @@ Includes crash protection:
 - Timeouts for tree building and solving
 - Tree complexity limits for NLHE
 - Graceful error handling with status feedback
+
+NLHE variant uses high-performance C++ solver when available.
 """
 
 from __future__ import annotations
@@ -19,7 +21,7 @@ import uuid
 from concurrent.futures import ThreadPoolExecutor, TimeoutError as FuturesTimeoutError
 from dataclasses import dataclass, field
 from functools import partial
-from typing import Any
+from typing import Any, Optional
 
 from .best_response import compute_ev_comparison
 from .cfr import CFRPlusSolver
@@ -29,14 +31,23 @@ from .models import GameVariant, SolveStatus
 from .node_lock import NodeLocker, NodeLockSpec
 from .storage import SolverDatabase
 
+# Try to import C++ solver
+try:
+    from .nlhe_cpp import NLHECppSolver, NLHECppConfig, is_cpp_available
+    CPP_SOLVER_AVAILABLE = is_cpp_available()
+except ImportError:
+    CPP_SOLVER_AVAILABLE = False
+    NLHECppSolver = None
+    NLHECppConfig = None
+
 logger = logging.getLogger(__name__)
 
 # ─── Configuration ────────────────────────────────────────────────────────────
 
 # Timeouts in seconds (only protection mechanism)
-TREE_BUILD_TIMEOUT = 30
-SOLVE_TIMEOUT = 30
-EXPLOITABILITY_TIMEOUT = 30
+TREE_BUILD_TIMEOUT = 120
+SOLVE_TIMEOUT = 120
+EXPLOITABILITY_TIMEOUT = 120
 
 
 @dataclass
@@ -44,16 +55,21 @@ class SolverState:
     """In-memory state for an active solve."""
     solve_id: str
     variant: GameVariant
-    root: GameNode
-    info_store: InfoSetStore
-    solver: CFRPlusSolver
-    locker: NodeLocker
+    root: GameNode | None  # None for C++ solver
+    info_store: InfoSetStore | None  # None for C++ solver
+    solver: CFRPlusSolver | None  # None for C++ solver
+    locker: NodeLocker | None  # None for C++ solver
     status: SolveStatus = SolveStatus.PENDING
     target_iterations: int = 1000
     completed_iterations: int = 0
     task: asyncio.Task | None = field(default=None, repr=False)
     action_labels: dict[str, list[str]] = field(default_factory=dict)
     error_message: str | None = None
+    # C++ solver state (for NLHE)
+    cpp_solver: Any = field(default=None, repr=False)
+    cpp_config: Any = field(default=None, repr=False)
+    ev_p0: float | None = None
+    exploitability: float | None = None
 
 
 class SolverManager:
@@ -103,9 +119,13 @@ class SolverManager:
                            config: dict | None = None) -> str:
         """Create and start a new solve. Returns solve_id."""
         solve_id = str(uuid.uuid4())[:8]
+        loop = asyncio.get_event_loop()
+
+        # Use C++ solver for NLHE if available
+        if variant == GameVariant.NLHE_SUBGAME and CPP_SOLVER_AVAILABLE:
+            return await self._create_cpp_solve(solve_id, num_iterations, config)
 
         # Build tree with timeout (in executor to not block event loop)
-        loop = asyncio.get_event_loop()
         try:
             logger.info("Building tree for %s solve %s...", variant.value, solve_id)
             root, action_labels = await asyncio.wait_for(
@@ -157,6 +177,81 @@ class SolverManager:
         else:
             state.task = asyncio.create_task(
                 self._run_solve(state)
+            )
+
+        return solve_id
+
+    async def _create_cpp_solve(self, solve_id: str, num_iterations: int,
+                                 config: dict | None) -> str:
+        """Create and start a C++ NLHE solve."""
+        config = config or {}
+        loop = asyncio.get_event_loop()
+
+        logger.info("Creating C++ NLHE solve %s...", solve_id)
+
+        try:
+            # Create C++ config
+            cpp_config = NLHECppConfig(
+                board=config.get("board", ""),
+                range_p0=config.get("range_p0", ""),
+                range_p1=config.get("range_p1", ""),
+                pot=config.get("pot", 100.0),
+                stack=config.get("stack", 100.0),
+                bet_sizes=config.get("bet_sizes", [0.5, 1.0]),
+                max_raises=config.get("max_raises", 3),
+                max_runouts=config.get("max_runouts", 6),
+            )
+
+            # Create C++ solver in executor
+            cpp_solver = await asyncio.wait_for(
+                loop.run_in_executor(
+                    self._executor,
+                    lambda: NLHECppSolver(cpp_config)
+                ),
+                timeout=TREE_BUILD_TIMEOUT
+            )
+
+            tree_stats = cpp_solver.tree_stats()
+            logger.info("C++ tree built: %d info sets, %d nodes",
+                        tree_stats.info_sets, tree_stats.total_nodes())
+
+        except asyncio.TimeoutError:
+            error_msg = f"C++ tree building timed out after {TREE_BUILD_TIMEOUT}s"
+            logger.error(error_msg)
+            await self.db.create_solve(solve_id, "nlhe_subgame", num_iterations, config)
+            await self.db.update_solve_status(solve_id, "failed", error=error_msg)
+            raise ValueError(error_msg)
+        except Exception as e:
+            error_msg = f"C++ solver creation failed: {str(e)}"
+            logger.exception(error_msg)
+            await self.db.create_solve(solve_id, "nlhe_subgame", num_iterations, config)
+            await self.db.update_solve_status(solve_id, "failed", error=error_msg)
+            raise ValueError(error_msg)
+
+        state = SolverState(
+            solve_id=solve_id,
+            variant=GameVariant.NLHE_SUBGAME,
+            root=None,
+            info_store=None,
+            solver=None,
+            locker=None,
+            target_iterations=num_iterations,
+            cpp_solver=cpp_solver,
+            cpp_config=cpp_config,
+        )
+
+        async with self._lock:
+            self._solvers[solve_id] = state
+
+        # Persist
+        await self.db.create_solve(solve_id, "nlhe_subgame", num_iterations, config)
+
+        # Run solve
+        if os.environ.get("VERCEL"):
+            await self._run_cpp_solve(state)
+        else:
+            state.task = asyncio.create_task(
+                self._run_cpp_solve(state)
             )
 
         return solve_id
@@ -245,6 +340,111 @@ class SolverManager:
                 state.solve_id, "failed", error=str(e)
             )
 
+    async def _run_cpp_solve(self, state: SolverState) -> None:
+        """Run C++ CFR solve with progress callbacks."""
+        state.status = SolveStatus.RUNNING
+        await self.db.update_solve_status(state.solve_id, "running")
+
+        loop = asyncio.get_event_loop()
+
+        # Progress tracking
+        progress_data = {"iteration": 0, "ev": 0.0}
+
+        def progress_callback(iter_num: int, completed: int, total: int, ev: float) -> bool:
+            """Called from C++ solver during iteration."""
+            progress_data["iteration"] = completed
+            progress_data["ev"] = ev
+            state.completed_iterations = completed
+            # Return True to continue, False to cancel
+            return True
+
+        try:
+            logger.info(
+                "Starting C++ CFR solve %s: %d iterations",
+                state.solve_id, state.target_iterations
+            )
+
+            # Run C++ solver in thread pool
+            # Note: The C++ solver releases GIL during computation
+            result = await asyncio.wait_for(
+                loop.run_in_executor(
+                    self._executor,
+                    lambda: state.cpp_solver.solve(
+                        state.target_iterations,
+                        progress_callback,
+                        100  # callback every 100 iterations
+                    )
+                ),
+                timeout=SOLVE_TIMEOUT
+            )
+
+            if result.error:
+                raise RuntimeError(result.error)
+
+            if result.cancelled:
+                state.status = SolveStatus.CANCELLED
+                logger.info("C++ solve %s cancelled", state.solve_id)
+                await self.db.update_solve_status(state.solve_id, "cancelled")
+                return
+
+            state.status = SolveStatus.COMPLETED
+            state.completed_iterations = result.completed_iterations
+            state.ev_p0 = result.ev_p0
+            state.exploitability = result.exploitability
+
+            # Save results to DB
+            await self.db.update_solve_status(
+                state.solve_id, "completed",
+                ev_p0=result.ev_p0,
+                exploitability=result.exploitability,
+                num_info_sets=result.total_info_sets,
+                completed_iterations=result.completed_iterations,
+            )
+
+            # Save strategies
+            await self._save_cpp_strategies(state)
+
+            logger.info(
+                "C++ solve %s completed: EV=%.4f, exploit=%.4f, %d info sets",
+                state.solve_id, result.ev_p0, result.exploitability,
+                result.total_info_sets
+            )
+
+        except asyncio.TimeoutError:
+            state.status = SolveStatus.FAILED
+            state.error_message = f"C++ solve timed out after {SOLVE_TIMEOUT}s"
+            logger.error("C++ solve %s timed out", state.solve_id)
+            await self.db.update_solve_status(
+                state.solve_id, "failed",
+                error=state.error_message,
+                completed_iterations=state.completed_iterations,
+            )
+
+        except asyncio.CancelledError:
+            state.status = SolveStatus.CANCELLED
+            logger.info("C++ solve %s cancelled", state.solve_id)
+            await self.db.update_solve_status(state.solve_id, "cancelled")
+
+        except Exception as e:
+            state.status = SolveStatus.FAILED
+            state.error_message = str(e)
+            logger.exception("C++ solve %s failed", state.solve_id)
+            await self.db.update_solve_status(
+                state.solve_id, "failed", error=str(e)
+            )
+
+    async def _save_cpp_strategies(self, state: SolverState) -> None:
+        """Save C++ solver strategies to the database."""
+        cpp_strategies = state.cpp_solver.get_strategies()
+        strategies = {}
+        for key, (actions, probs, locked) in cpp_strategies.items():
+            strategies[key] = {
+                "actions": actions,
+                "probs": list(probs),
+                "locked": locked,
+            }
+        await self.db.save_strategies(state.solve_id, strategies)
+
     async def _save_strategies(self, state: SolverState) -> None:
         """Save all strategies to the database."""
         strategies = {}
@@ -263,16 +463,34 @@ class SolverManager:
         # Check in-memory first
         state = self._solvers.get(solve_id)
         if state:
-            result = {
-                "solve_id": solve_id,
-                "status": state.status.value,
-                "variant": state.variant.value,
-                "num_iterations": state.target_iterations,
-                "progress": min(1.0, state.solver.iteration / state.target_iterations) if state.target_iterations > 0 else 0,
-                "ev_p0": state.solver.get_average_ev() if state.status == SolveStatus.COMPLETED else None,
-                "exploitability": None,
-                "num_info_sets": len(state.info_store),
-            }
+            # Handle C++ solver state
+            if state.cpp_solver is not None:
+                progress = (state.completed_iterations / state.target_iterations
+                            if state.target_iterations > 0 else 0)
+                result = {
+                    "solve_id": solve_id,
+                    "status": state.status.value,
+                    "variant": state.variant.value,
+                    "num_iterations": state.target_iterations,
+                    "progress": min(1.0, progress),
+                    "ev_p0": state.ev_p0 if state.status == SolveStatus.COMPLETED else None,
+                    "exploitability": state.exploitability,
+                    "num_info_sets": state.cpp_solver.num_info_sets(),
+                    "cpp_solver": True,
+                }
+            else:
+                # Python solver state
+                result = {
+                    "solve_id": solve_id,
+                    "status": state.status.value,
+                    "variant": state.variant.value,
+                    "num_iterations": state.target_iterations,
+                    "progress": min(1.0, state.solver.iteration / state.target_iterations) if state.target_iterations > 0 else 0,
+                    "ev_p0": state.solver.get_average_ev() if state.status == SolveStatus.COMPLETED else None,
+                    "exploitability": None,
+                    "num_info_sets": len(state.info_store),
+                    "cpp_solver": False,
+                }
             if state.error_message:
                 result["error"] = state.error_message
             return result
@@ -298,7 +516,31 @@ class SolverManager:
         if state.status != SolveStatus.COMPLETED:
             raise ValueError(f"Solve {solve_id} is not completed (status: {state.status})")
 
-        # Apply locks
+        # Handle C++ solver
+        if state.cpp_solver is not None:
+            results = state.cpp_solver.apply_locks(locks)
+
+            # Save locks to DB
+            for key, strategy in locks.items():
+                if results.get(key):
+                    await self.db.save_node_lock(solve_id, key, list(strategy))
+
+            # Prepare for re-solve
+            state.cpp_solver.prepare_for_resolve()
+            state.status = SolveStatus.RUNNING
+            state.target_iterations += resolve_iterations
+            await self.db.update_solve_status(solve_id, "running")
+
+            if os.environ.get("VERCEL"):
+                await self._run_cpp_solve(state)
+            else:
+                state.task = asyncio.create_task(
+                    self._run_cpp_solve(state)
+                )
+
+            return results
+
+        # Python solver
         spec = NodeLockSpec(locks=locks)
         results = state.locker.apply_locks(spec)
 
