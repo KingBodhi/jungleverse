@@ -5,6 +5,10 @@
 #include <memory>
 #include <sstream>
 
+#ifdef _OPENMP
+#include <omp.h>
+#endif
+
 #include "cards.hpp"
 #include "evaluator.hpp"
 #include "game_tree.hpp"
@@ -217,8 +221,31 @@ private:
     float last_ev_ = 0.0f;
 };
 
+// OpenMP utilities
+bool is_openmp_enabled() {
+#ifdef _OPENMP
+    return true;
+#else
+    return false;
+#endif
+}
+
+int get_num_threads() {
+#ifdef _OPENMP
+    return omp_get_max_threads();
+#else
+    return 1;
+#endif
+}
+
+void set_num_threads(int num) {
+#ifdef _OPENMP
+    omp_set_num_threads(num);
+#endif
+}
+
 PYBIND11_MODULE(nlhe_solver_cpp, m) {
-    m.doc() = "NLHE Poker CFR+ Solver - C++ Implementation";
+    m.doc() = "NLHE Poker CFR+ Solver - C++ Implementation with OpenMP";
 
     // StrategyEntry
     py::class_<StrategyEntry>(m, "StrategyEntry")
@@ -278,6 +305,16 @@ PYBIND11_MODULE(nlhe_solver_cpp, m) {
         .def("num_info_sets", &NLHESolver::num_info_sets)
         .def("tree_stats", &NLHESolver::tree_stats);
 
+    // OpenMP utilities
+    m.def("is_openmp_enabled", &is_openmp_enabled,
+          "Check if OpenMP parallel solving is available");
+    m.def("get_num_threads", &get_num_threads,
+          "Get the maximum number of threads for parallel solving");
+    m.def("set_num_threads", &set_num_threads,
+          py::arg("num_threads"),
+          "Set the number of threads for parallel solving");
+
     // Version info
     m.attr("__version__") = "1.0.0";
+    m.attr("openmp_enabled") = is_openmp_enabled();
 }

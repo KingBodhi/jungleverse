@@ -15,6 +15,15 @@ endif()
 set(CMAKE_CXX_FLAGS_RELEASE "-O3 -march=native -DNDEBUG -ffast-math")
 set(CMAKE_CXX_FLAGS_DEBUG "-g -O0 -DDEBUG")
 
+# Find OpenMP
+find_package(OpenMP)
+if(OpenMP_CXX_FOUND)
+    message(STATUS "OpenMP found - enabling parallel solver")
+    set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} ${OpenMP_CXX_FLAGS}")
+else()
+    message(STATUS "OpenMP not found - using single-threaded solver")
+endif()
+
 # Find pybind11
 find_package(pybind11 REQUIRED)
 

@@ -2,11 +2,12 @@ FROM python:3.12-slim
 
 WORKDIR /app
 
-# Install build dependencies
+# Install build dependencies including OpenMP for parallel solving
 RUN apt-get update && apt-get install -y --no-install-recommends \
     curl \
     build-essential \
     cmake \
+    libomp-dev \
     && rm -rf /var/lib/apt/lists/*
 
 # Install Python dependencies (including pybind11)

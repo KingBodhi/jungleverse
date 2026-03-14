@@ -3,6 +3,10 @@
 #include <algorithm>
 #include <sstream>
 
+#ifdef _OPENMP
+#include <omp.h>
+#endif
+
 namespace nlhe {
 
 CFRSolver::CFRSolver(NodePtr root, InfoSetStore& info_store,
@@ -39,25 +43,36 @@ SolveResult CFRSolver::solve(int num_iterations,
         float iter_ev = 0.0f;
         float total_weight = 0.0f;
 
-        for (const Hand& h0 : range_p0_) {
-            for (const Hand& h1 : range_p1_) {
-                // Skip if hands share cards
-                if (h0.contains(h1.cards[0]) || h0.contains(h1.cards[1])) {
-                    continue;
-                }
-                // Skip if hands conflict with board
-                if (board_.contains(h0.cards[0]) || board_.contains(h0.cards[1]) ||
-                    board_.contains(h1.cards[0]) || board_.contains(h1.cards[1])) {
-                    continue;
-                }
+        // Flatten loops for OpenMP parallelization
+        const size_t n_p0 = range_p0_.size();
+        const size_t n_p1 = range_p1_.size();
+        const size_t total_combos = n_p0 * n_p1;
 
-                std::array<float, 3> reach = {1.0f, 1.0f, 1.0f};
-                float ev = cfr_traverse(root_.get(), h0, h1, reach, traversing_player);
+        #ifdef _OPENMP
+        #pragma omp parallel for reduction(+:iter_ev, total_weight) schedule(dynamic, 64)
+        #endif
+        for (size_t idx = 0; idx < total_combos; ++idx) {
+            const size_t i = idx / n_p1;
+            const size_t j = idx % n_p1;
+            const Hand& h0 = range_p0_[i];
+            const Hand& h1 = range_p1_[j];
 
-                if (traversing_player == 0) {
-                    iter_ev += ev;
-                    total_weight += 1.0f;
-                }
+            // Skip if hands share cards
+            if (h0.contains(h1.cards[0]) || h0.contains(h1.cards[1])) {
+                continue;
+            }
+            // Skip if hands conflict with board
+            if (board_.contains(h0.cards[0]) || board_.contains(h0.cards[1]) ||
+                board_.contains(h1.cards[0]) || board_.contains(h1.cards[1])) {
+                continue;
+            }
+
+            std::array<float, 3> reach = {1.0f, 1.0f, 1.0f};
+            float ev = cfr_traverse(root_.get(), h0, h1, reach, traversing_player);
+
+            if (traversing_player == 0) {
+                iter_ev += ev;
+                total_weight += 1.0f;
             }
         }
 
@@ -245,21 +260,32 @@ float CFRSolver::compute_best_response(int br_player) {
     float total_ev = 0.0f;
     float total_weight = 0.0f;
 
-    for (const Hand& h0 : range_p0_) {
-        for (const Hand& h1 : range_p1_) {
-            // Skip conflicting hands
-            if (h0.contains(h1.cards[0]) || h0.contains(h1.cards[1])) {
-                continue;
-            }
-            if (board_.contains(h0.cards[0]) || board_.contains(h0.cards[1]) ||
-                board_.contains(h1.cards[0]) || board_.contains(h1.cards[1])) {
-                continue;
-            }
+    // Flatten loops for OpenMP parallelization
+    const size_t n_p0 = range_p0_.size();
+    const size_t n_p1 = range_p1_.size();
+    const size_t total_combos = n_p0 * n_p1;
 
-            float ev = br_traverse(root_.get(), h0, h1, 1.0f, br_player);
-            total_ev += ev;
-            total_weight += 1.0f;
+    #ifdef _OPENMP
+    #pragma omp parallel for reduction(+:total_ev, total_weight) schedule(dynamic, 64)
+    #endif
+    for (size_t idx = 0; idx < total_combos; ++idx) {
+        const size_t i = idx / n_p1;
+        const size_t j = idx % n_p1;
+        const Hand& h0 = range_p0_[i];
+        const Hand& h1 = range_p1_[j];
+
+        // Skip conflicting hands
+        if (h0.contains(h1.cards[0]) || h0.contains(h1.cards[1])) {
+            continue;
         }
+        if (board_.contains(h0.cards[0]) || board_.contains(h0.cards[1]) ||
+            board_.contains(h1.cards[0]) || board_.contains(h1.cards[1])) {
+            continue;
+        }
+
+        float ev = br_traverse(root_.get(), h0, h1, 1.0f, br_player);
+        total_ev += ev;
+        total_weight += 1.0f;
     }
 
     return (total_weight > 0) ? total_ev / total_weight : 0.0f;

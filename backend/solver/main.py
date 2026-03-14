@@ -188,11 +188,25 @@ async def delete_solve(request: Request, solve_id: str):
 @app.get("/health")
 async def health():
     is_vercel = bool(os.environ.get("VERCEL"))
+
+    # Get OpenMP status from C++ module
+    openmp_info = {"enabled": False, "threads": 1}
+    if CPP_SOLVER_AVAILABLE:
+        try:
+            import nlhe_solver_cpp
+            openmp_info = {
+                "enabled": nlhe_solver_cpp.is_openmp_enabled(),
+                "threads": nlhe_solver_cpp.get_num_threads(),
+            }
+        except Exception:
+            pass
+
     return {
         "status": "ok",
         "service": "poker-cfr-solver",
         "serverless": is_vercel,
         "cpp_solver_available": CPP_SOLVER_AVAILABLE,
+        "openmp": openmp_info,
         "crash_protection": "timeout-based",
         "timeouts_seconds": {
             "tree_build": 120,
