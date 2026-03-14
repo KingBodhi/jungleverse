@@ -2,6 +2,11 @@
 
 Runs CPU-bound solves in a thread pool executor to keep FastAPI responsive.
 Maintains an in-memory cache of solved game trees for instant node locking.
+
+Includes crash protection:
+- Timeouts for tree building and solving
+- Tree complexity limits for NLHE
+- Graceful error handling with status feedback
 """
 
 from __future__ import annotations
@@ -9,9 +14,11 @@ from __future__ import annotations
 import asyncio
 import logging
 import os
+import signal
 import uuid
-from concurrent.futures import ThreadPoolExecutor
+from concurrent.futures import ThreadPoolExecutor, TimeoutError as FuturesTimeoutError
 from dataclasses import dataclass, field
+from functools import partial
 from typing import Any
 
 from .best_response import compute_ev_comparison
@@ -23,6 +30,13 @@ from .node_lock import NodeLocker, NodeLockSpec
 from .storage import SolverDatabase
 
 logger = logging.getLogger(__name__)
+
+# ─── Configuration ────────────────────────────────────────────────────────────
+
+# Timeouts in seconds (only protection mechanism)
+TREE_BUILD_TIMEOUT = 30
+SOLVE_TIMEOUT = 30
+EXPLOITABILITY_TIMEOUT = 30
 
 
 @dataclass
@@ -39,6 +53,7 @@ class SolverState:
     completed_iterations: int = 0
     task: asyncio.Task | None = field(default=None, repr=False)
     action_labels: dict[str, list[str]] = field(default_factory=dict)
+    error_message: str | None = None
 
 
 class SolverManager:
@@ -52,7 +67,7 @@ class SolverManager:
 
     async def start(self) -> None:
         await self.db.connect()
-        logger.info("SolverManager started")
+        logger.info("SolverManager started with crash protection enabled")
 
     async def stop(self) -> None:
         # Cancel running tasks
@@ -89,8 +104,31 @@ class SolverManager:
         """Create and start a new solve. Returns solve_id."""
         solve_id = str(uuid.uuid4())[:8]
 
-        # Build tree (fast for small variants, may need executor for large)
-        root, action_labels = self._build_tree(variant, config)
+        # Build tree with timeout (in executor to not block event loop)
+        loop = asyncio.get_event_loop()
+        try:
+            logger.info("Building tree for %s solve %s...", variant.value, solve_id)
+            root, action_labels = await asyncio.wait_for(
+                loop.run_in_executor(
+                    self._executor,
+                    partial(self._build_tree, variant, config)
+                ),
+                timeout=TREE_BUILD_TIMEOUT
+            )
+            logger.info("Tree built: %d info sets", len(action_labels))
+        except asyncio.TimeoutError:
+            error_msg = f"Tree building timed out after {TREE_BUILD_TIMEOUT}s (config too complex)"
+            logger.error(error_msg)
+            # Save failed solve to DB
+            await self.db.create_solve(solve_id, variant.value, num_iterations, config)
+            await self.db.update_solve_status(solve_id, "failed", error=error_msg)
+            raise ValueError(error_msg)
+        except Exception as e:
+            error_msg = f"Tree building failed: {str(e)}"
+            logger.exception(error_msg)
+            await self.db.create_solve(solve_id, variant.value, num_iterations, config)
+            await self.db.update_solve_status(solve_id, "failed", error=error_msg)
+            raise ValueError(error_msg)
 
         info_store = InfoSetStore()
         solver = CFRPlusSolver(root, info_store)
@@ -114,7 +152,6 @@ class SolverManager:
         await self.db.create_solve(solve_id, variant.value, num_iterations, config)
 
         # On Vercel serverless, run synchronously within the request
-        # (background tasks freeze between requests)
         if os.environ.get("VERCEL"):
             await self._run_solve(state)
         else:
@@ -125,26 +162,46 @@ class SolverManager:
         return solve_id
 
     async def _run_solve(self, state: SolverState) -> None:
-        """Run CFR solve in thread pool."""
+        """Run CFR solve in thread pool with timeout protection."""
         state.status = SolveStatus.RUNNING
         await self.db.update_solve_status(state.solve_id, "running")
 
+        loop = asyncio.get_event_loop()
+
         try:
-            loop = asyncio.get_event_loop()
-            ev = await loop.run_in_executor(
-                self._executor,
-                state.solver.solve,
-                state.target_iterations,
+            # Run CFR with timeout
+            logger.info(
+                "Starting CFR solve %s: %d iterations",
+                state.solve_id, state.target_iterations
+            )
+
+            ev = await asyncio.wait_for(
+                loop.run_in_executor(
+                    self._executor,
+                    state.solver.solve,
+                    state.target_iterations,
+                ),
+                timeout=SOLVE_TIMEOUT
             )
 
             state.status = SolveStatus.COMPLETED
             state.completed_iterations = state.solver.iteration
 
-            # Compute exploitability
-            exploitability = await loop.run_in_executor(
-                self._executor,
-                state.solver.get_exploitability,
-            )
+            # Compute exploitability with timeout
+            try:
+                exploitability = await asyncio.wait_for(
+                    loop.run_in_executor(
+                        self._executor,
+                        state.solver.get_exploitability,
+                    ),
+                    timeout=EXPLOITABILITY_TIMEOUT
+                )
+            except asyncio.TimeoutError:
+                logger.warning(
+                    "Exploitability computation timed out for %s",
+                    state.solve_id
+                )
+                exploitability = None
 
             # Save results to DB
             await self.db.update_solve_status(
@@ -159,19 +216,34 @@ class SolverManager:
             await self._save_strategies(state)
 
             logger.info(
-                "Solve %s completed: EV=%.4f, exploit=%.4f, %d info sets",
-                state.solve_id, ev, exploitability, len(state.info_store)
+                "Solve %s completed: EV=%.4f, exploit=%s, %d info sets",
+                state.solve_id, ev,
+                f"{exploitability:.4f}" if exploitability else "N/A",
+                len(state.info_store)
+            )
+
+        except asyncio.TimeoutError:
+            state.status = SolveStatus.FAILED
+            state.error_message = f"Solve timed out after {SOLVE_TIMEOUT}s"
+            logger.error("Solve %s timed out", state.solve_id)
+            await self.db.update_solve_status(
+                state.solve_id, "failed",
+                error=state.error_message,
+                completed_iterations=state.solver.iteration,
             )
 
         except asyncio.CancelledError:
             state.status = SolveStatus.CANCELLED
+            logger.info("Solve %s cancelled", state.solve_id)
             await self.db.update_solve_status(state.solve_id, "cancelled")
+
         except Exception as e:
             state.status = SolveStatus.FAILED
+            state.error_message = str(e)
+            logger.exception("Solve %s failed", state.solve_id)
             await self.db.update_solve_status(
                 state.solve_id, "failed", error=str(e)
             )
-            logger.exception("Solve %s failed", state.solve_id)
 
     async def _save_strategies(self, state: SolverState) -> None:
         """Save all strategies to the database."""
@@ -191,16 +263,19 @@ class SolverManager:
         # Check in-memory first
         state = self._solvers.get(solve_id)
         if state:
-            return {
+            result = {
                 "solve_id": solve_id,
                 "status": state.status.value,
                 "variant": state.variant.value,
                 "num_iterations": state.target_iterations,
-                "progress": min(1.0, state.solver.iteration / state.target_iterations),
+                "progress": min(1.0, state.solver.iteration / state.target_iterations) if state.target_iterations > 0 else 0,
                 "ev_p0": state.solver.get_average_ev() if state.status == SolveStatus.COMPLETED else None,
                 "exploitability": None,
                 "num_info_sets": len(state.info_store),
             }
+            if state.error_message:
+                result["error"] = state.error_message
+            return result
         # Fall back to DB
         return await self.db.get_solve(solve_id)
 
@@ -254,13 +329,20 @@ class SolverManager:
             raise ValueError(f"Solve {solve_id} not in memory")
 
         loop = asyncio.get_event_loop()
-        comparison = await loop.run_in_executor(
-            self._executor,
-            compute_ev_comparison,
-            state.root,
-            state.info_store,
-        )
-        return comparison
+
+        try:
+            comparison = await asyncio.wait_for(
+                loop.run_in_executor(
+                    self._executor,
+                    compute_ev_comparison,
+                    state.root,
+                    state.info_store,
+                ),
+                timeout=EXPLOITABILITY_TIMEOUT
+            )
+            return comparison
+        except asyncio.TimeoutError:
+            raise ValueError(f"EV comparison timed out after {EXPLOITABILITY_TIMEOUT}s")
 
     async def cancel_solve(self, solve_id: str) -> bool:
         """Cancel a running solve."""

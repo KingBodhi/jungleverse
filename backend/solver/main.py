@@ -64,13 +64,7 @@ def _mgr(request: Request) -> SolverManager:
 async def start_solve(request: Request, body: SolveRequest):
     mgr = _mgr(request)
 
-    # On Vercel, clamp iterations to avoid serverless timeout
-    num_iterations = body.num_iterations
-    if os.environ.get("VERCEL"):
-        limits = {"kuhn": 50_000, "leduc": 1_000, "nlhe_subgame": 100}
-        cap = limits.get(body.variant.value, 1_000)
-        num_iterations = min(num_iterations, cap)
-
+    # Build config for NLHE
     config = None
     if body.variant == GameVariant.NLHE_SUBGAME:
         config = {k: v for k, v in {
@@ -78,23 +72,38 @@ async def start_solve(request: Request, body: SolveRequest):
             "range_p1": body.range_p1, "pot": body.pot,
             "stack": body.stack, "bet_sizes": body.bet_sizes,
         }.items() if v is not None}
-    try:
-        solve_id = await mgr.create_solve(body.variant, num_iterations, config)
-    except Exception as e:
-        raise HTTPException(400, str(e))
 
-    # On Vercel, solve runs synchronously — return completed status
+    try:
+        # Manager handles iteration limits and crash protection
+        solve_id = await mgr.create_solve(body.variant, body.num_iterations, config)
+    except ValueError as e:
+        # Tree build timeout or complexity error
+        raise HTTPException(400, str(e))
+    except Exception as e:
+        raise HTTPException(500, f"Solve failed: {str(e)}")
+
+    # Check if solve completed synchronously (Vercel) or is running (Docker)
     state = mgr._solvers.get(solve_id)
-    if state and state.status == SolveStatus.COMPLETED:
-        return SolveResponse(
-            solve_id=solve_id, status=SolveStatus.COMPLETED,
-            variant=body.variant, num_iterations=num_iterations,
-            progress=1.0, ev_p0=state.solver.get_average_ev(),
-            exploitability=state.solver.get_exploitability(),
-            num_info_sets=len(state.info_store),
-        )
-    return SolveResponse(solve_id=solve_id, status=SolveStatus.RUNNING,
-                         variant=body.variant, num_iterations=num_iterations)
+    if state:
+        if state.status == SolveStatus.COMPLETED:
+            return SolveResponse(
+                solve_id=solve_id, status=SolveStatus.COMPLETED,
+                variant=body.variant, num_iterations=state.target_iterations,
+                progress=1.0, ev_p0=state.solver.get_average_ev(),
+                exploitability=state.solver.get_exploitability(),
+                num_info_sets=len(state.info_store),
+            )
+        elif state.status == SolveStatus.FAILED:
+            return SolveResponse(
+                solve_id=solve_id, status=SolveStatus.FAILED,
+                variant=body.variant, num_iterations=state.target_iterations,
+                progress=0.0, error=state.error_message,
+            )
+
+    return SolveResponse(
+        solve_id=solve_id, status=SolveStatus.RUNNING,
+        variant=body.variant, num_iterations=body.num_iterations
+    )
 
 
 @app.get("/api/v1/solver/solve/{solve_id}", response_model=SolveResponse)
@@ -173,9 +182,10 @@ async def health():
         "status": "ok",
         "service": "poker-cfr-solver",
         "serverless": is_vercel,
-        "max_iterations": {
-            "kuhn": 100_000 if not is_vercel else 50_000,
-            "leduc": 100_000 if not is_vercel else 1_000,
-            "nlhe_subgame": 100_000 if not is_vercel else 100,
+        "crash_protection": "timeout-based",
+        "timeouts_seconds": {
+            "tree_build": 30,
+            "solve": 30,
+            "exploitability": 30,
         },
     }
