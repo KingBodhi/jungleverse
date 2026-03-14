@@ -570,6 +570,18 @@ class SolverManager:
         if state is None:
             raise ValueError(f"Solve {solve_id} not in memory")
 
+        # C++ solver: return cached values (exploitability already computed)
+        if state.cpp_solver is not None:
+            ev_p0 = state.ev_p0 or 0.0
+            exploitability = state.exploitability or 0.0
+            return {
+                "gto_ev_p0": ev_p0,
+                "gto_ev_p1": -ev_p0,  # Zero-sum game
+                "br_ev_p0": ev_p0 + exploitability / 2,
+                "br_ev_p1": -ev_p0 + exploitability / 2,
+                "exploitability": exploitability,
+            }
+
         loop = asyncio.get_event_loop()
 
         try:
