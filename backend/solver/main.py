@@ -71,6 +71,7 @@ async def start_solve(request: Request, body: SolveRequest):
             "board": body.board, "range_p0": body.range_p0,
             "range_p1": body.range_p1, "pot": body.pot,
             "stack": body.stack, "bet_sizes": body.bet_sizes,
+            "max_raises": body.max_raises, "max_runouts": body.max_runouts,
         }.items() if v is not None}
 
     try:

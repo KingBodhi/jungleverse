@@ -33,7 +33,9 @@ class SolveRequest(BaseModel):
     range_p1: Optional[str] = None
     pot: Optional[float] = None
     stack: Optional[float] = None
-    bet_sizes: Optional[list[float]] = None  # fractions of pot, e.g. [0.33, 0.5, 1.0]
+    bet_sizes: Optional[list[float]] = None  # fractions of pot, e.g. [0.5, 1.0] - keep to 2-3 sizes!
+    max_raises: Optional[int] = Field(default=2, ge=1, le=4)  # max raise count per street (2 recommended)
+    max_runouts: Optional[int] = Field(default=3, ge=1, le=6)  # max turn/river cards to sample (3 recommended)
 
 
 class NodeLockRequest(BaseModel):

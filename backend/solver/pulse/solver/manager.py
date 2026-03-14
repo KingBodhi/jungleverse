@@ -198,8 +198,8 @@ class SolverManager:
                 pot=config.get("pot", 100.0),
                 stack=config.get("stack", 100.0),
                 bet_sizes=config.get("bet_sizes", [0.5, 1.0]),
-                max_raises=config.get("max_raises", 3),
-                max_runouts=config.get("max_runouts", 6),
+                max_raises=config.get("max_raises", 2),
+                max_runouts=config.get("max_runouts", 3),
             )
 
             # Create C++ solver in executor
