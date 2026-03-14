@@ -158,10 +158,12 @@ export function inferPlayer(key: string, variant: string): 0 | 1 {
 
 export const DEFAULT_NLHE_CONFIG = {
   board: "Qs9d2c",
-  range_p0: "AA,KK,QQ,JJ,TT,99,88,77,66,AKs,AQs,AJs,ATs,KQs,KJs,AKo,AQo",
-  range_p1: "AA,KK,QQ,JJ,TT,99,88,77,AKs,AQs,AJs,KQs,AKo",
+  range_p0: "AA,KK,QQ,JJ,TT,AKs,AQs",
+  range_p1: "AA,KK,QQ,JJ,TT,AKs",
   pot: 100,
   stack: 200,
-  bet_sizes: [0.33, 0.5, 0.75, 1.0],
-  num_iterations: 1000,
+  bet_sizes: [0.5, 1.0],
+  num_iterations: 500,
+  max_raises: 2,
+  max_runouts: 3,
 };

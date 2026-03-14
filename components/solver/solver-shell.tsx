@@ -126,6 +126,8 @@ export function SolverShell() {
               pot: store.pot,
               stack: store.stack,
               bet_sizes: store.betSizes,
+              max_raises: store.maxRaises,
+              max_runouts: store.maxRunouts,
             }
           : {}),
       });

@@ -17,6 +17,8 @@ interface SolverState {
   pot: number;
   stack: number;
   betSizes: number[];
+  maxRaises: number;
+  maxRunouts: number;
 
   // --- Solve ---
   solveId: string | null;
@@ -46,6 +48,8 @@ interface SolverState {
   setPot: (p: number) => void;
   setStack: (s: number) => void;
   setBetSizes: (b: number[]) => void;
+  setMaxRaises: (n: number) => void;
+  setMaxRunouts: (n: number) => void;
 
   setSolveId: (id: string | null) => void;
   setStatus: (s: SolveStatus | null) => void;
@@ -68,13 +72,15 @@ interface SolverState {
 
 const initialState = {
   variant: "kuhn" as GameVariant,
-  numIterations: 1000,
+  numIterations: 500,
   board: "Qs9d2c",
-  rangeP0: "AA,KK,QQ,JJ,TT,99,88,77,66,AKs,AQs,AJs,ATs,KQs,KJs,AKo,AQo",
-  rangeP1: "AA,KK,QQ,JJ,TT,99,88,77,AKs,AQs,AJs,KQs,AKo",
+  rangeP0: "AA,KK,QQ,JJ,TT,AKs,AQs",
+  rangeP1: "AA,KK,QQ,JJ,TT,AKs",
   pot: 100,
   stack: 200,
-  betSizes: [0.33, 0.5, 0.75, 1.0],
+  betSizes: [0.5, 1.0],
+  maxRaises: 2,
+  maxRunouts: 3,
 
   solveId: null,
   status: null,
@@ -104,6 +110,8 @@ export const useSolverStore = create<SolverState>((set) => ({
   setPot: (p) => set({ pot: p }),
   setStack: (s) => set({ stack: s }),
   setBetSizes: (b) => set({ betSizes: b }),
+  setMaxRaises: (n) => set({ maxRaises: n }),
+  setMaxRunouts: (n) => set({ maxRunouts: n }),
 
   setSolveId: (id) => set({ solveId: id }),
   setStatus: (s) => set({ status: s }),

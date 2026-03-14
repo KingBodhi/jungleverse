@@ -20,6 +20,8 @@ export interface SolveRequest {
   pot?: number;
   stack?: number;
   bet_sizes?: number[];
+  max_raises?: number;
+  max_runouts?: number;
 }
 
 export interface NodeLockRequest {
