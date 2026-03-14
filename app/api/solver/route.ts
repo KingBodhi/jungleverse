@@ -21,7 +21,8 @@ import { NextRequest, NextResponse } from "next/server";
 
 export const maxDuration = 60;
 
-const SOLVER_URL = process.env.SOLVER_URL;
+// Remove trailing slash if present to avoid double-slash URLs
+const SOLVER_URL = process.env.SOLVER_URL?.replace(/\/+$/, "");
 const APN_GATEWAY_URL = process.env.APN_GATEWAY_URL;
 const APN_API_KEY = process.env.APN_API_KEY;
 
