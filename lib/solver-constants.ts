@@ -9,6 +9,7 @@ export const ACTION_COLORS: Record<string, string> = {
   raise: "#f97316",      // orange-500
   allin: "#a855f7",      // purple-500
   "all-in": "#a855f7",
+  limp: "#eab308",       // yellow-500
 };
 
 /** Tailwind-friendly background classes for action buttons / legends */
@@ -66,6 +67,7 @@ export function classifyAction(label: string): string {
   if (lower.startsWith("raise") || lower.startsWith("3bet") || lower.startsWith("4bet"))
     return "raise";
   if (lower.startsWith("bet")) return "bet";
+  if (lower === "limp") return "limp";
   return "bet"; // fallback
 }
 
@@ -76,6 +78,7 @@ export function formatAction(label: string): string {
   if (lower === "check") return "Check";
   if (lower === "fold") return "Fold";
   if (lower === "call") return "Call";
+  if (lower === "limp") return "Limp";
 
   // Handle parameterized actions: bet_100, raise_150, allin_200, bet_2, bet_4
   const match = lower.match(/^(bet|raise|allin|all[_-]in)[_]?(\d+\.?\d*)?$/);

@@ -11,6 +11,7 @@ const links = [
   { href: "/tournaments", label: "Tournaments" },
   { href: "/cash-games", label: "Cash Games" },
   { href: "/solver", label: "Solver" },
+  { href: "/gto", label: "GTO Charts" },
 ];
 
 export async function SiteHeader({ children }: PropsWithChildren) {
